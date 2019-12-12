@@ -1,0 +1,4 @@
+h5p-core/*
+h5p-editor/*
+!h5p-core/.gitkeep
+!h5p-editor/.gitkeep
