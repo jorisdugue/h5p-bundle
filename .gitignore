@@ -12,3 +12,4 @@ bin/*
 public/index.php
 .idea/*
 .idea
+composer-lock.json
