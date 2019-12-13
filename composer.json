@@ -1,0 +1,34 @@
+{
+    "name": "studit/h5p-bundle",
+    "type": "symfony-bundle",
+    "description": "H5P Bundle for Symfony 4",
+    "keywords": ["h5p", "symfony", "interactive", "content", "php"],
+    "authors": [
+        {
+            "name": "Nieck Moorman",
+            "email": "nieck@emmedy.com",
+            "homepage": "https://emmedy.com",
+            "role": "developer"
+        },
+        {
+            "name": "Joris Dugué",
+            "email": "joris@studit.fr",
+            "role": "developer",
+            "homepage": "https://joris.dugue.ml"
+        }
+    ],
+    "require": {
+        "php": "^7.2.5",
+        "doctrine/orm": "^2.7",
+        "guzzlehttp/guzzle": "^6.5",
+        "h5p/h5p-core": "^1.24",
+        "h5p/h5p-editor": "^1.24",
+        "symfony/asset": "^5.0",
+        "symfony/console": "5.0.*",
+        "symfony/framework-bundle": "~4.0|~5.0",
+        "twig/extensions": "^1.5"
+    },
+    "autoload": {
+        "psr-4": { "Studit\\H5PBundle\\": "" }
+    }
+}

@@ -1,0 +1,7 @@
+{% extends '@StuditH5P/javascripts.html.twig' %}
+
+{% block editor_javascripts %}
+    <script src="{{ asset('bundles/studith5p/h5p/h5p-editor/scripts/h5peditor-selector-hub.js')|h5pCacheBuster }}"></script>
+    <script src="{{ asset('bundles/studith5p/h5p/h5p-editor/scripts/h5peditor-editor.js')|h5pCacheBuster }}"></script>
+    <script src="{{ asset(h5pCoreTranslations)|h5pCacheBuster }}"></script>
+{% endblock %}

@@ -1,0 +1,7 @@
+studit_h5p.ajax:
+  resource: "@StuditH5PBundle/Controller/AjaxController.php"
+  type:     annotation
+
+studit_h5p.interaction:
+  resource: "@StuditH5PBundle/Controller/InteractionController.php"
+  type:     annotation

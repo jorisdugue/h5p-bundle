@@ -1,0 +1,14 @@
+{% if h5pIntegration %}
+    <script>
+        var H5PIntegration = {{ h5pIntegration|json_encode|raw }};
+    </script>
+    <script src="{{ asset('bundles/studith5p/h5p/h5p-core/js/jquery.js')|h5pCacheBuster }}"></script>
+    <script src="{{ asset('bundles/studith5p/h5p/h5p-core/js/h5p.js')|h5pCacheBuster }}"></script>
+    <script src="{{ asset('bundles/studith5p/h5p/h5p-core/js/h5p-event-dispatcher.js')|h5pCacheBuster }}"></script>
+    <script src="{{ asset('bundles/studith5p/h5p/h5p-core/js/h5p-x-api-event.js')|h5pCacheBuster }}"></script>
+    <script src="{{ asset('bundles/studith5p/h5p/h5p-core/js/h5p-x-api.js')|h5pCacheBuster }}"></script>
+    <script src="{{ asset('bundles/studith5p/h5p/h5p-core/js/h5p-content-type.js')|h5pCacheBuster }}"></script>
+    <script src="{{ asset('bundles/studith5p/h5p/h5p-core/js/h5p-confirmation-dialog.js')|h5pCacheBuster }}"></script>
+    <script src="{{ asset('bundles/studith5p/h5p/h5p-core/js/h5p-action-bar.js')|h5pCacheBuster }}"></script>
+    {% block editor_javascripts %}{% endblock %}
+{% endif %}

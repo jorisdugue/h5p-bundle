@@ -1,0 +1,16 @@
+{% extends '@StuditH5P/layout.html.twig' %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div id="h5p-editor">Waiting for javascript...</div>
+        <br />
+        {{ form_row(form.save, {'attr': {'class': 'btn btn-success'}}) }}
+        {{ form_row(form.library) }}
+        {{ form_row(form.parameters) }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ include('@EmmedyH5P/edit_javascripts.html.twig') }}
+    <script src="{{ asset('bundles/studith5p/h5p/symfony-h5p.js') }}"></script>
+{% endblock %}

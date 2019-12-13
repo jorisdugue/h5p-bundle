@@ -1,0 +1,15 @@
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+.env
+bin/*
+public/index.php
+.idea/*
+.idea
+composer.lock

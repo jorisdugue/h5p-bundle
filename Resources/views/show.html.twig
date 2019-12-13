@@ -1,0 +1,33 @@
+{% extends '@StuditH5P/layout.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/studith5p/h5p/h5p-core/styles/h5p.css') }}" />
+    {% if not isFrame %}
+        {% for style in files.styles %}
+            <link rel="stylesheet" href="{{ asset(style.path ~ style.version) }}" />
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block navbar_elements %}
+<li class="nav-item">
+    <a class="nav-link" href="{{ path('studit_h5p_h5p_edit', { 'content': contentId }) }}">Edit</a>
+</li>
+{% endblock %}
+
+{% block content %}
+    {% if isFrame %}
+        <div class="h5p-iframe-wrapper"><iframe id="h5p-iframe-{{ contentId }}" class="h5p-iframe" data-content-id="{{ contentId }}" style="height:1px;width:100%;" frameBorder="0" scrolling="no"></iframe></div>
+    {% else %}
+        <div class="h5p-content" data-content-id="{{ contentId }}"></div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ include('@studitH5P/javascripts.html.twig') }}
+    {% if not isFrame %}
+        {% for script in files.scripts %}
+            <script src="{{ asset(script.path ~ script.version) }}"></script>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
