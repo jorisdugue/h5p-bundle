@@ -1,5 +1,5 @@
 {
-    "name": "studit/h5p-bundle-sf4",
+    "name": "studit/h5p-bundle",
     "type": "symfony-bundle",
     "description": "H5P Bundle for Symfony 4",
     "keywords": ["h5p", "symfony", "interactive", "content", "php"],
