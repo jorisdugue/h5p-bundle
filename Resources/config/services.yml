@@ -1,14 +1,13 @@
 services:
-    # default configuration for services in *this* file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: true
+        autowire: true
     studit_h5p.options:
         class: Studit\H5PBundle\Core\H5POptions
-        arguments: [~, '%kernel.project_dir%']
+        arguments: [~, '%kernel.project_dir%', '@doctrine.orm.entity_manager']
 
     Studit\H5PBundle\Core\H5POptions:
-        arguments: [~, '%kernel.project_dir%']
+        arguments: [~, '%kernel.project_dir%', '@doctrine.orm.entity_manager']
 
     studit_h5p.editor_storage:
         class: Studit\H5PBundle\Editor\EditorStorage
@@ -34,18 +33,22 @@ services:
 
     studit_h5p.editor:
         class: H5peditor
+        arguments: ['@studit_h5p.core', '@studit_h5p.editor_storage', '@studit_h5p.editor_ajax']
 
     H5peditor: '@studit_h5p.editor'
 
     studit_h5p.validator:
         class: H5PValidator
+        arguments: ['@studit_h5p.interface', '@studit_h5p.core']
 
     studit_h5p.storage:
         class: H5PStorage
+        arguments: ['@studit_h5p.interface', '@studit_h5p.core']
     H5PStorage: '@studit_h5p.storage'
 
     studit_h5p.contentvalidator:
         class: H5PContentValidator
+        arguments: ['@studit_h5p.interface', '@studit_h5p.core']
 
     H5PContentValidator: '@studit_h5p.contentvalidator'
 

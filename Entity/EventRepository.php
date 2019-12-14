@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * EventRepository
  */
-class EventRepository
+class EventRepository extends EntityRepository
 {
     public function findRecentlyUsedLibraries($userId)
     {

@@ -1,3 +1,0 @@
-studit_h5p.test:
-  resource: "@StuditH5PBundle/Controller/H5PController.php"
-  type:     annotation

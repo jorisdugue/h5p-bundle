@@ -22,7 +22,7 @@ class H5POptions
     private $folderPath;
     private $projectRootDir;
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $manager;
 
