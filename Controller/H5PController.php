@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Studit\H5PBundle\Core\H5PIntegration;
+use Studit\H5PBundle\Form\Type\H5pType;
 
 /**
  * @Route("/h5p/")
