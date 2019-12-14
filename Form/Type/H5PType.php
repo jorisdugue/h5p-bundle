@@ -8,7 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class H5pType extends AbstractType
+class H5PType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
