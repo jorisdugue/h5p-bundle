@@ -2,6 +2,12 @@ services:
     _defaults:
         public: true
         autowire: true
+    Studit\H5PBundle\Command\H5pBundleIncludeAssetsCommand:
+        tags:
+            - { name: 'console.command', command: 'h5p-bundle:IncludeAssetsCommand' }
+    Studit\H5PBundle\Command\H5pBundleCleanUpFilesCommand:
+        tags:
+            - { name: 'console.command', command: 'h5p-bundle:cleanup-files'}
     studit_h5p.options:
         class: Studit\H5PBundle\Core\H5POptions
         arguments: [~, '%kernel.project_dir%', '@doctrine.orm.entity_manager']
