@@ -87,8 +87,8 @@ class H5PIntegration
         $saveContentFrequency = $this->options->getOption('save_content_frequency', 30);
         $hubIsEnabled = $this->options->getOption('hub_is_enabled', true);
         // Create AJAX URLs
-        $setFinishedUrl = $this->router->generate('studit_h5p_h5p_interaction_setfinished', ['token' => \H5PCore::createToken('result')]);
-        $contentUserDataUrl = $this->router->generate('studit_h5p_h5p_interaction_contentuserdata', ['contentId' => ':contentId', 'dataType' => ':dataType', 'subContentId' => ':subContentId', 'token' => \H5PCore::createToken('contentuserdata')]);
+        $setFinishedUrl = $this->router->generate('studit_h5p_h5pinteraction_setfinished', ['token' => \H5PCore::createToken('result')]);
+        $contentUserDataUrl = $this->router->generate('studit_h5p_h5pinteraction_contentuserdata', ['contentId' => ':contentId', 'dataType' => ':dataType', 'subContentId' => ':subContentId', 'token' => \H5PCore::createToken('contentuserdata')]);
         // Define the generic H5PIntegration settings
         $settings = array(
             'baseUrl' => "/",
