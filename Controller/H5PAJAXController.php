@@ -4,6 +4,7 @@ namespace Studit\H5PBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class H5PAJAXController extends AbstractController
 {
