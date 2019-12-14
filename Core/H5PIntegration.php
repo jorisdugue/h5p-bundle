@@ -87,8 +87,8 @@ class H5PIntegration
         $saveContentFrequency = $this->options->getOption('save_content_frequency', 30);
         $hubIsEnabled = $this->options->getOption('hub_is_enabled', true);
         // Create AJAX URLs
-        $setFinishedUrl = $this->router->generate('studit_h5p_interaction_setfinished', ['token' => \H5PCore::createToken('result')]);
-        $contentUserDataUrl = $this->router->generate('studit_h5p_interaction_contentuserdata', ['contentId' => ':contentId', 'dataType' => ':dataType', 'subContentId' => ':subContentId', 'token' => \H5PCore::createToken('contentuserdata')]);
+        $setFinishedUrl = $this->router->generate('studit_h5p_h5p_interaction_setfinished', ['token' => \H5PCore::createToken('result')]);
+        $contentUserDataUrl = $this->router->generate('studit_h5p_h5p_interaction_contentuserdata', ['contentId' => ':contentId', 'dataType' => ':dataType', 'subContentId' => ':subContentId', 'token' => \H5PCore::createToken('contentuserdata')]);
         // Define the generic H5PIntegration settings
         $settings = array(
             'baseUrl' => "/",
@@ -153,7 +153,7 @@ class H5PIntegration
             }
         }
         $filteredParameters = $this->getFilteredParameters($content);
-        $embedUrl = $this->router->generate('studit_h5p_interaction_embed', ['content' => $content->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $embedUrl = $this->router->generate('studit_h5p_h5p_interaction_embed', ['content' => $content->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
         $resizerUrl = $this->getH5PAssetUrl() . '/h5p-core/js/h5p-resizer.js';
         $displayOptions = $this->core->getDisplayOptionsForView($content->getDisabledFeatures(), $content->getId());
         return array(
