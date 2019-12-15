@@ -28,5 +28,6 @@ class StuditH5PExtension extends Extension
         $definition->setArgument(1, $container->getParameter('kernel.project_dir') . '/' . $config['web_dir'] . '/' . $config["storage_dir"]);
         $definition->setArgument(2, '/');
         $definition = $container->getDefinition("studit_h5p.options");
-        $definition->setArgument(0, $config);    }
+        $definition->setArgument(0, $config);
+    }
 }

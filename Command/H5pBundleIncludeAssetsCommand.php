@@ -46,7 +46,6 @@ class H5pBundleIncludeAssetsCommand extends Command
 
         //$toDir = new FileLocator($fromDir);
         // $test = $fileLocator->locate('@StuditH5PBundle');
-//        var_dump($toDir->locate('h5p-bundle/public/h5p/'));
 
         //$toDir = $fileLocator->locate();
 

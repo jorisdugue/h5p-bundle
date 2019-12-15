@@ -2,25 +2,29 @@
 
 namespace Studit\H5PBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\NodeInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    const H5P_VERSION = '0.1.1'; // version of Symfony H5P bundle
+    const H5P_VERSION = '0.1'; // version of Symfony H5P bundle
 
     /**
-     * @inheritDoc
+     * Generates the configuration tree.
+     *
+     * @return NodeInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('studit_h5p');
-        /**
-         * @var $rootNode ArrayNodeDefinition|NodeDefinition
-        */
-        $rootNode = $treeBuilder->getRootNode();
+        $treeBuilder = new TreeBuilder('studit_h5_p');
+
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $rootNode = $treeBuilder->root('studit_h5_p');
+        }
         $rootNode
             ->children()
             ->scalarNode('storage_dir')->defaultValue("h5p")->end()
