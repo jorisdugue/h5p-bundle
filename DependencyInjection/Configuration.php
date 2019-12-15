@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    const H5P_VERSION = '0.1'; // version of Symfony H5P bundle
+    const H5P_VERSION = '0.1.1'; // version of Symfony H5P bundle
 
     /**
      * @inheritDoc
@@ -17,7 +17,6 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('studit_h5p');
-        //$rootNode = $treeBuilder->root('');
         /**
          * @var $rootNode ArrayNodeDefinition|NodeDefinition
         */
@@ -25,7 +24,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
             ->scalarNode('storage_dir')->defaultValue("h5p")->end()
-            ->scalarNode('web_dir')->defaultValue("web")->end()
+            ->scalarNode('web_dir')->defaultValue("public")->end()
             ->booleanNode('hub_is_enabled')->defaultTrue()->end()
             ->booleanNode('send_usage_statistics')->defaultTrue()->end()
             ->booleanNode('save_content_state')->defaultFalse()->end()
