@@ -11,6 +11,12 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class H5PAJAXController extends AbstractController
 {
+    protected $h5peditor;
+    public function __construct($h5peditor)
+    {
+        $this->h5peditor = $h5peditor;
+    }
+
     /**
      * Callback that lists all h5p libraries.
      *
@@ -24,7 +30,7 @@ class H5PAJAXController extends AbstractController
             return $this->libraryCallback($request);
         }
         //get editor
-        $editor = $this->get('studit_h5p.editor');
+        $editor = $this->h5peditor;
         $editor->ajax->action(\H5PEditorEndpoints::LIBRARIES);
         exit();
     }
@@ -36,7 +42,7 @@ class H5PAJAXController extends AbstractController
      */
     public function contentTypeCacheCallback()
     {
-        $editor = $this->get('studit_h5p.editor');
+        $editor = $this->h5peditor;
         $editor->ajax->action(\H5PEditorEndpoints::CONTENT_TYPE_CACHE);
         exit();
     }
@@ -53,7 +59,7 @@ class H5PAJAXController extends AbstractController
      */
     public function libraryInstallCallback(Request $request)
     {
-        $editor = $this->get('studit_h5p.editor');
+        $editor = $this->h5peditor;
         $editor->ajax->action(
             \H5PEditorEndpoints::LIBRARY_INSTALL,
             $request->get('token', 1),
@@ -72,7 +78,7 @@ class H5PAJAXController extends AbstractController
      */
     private function libraryCallback(Request $request)
     {
-        $editor = $this->get('studit_h5p.editor');
+        $editor = $this->h5peditor;
         $editor->ajax->action(
             \H5PEditorEndpoints::SINGLE_LIBRARY, $request->get('machineName'),
             $request->get('majorVersion'), $request->get('minorVersion'),
@@ -91,7 +97,7 @@ class H5PAJAXController extends AbstractController
      */
     function filesCallback(Request $request)
     {
-        $editor = $this->get('studit_h5p.editor');
+        $editor = $this->h5peditor;
         $editor->ajax->action(
             \H5PEditorEndpoints::FILES,
             $request->get('token', 1),

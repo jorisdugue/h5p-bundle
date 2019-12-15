@@ -2,6 +2,7 @@ services:
     _defaults:
         public: true
         autowire: true
+        autoconfigure: true
     Studit\H5PBundle\Command\H5pBundleIncludeAssetsCommand:
         tags:
             - { name: 'console.command', command: 'h5p-bundle:IncludeAssetsCommand' }
@@ -79,4 +80,8 @@ services:
     H5PExtension: '@studit_h5p.twig.h5p_extension'
 
     Studit\H5PBundle\Controller\H5PController:
+        arguments: ['@studit_h5p.core', '@studit_h5p.integration', '@studit_h5p.editor_ajax']
         tags: [ 'controller.service_arguments' ]
+    Studit\H5PBundle\Controller\H5PAJAXController:
+        arguments: ['@studit_h5p.editor']
+        tags: [ 'controller.service_arguments']
