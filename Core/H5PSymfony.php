@@ -664,7 +664,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function alterLibrarySemantics(&$semantics, $name, $majorVersion, $minorVersion)
     {
-        $this->eventDispatcher->dispatch(H5PEvents::SEMANTICS, new LibrarySemanticsEvent($semantics, $name, $majorVersion, $minorVersion));
+        $this->eventDispatcher->dispatch(new LibrarySemanticsEvent($semantics, $name, $majorVersion, $minorVersion), H5PEvents::SEMANTICS);
     }
 
     /**
