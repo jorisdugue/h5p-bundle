@@ -183,10 +183,10 @@ class EditorStorage implements \H5peditorStorage
             ];
         }
         $event = new LibraryFileEvent($files['scripts'], $library_list, $mode);
-        $this->eventDispatcher->dispatch(H5PEvents::SCRIPTS, $event);
+        $this->eventDispatcher->dispatch($event, H5PEvents::SCRIPTS);
         $files['scripts'] = $event->getFiles();
         $event = new LibraryFileEvent($files['styles'], $library_list, $mode);
-        $this->eventDispatcher->dispatch(H5PEvents::STYLES, $event);
+        $this->eventDispatcher->dispatch($event, H5PEvents::STYLES);
         $files['styles'] = $event->getFiles();
     }
 

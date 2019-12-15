@@ -12,9 +12,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class H5PAJAXController extends AbstractController
 {
     protected $h5peditor;
-    public function __construct($h5peditor)
+    protected $serviceh5poptions;
+    public function __construct($h5peditor, $h5poption)
     {
         $this->h5peditor = $h5peditor;
+        $this->serviceh5poptions = $h5poption;
     }
 
     /**
@@ -82,7 +84,8 @@ class H5PAJAXController extends AbstractController
         $editor->ajax->action(
             \H5PEditorEndpoints::SINGLE_LIBRARY, $request->get('machineName'),
             $request->get('majorVersion'), $request->get('minorVersion'),
-            $request->getLocale(), $this->get('studit_h5p.options')->getOption('storage_dir')
+            $request->getLocale(), $request->get('languageCode'),
+            $this->serviceh5poptions->getOption('storage_dir'), $request->get('defaultLanguage')
         );
         exit();
     }
