@@ -83,5 +83,5 @@ services:
         arguments: ['@studit_h5p.core', '@studit_h5p.integration', '@studit_h5p.editor_ajax']
         tags: [ 'controller.service_arguments' ]
     Studit\H5PBundle\Controller\H5PAJAXController:
-        arguments: ['@studit_h5p.editor']
+        arguments: ['@studit_h5p.editor', '@studit_h5p.options']
         tags: [ 'controller.service_arguments']
