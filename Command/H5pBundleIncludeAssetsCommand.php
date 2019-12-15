@@ -41,8 +41,14 @@ class H5pBundleIncludeAssetsCommand extends Command
 
         $fromDir = $this->appKernel->getProjectDir()."/vendor/h5p/";
         //call service
-        $fileLocator = new FileLocator();
-        $toDir = $fileLocator->locate("@StuditH5PBundle/public/h5p/");
+        //$toDir = $this->appKernel->getProjectDir().'/vendor/studit/h5p-bundle/public/h5p/';
+        $toDir = $this->appKernel->getProjectDir().'/public/bundles/studith5p/h5p/';
+
+        //$toDir = new FileLocator($fromDir);
+        // $test = $fileLocator->locate('@StuditH5PBundle');
+//        var_dump($toDir->locate('h5p-bundle/public/h5p/'));
+
+        //$toDir = $fileLocator->locate();
 
         $coreSubDir = "h5p-core/";
         $coreDirs = ["fonts", "images", "js", "styles"];
