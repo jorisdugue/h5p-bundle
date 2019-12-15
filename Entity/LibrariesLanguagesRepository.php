@@ -11,7 +11,7 @@ use Doctrine\ORM\NoResultException;
 /**
  * LibrariesLanguagesRepository
  */
-class LibrariesLanguagesRepository
+class LibrariesLanguagesRepository extends EntityRepository
 {
     public function findForLibrary($machineName, $majorVersion, $minorVersion, $languageCode)
     {
