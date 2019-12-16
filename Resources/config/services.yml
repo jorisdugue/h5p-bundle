@@ -1,47 +1,35 @@
 services:
     _defaults:
         public: true
-        autowire: true
-        autoconfigure: true
-    Studit\H5PBundle\Command\H5pBundleIncludeAssetsCommand:
-        tags:
-            - { name: 'console.command', command: 'h5p-bundle:IncludeAssetsCommand' }
-    Studit\H5PBundle\Command\H5pBundleCleanUpFilesCommand:
-        tags:
-            - { name: 'console.command', command: 'h5p-bundle:cleanup-files'}
+        #autowire: true
+        #autoconfigure: true
+
     studit_h5p.options:
         class: Studit\H5PBundle\Core\H5POptions
         arguments: [~, '%kernel.project_dir%', '@doctrine.orm.entity_manager']
-
     Studit\H5PBundle\Core\H5POptions:
         arguments: [~, '%kernel.project_dir%', '@doctrine.orm.entity_manager']
 
     studit_h5p.editor_storage:
         class: Studit\H5PBundle\Editor\EditorStorage
-
-    Studit\H5PBundle\Editor\EditorStorage:
+        arguments: ['@studit_h5p.options', '@filesystem', '@security.authorization_checker', '@doctrine.orm.entity_manager', '@event_dispatcher']
     H5peditorStorage: '@studit_h5p.editor_storage'
 
     studit_h5p.interface:
         class: Studit\H5PBundle\Core\H5PSymfony
-
-    H5PFrameworkInterface: '@studit_h5p.interface'
+        arguments: ['@studit_h5p.options', '@studit_h5p.editor_storage','@security.token_storage', '@doctrine.orm.entity_manager', '@session.flash_bag', '@security.authorization_checker', '@event_dispatcher', '@router.default']
 
     studit_h5p.core:
         class: H5PCore
-    H5PCore: '@studit_h5p.core'
+        arguments: ['@studit_h5p.interface', ~, ~]
 
     studit_h5p.editor_ajax:
         class: Studit\H5PBundle\Editor\EditorAjax
-
-    Studit\H5PBundle\Editor\EditorAjax:
-
-    H5PEditorAjaxInterface: '@studit_h5p.editor_ajax'
+        arguments: ['@doctrine.orm.entity_manager', '@security.token_storage']
 
     studit_h5p.editor:
         class: H5peditor
         arguments: ['@studit_h5p.core', '@studit_h5p.editor_storage', '@studit_h5p.editor_ajax']
-
     H5peditor: '@studit_h5p.editor'
 
     studit_h5p.validator:
@@ -51,37 +39,44 @@ services:
     studit_h5p.storage:
         class: H5PStorage
         arguments: ['@studit_h5p.interface', '@studit_h5p.core']
-    H5PStorage: '@studit_h5p.storage'
 
     studit_h5p.contentvalidator:
         class: H5PContentValidator
         arguments: ['@studit_h5p.interface', '@studit_h5p.core']
 
-    H5PContentValidator: '@studit_h5p.contentvalidator'
-
     studit_h5p.export:
         class: H5PExport
+        arguments: ['@studit_h5p.interface', '@studit_h5p.core']
 
     studit_h5p.integration:
         class: Studit\H5PBundle\Core\H5PIntegration
-
+        arguments: ['@studit_h5p.core', '@studit_h5p.options', '@security.token_storage', '@doctrine.orm.entity_manager', '@router', '@request_stack', '@assets.packages', '@studit_h5p.contentvalidator']
     Studit\H5PBundle\Core\H5PIntegration: '@studit_h5p.integration'
 
     studit_h5p.library_storage:
         class: Studit\H5PBundle\Editor\LibraryStorage
-
-    LibraryStorage: '@studit_h5p.library_storage'
+        arguments: ['@studit_h5p.core', '@studit_h5p.editor', '@doctrine.orm.entity_manager']
 
     studit_h5p.twig.h5p_extension:
         class: Studit\H5PBundle\Twig\H5PExtension
+        arguments: ['@studit_h5p.integration']
         tags:
             - { name: twig.extension }
 
-    H5PExtension: '@studit_h5p.twig.h5p_extension'
+    studit_h5p.result_storage:
+        class: Studit\H5PBundle\Service\ResultService
+        arguments: ['@service_container']
+
+    Studit\H5PBundle\Command\H5pBundleIncludeAssetsCommand:
+        tags:
+            - { name: 'console.command', command: 'h5p-bundle:IncludeAssetsCommand' }
+    Studit\H5PBundle\Command\H5pBundleCleanUpFilesCommand:
+        tags:
+            - { name: 'console.command', command: 'h5p-bundle:cleanup-files'}
 
     Studit\H5PBundle\Controller\H5PController:
-        arguments: ['@studit_h5p.core', '@studit_h5p.integration', '@studit_h5p.editor_ajax']
-        tags: [ 'controller.service_arguments' ]
+        autowire: true
+        tags: [ 'controller.service_arguments']
     Studit\H5PBundle\Controller\H5PAJAXController:
-        arguments: ['@studit_h5p.editor', '@studit_h5p.options']
+        autowire: true
         tags: [ 'controller.service_arguments']

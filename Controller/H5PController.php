@@ -17,12 +17,11 @@ use Studit\H5PBundle\Form\Type\H5PType;
  */
 class H5PController extends AbstractController
 {
-    protected $serviceh5pcore;
-    protected $serviceh5pintegeration;
-    public function __construct($core, $integration)
+
+    protected $h5PIntegrations;
+    public function __construct(H5PIntegration $h5PIntegration)
     {
-        $this->serviceh5pcore = $core;
-        $this->serviceh5pintegeration = $integration;
+        $this->h5PIntegrations = $h5PIntegration;
     }
 
     /**
@@ -42,11 +41,11 @@ class H5PController extends AbstractController
      */
     public function showAction(Content $content)
     {
-        $h5pIntegration = $this->serviceh5pintegeration->getGenericH5PIntegrationSettings();
+        $h5pIntegration = $this->get('studit_h5p.integration')->getGenericH5PIntegrationSettings();
         $contentIdStr = 'cid-' . $content->getId();
-        $h5pIntegration['contents'][$contentIdStr] = $this->serviceh5pintegeration->getH5PContentIntegrationSettings($content);
-        $preloaded_dependencies = $this->serviceh5pcore->loadContentDependencies($content->getId(), 'preloaded');
-        $files = $this->serviceh5pcore->getDependenciesFiles($preloaded_dependencies, $this->get('studit_h5p.options')->getRelativeH5PPath());
+        $h5pIntegration['contents'][$contentIdStr] = $this->get('studit_h5p.integration')->getH5PContentIntegrationSettings($content);
+        $preloaded_dependencies = $this->get('studit_h5p.core')->loadContentDependencies($content->getId(), 'preloaded');
+        $files = $this->get('studit_h5p.core')->getDependenciesFiles($preloaded_dependencies, $this->get('studit_h5p.options')->getRelativeH5PPath());
         if ($content->getLibrary()->isFrame()) {
             $jsFilePaths = array_map(function ($asset) {
                 return $asset->path;
@@ -54,7 +53,7 @@ class H5PController extends AbstractController
             $cssFilePaths = array_map(function ($asset) {
                 return $asset->path;
             }, $files['styles']);
-            $coreAssets = $this->serviceh5pintegeration->getCoreAssets();
+            $coreAssets = $this->get('studit_h5p.integration')->getCoreAssets();
             $h5pIntegration['core']['scripts'] = $coreAssets['scripts'];
             $h5pIntegration['core']['styles'] = $coreAssets['styles'];
             $h5pIntegration['contents'][$contentIdStr]['scripts'] = $jsFilePaths;
@@ -68,9 +67,9 @@ class H5PController extends AbstractController
      * @param H5PIntegration $h5PIntegration
      * @return
      */
-    public function newAction(Request $request, H5PIntegration $h5PIntegration)
+    public function newAction(Request $request)
     {
-        return $this->handleRequest($request,$h5PIntegration );
+        return $this->handleRequest($request );
     }
     /**
      * @Route("edit/{content}")
@@ -82,7 +81,7 @@ class H5PController extends AbstractController
     {
         return $this->handleRequest($request, $content);
     }
-    private function handleRequest(Request $request,H5PIntegration $h5PIntegration, Content $content = null)
+    private function handleRequest(Request $request, Content $content = null)
     {
         $formData = null;
         if ($content) {
@@ -96,8 +95,8 @@ class H5PController extends AbstractController
             $contentId = $this->get('studit_h5p.library_storage')->storeLibraryData($data['library'], $data['parameters'], $content);
             return $this->redirectToRoute('studit_h5p_h5p_show', ['content' => $contentId]);
         }
-        $h5pIntegration = $h5PIntegration->getEditorIntegrationSettings($content ? $content->getId() : null);
-        return $this->render('@StuditH5P/edit.html.twig', ['form' => $form->createView(), 'h5pIntegration' => $h5pIntegration, 'h5pCoreTranslations' => $this->serviceh5pintegeration->getTranslationFilePath()]);
+        $h5pIntegration = $this->h5PIntegrations->getEditorIntegrationSettings($content ? $content->getId() : null);
+        return $this->render('@StuditH5P/edit.html.twig', ['form' => $form->createView(), 'h5pIntegration' => $h5pIntegration, 'h5pCoreTranslations' => $this->get('studit_h5p.integration')->getTranslationFilePath()]);
     }
     /**
      * @Route("delete/{contentId}")

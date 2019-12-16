@@ -2,6 +2,7 @@
 
 namespace Studit\H5PBundle\Controller;
 
+use Studit\H5PBundle\Core\H5POptions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,7 +14,7 @@ class H5PAJAXController extends AbstractController
 {
     protected $h5peditor;
     protected $serviceh5poptions;
-    public function __construct($h5peditor, $h5poption)
+    public function __construct(\H5peditor $h5peditor, H5POptions $h5poption)
     {
         $this->h5peditor = $h5peditor;
         $this->serviceh5poptions = $h5poption;
@@ -85,7 +86,7 @@ class H5PAJAXController extends AbstractController
             \H5PEditorEndpoints::SINGLE_LIBRARY, $request->get('machineName'),
             $request->get('majorVersion'), $request->get('minorVersion'),
             $request->getLocale(), $request->get('languageCode'),
-            $this->serviceh5poptions->getOption('storage_dir'), $request->get('defaultLanguage')
+            $this->get('studit_h5p.options')->getOption('storage_dir'), $request->get('defaultLanguage')
         );
         exit();
     }
