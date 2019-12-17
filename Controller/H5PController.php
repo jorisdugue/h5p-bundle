@@ -61,11 +61,11 @@ class H5PController extends AbstractController
         }
         return $this->render('@StuditH5P/show.html.twig', ['contentId' => $content->getId(), 'isFrame' => $content->getLibrary()->isFrame(), 'h5pIntegration' => $h5pIntegration, 'files' => $files]);
     }
+
     /**
      * @Route("new")
      * @param Request $request
-     * @param H5PIntegration $h5PIntegration
-     * @return
+     * @return RedirectResponse|Response
      */
     public function newAction(Request $request)
     {

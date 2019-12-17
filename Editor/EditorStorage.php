@@ -83,9 +83,19 @@ class EditorStorage implements \H5peditorStorage
     /**
      * @inheritDoc
      */
+    /**
+     * Load language all file(JSON) from database.
+     * This is used to translate the editor fields(title, description etc.)
+     *
+     * @param string $machineName The machine readable name of the library(content type)
+     * @param int $majorVersion Major part of version number
+     * @param int $minorVersion Minor part of version number
+     * @param string $language Language code default is EN
+     * @return string Translation in JSON format
+     */
     public function getAvailableLanguages($machineName, $majorVersion, $minorVersion)
     {
-        // TODO: Implement getAvailableLanguages() method.
+        return $this->entityManager->getRepository('StuditH5PBundle:LibrariesLanguages')->findForLibraryAllLanguages($machineName, $majorVersion, $minorVersion);
     }
 
     /**

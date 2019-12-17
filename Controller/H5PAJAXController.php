@@ -92,7 +92,7 @@ class H5PAJAXController extends AbstractController
             $locale,
             $this->get('studit_h5p.options')->getOption('storage_dir'),
             '',
-            $locale
+            filter_input(INPUT_GET, 'default-language')
         );
         exit();
     }

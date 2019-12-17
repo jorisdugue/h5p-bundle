@@ -206,6 +206,7 @@ class H5PIntegration
             'ajaxPath' => $this->router->getContext()->getBaseUrl() . "/h5p/ajax/",
             'libraryPath' => $this->getH5PAssetUrl() . "/h5p-editor/",
             'copyrightSemantics' => $this->contentValidator->getCopyrightSemantics(),
+            'metadataSemantics' => $this->contentValidator->getMetadataSemantics(),
             'assets' => $this->getEditorAssets(),
             'apiVersion' => \H5PCore::$coreApi,
         ];
