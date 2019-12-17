@@ -68,6 +68,7 @@ services:
         arguments: ['@service_container']
 
     Studit\H5PBundle\Command\H5pBundleIncludeAssetsCommand:
+        autowire: true
         tags:
             - { name: 'console.command', command: 'h5p-bundle:IncludeAssetsCommand' }
     Studit\H5PBundle\Command\H5pBundleCleanUpFilesCommand:

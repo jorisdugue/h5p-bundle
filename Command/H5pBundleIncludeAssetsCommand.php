@@ -56,6 +56,7 @@ class H5pBundleIncludeAssetsCommand extends Command
         $editorSubDir = "h5p-editor/";
         $editorDirs = ["ckeditor", "images", "language", "libs", "scripts", "styles"];
         $this->createSymLinks($fromDir, $toDir, $editorSubDir, $editorDirs);
+
     }
 
     private function createSymLinks($fromDir, $toDir, $subDir, $subDirs)

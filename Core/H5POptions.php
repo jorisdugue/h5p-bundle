@@ -99,21 +99,28 @@ class H5POptions
 
     public function getRelativeH5PPath()
     {
-        return "/" . $this->getOption('storage_dir');
+        //add in db web_dir and storage_dir or default this because SF5 destroy this config
+        $absolutelink = $this->getOption('web_dir') != null ? $this->getOption('web_dir') : "bundles/studith5p/";
+        $storagelink = $this->getOption('storage_dir') != null ? $this->getOption('storage_dir') : 'h5p';
+        return "/" . $absolutelink .$storagelink ;
     }
 
     public function getAbsoluteH5PPath()
     {
-        return $this->getAbsoluteWebPath() . '/' . $this->getOption('storage_dir');
+        $absolutelink = $this->getOption('web_dir') != null ? $this->getOption('web_dir') : "bundles/studith5p/";
+        $linkabsolute = $this->getOption('storage_dir') != null ? $this->getOption('storage_dir'): "h5p";
+        return $this->getAbsoluteWebPath() . '/' . $absolutelink .$linkabsolute;
     }
 
     public function getAbsoluteWebPath()
     {
-        return $this->projectRootDir . '/' . $this->getOption('web_dir');
+        $linkabsolutewebpath = $this->getOption('web_dir') != null ? $this->getOption('web_dir') : "bundles/studith5p/";
+        return $this->projectRootDir . '/' . $linkabsolutewebpath;
     }
 
     public function getLibraryFileUrl($libraryFolderName, $fileName)
     {
+
         return $this->getRelativeH5PPath() . "/libraries/$libraryFolderName/$fileName";
     }
 
