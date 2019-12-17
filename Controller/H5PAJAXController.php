@@ -83,13 +83,13 @@ class H5PAJAXController extends AbstractController
     private function libraryCallback(Request $request)
     {//$machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '', $defaultLanguage
         $editor = $this->h5peditor;
-        $locale = $request->getLocale() != null ? $request->getLocale() : 'en';
+        $locale = $request->getLocale() != null ? $request->getLocale() : 'fr';
         $editor->ajax->action(
             \H5PEditorEndpoints::SINGLE_LIBRARY,
             $request->get('machineName'),
             $request->get('majorVersion'),
             $request->get('minorVersion'),
-            $request->get('languageCode'),
+            $locale,
             $this->get('studit_h5p.options')->getOption('storage_dir'),
             '',
             $locale
