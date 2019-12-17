@@ -77,16 +77,22 @@ class H5PAJAXController extends AbstractController
      * @param string $machine_name Machine name of library
      * @param int $major_version Major version of library
      * @param int $minor_version Minor version of library
+     * @param string $locale Language of your website and plugins  for default is English (EN)
      * @param Request $request
      */
     private function libraryCallback(Request $request)
-    {
+    {//$machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '', $defaultLanguage
         $editor = $this->h5peditor;
+        $locale = $request->getLocale() != null ? $request->getLocale() : 'en';
         $editor->ajax->action(
-            \H5PEditorEndpoints::SINGLE_LIBRARY, $request->get('machineName'),
-            $request->get('majorVersion'), $request->get('minorVersion'),
-            $request->getLocale(), $request->get('languageCode'),
-            $this->get('studit_h5p.options')->getOption('storage_dir'), $request->get('defaultLanguage')
+            \H5PEditorEndpoints::SINGLE_LIBRARY,
+            $request->get('machineName'),
+            $request->get('majorVersion'),
+            $request->get('minorVersion'),
+            $request->get('languageCode'),
+            $this->get('studit_h5p.options')->getOption('storage_dir'),
+            '',
+            $locale
         );
         exit();
     }
