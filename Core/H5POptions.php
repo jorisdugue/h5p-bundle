@@ -99,7 +99,7 @@ class H5POptions
 
     public function getRelativeH5PPath()
     {
-        return "/" .$this->getOption('web_dir'). $this->getOption('storage_dir');
+        return "/". $this->getOption('storage_dir');
     }
 
     public function getAbsoluteH5PPath()
