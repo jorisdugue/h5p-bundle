@@ -116,6 +116,20 @@ class Library
      * @ORM\OneToMany(targetEntity="Studit\H5PBundle\Entity\ContentLibraries", mappedBy="library")
      */
     private $contentLibraries;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="metadata_settings", type="text", nullable=true)
+     */
+    private $metadataSettings;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="add_to", type="text", nullable=true)
+     */
+    private $addTo;
+
     public function __get($name)
     {
         if ($name === "name") {
@@ -379,4 +393,38 @@ class Library
     {
         return (strpos($this->embedTypes, 'iframe') !== false);
     }
+
+    /**
+     * @return string
+     */
+    public function getMetadataSettings(): string
+    {
+        return $this->metadataSettings;
+    }
+
+    /**
+     * @param string $metadataSettings
+     */
+    public function setMetadataSettings(string $metadataSettings): void
+    {
+        $this->metadataSettings = $metadataSettings;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddTo(): string
+    {
+        return $this->addTo;
+    }
+
+    /**
+     * @param string $addTo
+     */
+    public function setAddTo(string $addTo): void
+    {
+        $this->addTo = $addTo;
+    }
+
+
 }

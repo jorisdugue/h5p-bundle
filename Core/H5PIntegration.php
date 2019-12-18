@@ -103,7 +103,8 @@ class H5PIntegration
                 'H5P' => $this->core->getLocalization(),
             ),
             'hubIsEnabled' => $hubIsEnabled,
-            'siteUrl' => $this->requestStack->getMasterRequest()->getUri()
+            'siteUrl' => $this->requestStack->getMasterRequest()->getUri(),
+            'librairyConfig' => $this->core->h5pF->getLibraryConfig()
         );
         if (is_object($user)) {
             $settings['user'] = [

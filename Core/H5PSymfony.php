@@ -267,7 +267,36 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function loadAddons()
     {
-        // TODO: Implement loadAddons() method.
+        $q = $this->manager
+            ->createQueryBuilder()
+            ->select([
+                'l1.id as libraryId',
+                'l1.machineName as machineName',
+                'l1.majorVersion as majorVersion',
+                'l1.minorVersion as minorVersion',
+                'l1.patchVersion as patchVersion',
+                'l1.addTo as addTo',
+                'l1.preloadedJs as preloadedJs',
+                'l1.preloadedCss as preloadedCss',
+            ])
+            ->from('StuditH5PBundle:Library', 'l1')
+            ->leftJoin(
+                'StuditH5PBundle:Library',
+                'l2',
+                Expr\Join::WITH,
+                'l1.machineName = l2.machineName'
+            )
+            ->where(
+                new Expr\Orx([
+                    'l1.majorVersion < l2.majorVersion',
+                    new Expr\Andx([
+                        'l1.majorVersion = l2.majorVersion',
+                        'l1.minorVersion < l2.minorVersion'
+                    ])
+                ])
+            )
+            ->getQuery();
+        return $q->execute();
     }
 
     /**
@@ -408,6 +437,8 @@ class H5PSymfony implements \H5PFrameworkInterface
             $library->setDropLibraryCss($dropLibraryCss);
             $library->setSemantics($libraryData['semantics']);
             $library->setHasIcon($libraryData['hasIcon']);
+            $library->setMetadataSettings($libraryData['metadataSettings']);
+            $library->setAddTo(isset($libraryData['addTo']) ? json_encode($libraryData['addTo']) : NULL);
             $this->manager->persist($library);
             $this->manager->flush();
             $libraryData['libraryId'] = $library->getId();
@@ -428,6 +459,8 @@ class H5PSymfony implements \H5PFrameworkInterface
             $library->setDropLibraryCss($dropLibraryCss);
             $library->setSemantics($libraryData['semantics']);
             $library->setHasIcon($libraryData['hasIcon']);
+            $library->setMetadataSettings($libraryData['metadataSettings']);
+            $library->setAddTo(isset($libraryData['addTo']) ? json_encode($libraryData['addTo']) : NULL);
             $this->manager->persist($library);
             $this->manager->flush();
             $this->deleteLibraryDependencies($libraryData['libraryId']);

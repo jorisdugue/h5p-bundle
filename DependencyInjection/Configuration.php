@@ -33,7 +33,6 @@ class Configuration implements ConfigurationInterface
             ->booleanNode('send_usage_statistics')->defaultTrue()->end()
             ->booleanNode('save_content_state')->defaultFalse()->end()
             ->integerNode('save_content_fequency')->defaultValue(30)->end()
-            ->booleanNode('hub_is_enabled')->defaultTrue()->end()
             ->scalarNode('whitelist')->defaultValue(\H5PCore::$defaultContentWhitelist)->end()
             ->scalarNode('library_whitelist_extras')->defaultValue(\H5PCore::$defaultLibraryWhitelistExtras)->end()
             ->booleanNode('dev_mode')->defaultFalse()->end()
