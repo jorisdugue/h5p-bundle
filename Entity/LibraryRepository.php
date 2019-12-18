@@ -81,7 +81,7 @@ EOT;
     public function findHasSemantics($machineName, $majorVersion, $minorVersion)
     {
         $qb = $this->createQueryBuilder('l')
-            ->select('l.title, l.runnable, l.restricted, l.tutorialUrl')
+            ->select('l.title, l.runnable, l.restricted, l.tutorialUrl, l.metadata_settings')
             ->where('l.machineName = :machineName and l.majorVersion = :majorVersion and l.minorVersion = :minorVersion and l.semantics is not null')
             ->setParameters(['machineName' => $machineName, 'majorVersion' => $majorVersion, 'minorVersion' => $minorVersion]);
         try {

@@ -165,6 +165,7 @@ class EditorStorage implements \H5peditorStorage
                 $library->title = $details->title;
                 $library->runnable = $details->runnable;
                 $library->restricted = $canCreateRestricted ? false : ($details->restricted === '1');
+                $library->metadataSettings = json_decode($details->metadata_settings);
                 $librariesWithDetails[] = $library;
             }
         }
