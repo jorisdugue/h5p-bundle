@@ -285,17 +285,21 @@ class H5PSymfony implements \H5PFrameworkInterface
                 'StuditH5PBundle:Library',
                 'l2',
                 Expr\Join::WITH,
-                'l1.machineName = l2.machineName'
-            )
-            ->where(
-                new Expr\Orx([
-                    'l1.majorVersion < l2.majorVersion',
-                    new Expr\Andx([
-                        'l1.majorVersion = l2.majorVersion',
-                        'l1.minorVersion < l2.minorVersion'
+                new Expr\Andx([
+                    'l1.machineName = l2.machineName',
+                    new Expr\Orx([
+                        'l1.majorVersion > l2.majorVersion',
+                        new Expr\Andx([
+                            'l1.majorVersion = l2.majorVersion',
+                            'l1.minorVersion > l2.minorVersion'
+                        ])
                     ])
                 ])
             )
+            ->where(new Expr\Andx([
+                'l1.addTo IS NOT NULL',
+                'l2.machineName IS NULL'
+            ]))
             ->getQuery();
         return $q->execute();
     }
@@ -305,8 +309,8 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function getLibraryConfig($libraries = NULL)
     {
-        // TODO: Implement getLibraryConfig() method.
-    }
+        // Same as wordpress do but i don't know what is H5P_LIBRARY_CONFIG
+        return defined('H5P_LIBRARY_CONFIG') ? H5P_LIBRARY_CONFIG : NULL;    }
 
     /**
      * Implements loadLibraries
@@ -438,8 +442,8 @@ class H5PSymfony implements \H5PFrameworkInterface
             $library->setDropLibraryCss($dropLibraryCss);
             $library->setSemantics($libraryData['semantics']);
             $library->setHasIcon($libraryData['hasIcon']);
-            $library->setMetadataSettings($libraryData['metadataSettings']);
-            $library->setAddTo(isset($libraryData['addTo']) ? json_encode($libraryData['addTo']) : NULL);
+            // $library->setMetadataSettings($libraryData['metadataSettings']);
+            // $library->setAddTo(isset($libraryData['addTo']) ? json_encode($libraryData['addTo']) : NULL);
             $this->manager->persist($library);
             $this->manager->flush();
             $libraryData['libraryId'] = $library->getId();

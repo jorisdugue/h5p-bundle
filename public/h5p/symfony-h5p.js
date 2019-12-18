@@ -8,7 +8,7 @@
             ns.ajaxPath = H5PIntegration.editor.ajaxPath;
             ns.filesPath = H5PIntegration.editor.filesPath + '/editor';
             ns.apiVersion = H5PIntegration.editor.apiVersion;
-            // Semantics describing what copyright information can be stored for media and metadata of components.
+            // Semantics describing what copyright information can be stored for media.
             ns.copyrightSemantics = H5PIntegration.editor.copyrightSemantics;
             ns.metadataSemantics = H5PIntegration.editor.metadataSemantics;
             // Required styles and scripts for the editor

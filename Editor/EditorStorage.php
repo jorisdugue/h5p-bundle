@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use H5peditorFile;
 use Studit\H5PBundle\Core\H5POptions;
+use Studit\H5PBundle\Entity\Library;
 use Studit\H5PBundle\Event\H5PEvents;
 use Studit\H5PBundle\Event\LibraryFileEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -130,6 +131,7 @@ class EditorStorage implements \H5peditorStorage
         $libraries = [];
         $librariesResult = $this->entityManager->getRepository('StuditH5PBundle:Library')->findAllRunnableWithSemantics();
         foreach ($librariesResult as $library) {
+            //Decode metadata setting
             $library->metadataSettings = json_decode($library->metadataSettings);
             // Make sure we only display the newest version of a library.
             foreach ($libraries as $existingLibrary) {
@@ -160,13 +162,14 @@ class EditorStorage implements \H5peditorStorage
     {
         $librariesWithDetails = [];
         foreach ($libraries as $library) {
+            /** @var Library $details */
             $details = $this->entityManager->getRepository('StuditH5PBundle:Library')->findHasSemantics($library->name, $library->majorVersion, $library->minorVersion);
             if ($details) {
-                $library->tutorialUrl = $details->tutorialUrl;
-                $library->title = $details->title;
-                $library->runnable = $details->runnable;
-                $library->restricted = $canCreateRestricted ? false : ($details->restricted === '1');
-                $library->metadataSettings = json_decode($details->metadata_settings);
+                $library->tutorialUrl = $details->getTutorialUrl();
+                $library->title = $details->getTitle();
+                $library->runnable = $details->isRunnable();
+                $library->restricted = $canCreateRestricted ? false : ($details->isRestricted() === '1');
+                $library->metadataSettings = json_decode($details->getMetadataSettings());
                 $librariesWithDetails[] = $library;
             }
         }
