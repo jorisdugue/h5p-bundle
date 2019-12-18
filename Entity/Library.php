@@ -397,7 +397,7 @@ class Library
     /**
      * @return string
      */
-    public function getMetadataSettings(): string
+    public function getMetadataSettings()
     {
         return $this->metadataSettings;
     }
@@ -405,7 +405,7 @@ class Library
     /**
      * @param string $metadataSettings
      */
-    public function setMetadataSettings(string $metadataSettings): void
+    public function setMetadataSettings(string $metadataSettings)
     {
         $this->metadataSettings = $metadataSettings;
     }
@@ -413,7 +413,7 @@ class Library
     /**
      * @return string
      */
-    public function getAddTo(): string
+    public function getAddTo()
     {
         return $this->addTo;
     }
@@ -421,7 +421,7 @@ class Library
     /**
      * @param string $addTo
      */
-    public function setAddTo(string $addTo): void
+    public function setAddTo(string $addTo)
     {
         $this->addTo = $addTo;
     }
