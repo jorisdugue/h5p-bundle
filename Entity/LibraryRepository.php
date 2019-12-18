@@ -94,7 +94,7 @@ EOT;
     public function findAllRunnableWithSemantics()
     {
         $qb = $this->createQueryBuilder('l')
-            ->select('l.machineName as name, l.title, l.majorVersion, l.minorVersion, l.restricted, l.tutorialUrl')
+            ->select('l.machineName as name, l.title, l.majorVersion, l.minorVersion, l.restricted, l.tutorialUrl, 1.metadata_settings')
             ->where('l.runnable = true and l.semantics is not null')
             ->orderBy('l.title');
         $libraries = $qb->getQuery()->getResult();

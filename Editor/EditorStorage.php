@@ -130,6 +130,7 @@ class EditorStorage implements \H5peditorStorage
         $libraries = [];
         $librariesResult = $this->entityManager->getRepository('StuditH5PBundle:Library')->findAllRunnableWithSemantics();
         foreach ($librariesResult as $library) {
+            $library->metadataSettings = json_decode($library->metadataSettings);
             // Make sure we only display the newest version of a library.
             foreach ($libraries as $existingLibrary) {
                 if ($library->machineName === $existingLibrary->machineName) {
