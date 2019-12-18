@@ -135,7 +135,7 @@ class EditorStorage implements \H5peditorStorage
             $library->metadataSettings = json_decode($library->metadataSettings);
             // Make sure we only display the newest version of a library.
             foreach ($libraries as $existingLibrary) {
-                if ($library->machineName === $existingLibrary->machineName) {
+                if ($library->name === $existingLibrary->name) {
                     // Mark old ones
                     // This is the newest
                     if (($library->majorVersion === $existingLibrary->majorVersion && $library->minorVersion > $existingLibrary->minorVersion) ||
