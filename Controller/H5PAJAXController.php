@@ -114,6 +114,33 @@ class H5PAJAXController extends AbstractController
     }
 
     /**
+     *
+     * Callback for uploading a library
+     * @param string $token Editor security token
+     * @param int $content_id Id of content that is being edited
+     * @Route("/library-upload/")
+     * @param Request $request
+     *
+     */
+    public function libraryUploadCallback(Request $request){
+        $editor = $this->h5peditor;
+        $filePath = null;
+        if (isset($_FILES['h5p'])){
+            $filePath = $_FILES['h5p']['tmp_name'];
+        }else{
+            //generate error
+            throw new \Exception("POST file is missing");
+        }
+
+        $editor->ajax->action(
+            \H5PEditorEndpoints::LIBRARY_UPLOAD,
+            $request->get('token', 1),
+            $filePath,
+            $request->get('id')
+        );
+        exit();
+    }
+    /**
      * Callback for file uploads.
      *
      * @param string $token Security token
@@ -128,6 +155,24 @@ class H5PAJAXController extends AbstractController
             \H5PEditorEndpoints::FILES,
             $request->get('token', 1),
             $request->get('id')
+        );
+        exit();
+    }
+
+    /**
+     * Callback for filtering.
+     *
+     * @param string $token Security token
+     * @param int $content_id Content id
+     * @param Request $request
+     * @Route("/filter/")
+     */
+    function filterCallback(Request $request){
+        $editor = $this->h5peditor;
+        $editor->ajax->action(
+            \H5PEditorEndpoints::FILTER,
+            $request->get('token', 1),
+            $request->get('libraryParameters')
         );
         exit();
     }
