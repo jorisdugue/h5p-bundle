@@ -29,7 +29,7 @@ class H5pBundleIncludeAssetsCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->includeAssets();
     }
