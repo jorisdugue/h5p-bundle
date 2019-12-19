@@ -21,7 +21,7 @@
             }
 
             var h5peditor;
-            var $editor = $('#h5_p-editor');
+            var $editor = $('#h5p-editor');
             var $parameters = $('#h5_p_parameters');
             var $library = $('#h5_p_library');
             var library = $library.val();
