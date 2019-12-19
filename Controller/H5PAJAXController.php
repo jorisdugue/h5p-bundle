@@ -4,6 +4,7 @@ namespace Studit\H5PBundle\Controller;
 
 use Studit\H5PBundle\Core\H5POptions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -50,6 +51,21 @@ class H5PAJAXController extends AbstractController
         exit();
     }
 
+    /**
+     * Callback for translations
+     * @param Request $request
+     * @Route("/translations/")
+     * @return string
+     */
+    public function TranslationsCallback(Request $request){
+        $editor = $this->h5peditor;
+        $language = $request->get('language');
+        $editor->ajax->action(
+            \H5PEditorEndpoints::TRANSLATIONS,
+            $language
+        );
+        exit();
+    }
     /**
      * Callback Install library from external file
      *
