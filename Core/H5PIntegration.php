@@ -172,6 +172,7 @@ class H5PIntegration
     }
     public function getFilteredParameters(Content $content)
     {
+        $params = json_decode($content->getParameters());
         $contentData = [
             'title' => 'Interactive Content',
             'id' => $content->getId(),
@@ -181,10 +182,12 @@ class H5PIntegration
                 'majorVersion' => $content->getLibrary()->getMajorVersion(),
                 'minorVersion' => $content->getLibrary()->getMinorVersion(),
             ],
-            'params' => $content->getParameters(),
+            'params' => json_encode($params->params),
             'filtered' => $content->getFilteredParameters(),
             'embedType' => 'div',
         ];
+        if (!empty($contentData['filtered'] && $contentData['filtered'] == '{}')) $contentData['filtered'] = null;
+
         return $this->core->filterParameters($contentData);
     }
     protected function getExportUrl(Content $content)
@@ -282,7 +285,9 @@ class H5PIntegration
         $language = $this->requestStack->getCurrentRequest()->getLocale();
         $h5pAssetUrl = $this->getH5PAssetUrl();
         $languageFolder = "{$h5pAssetUrl}/h5p-editor/language";
-        $defaultLanguage = "{$languageFolder}/en.js";
+        //check default language exist if exist load the file
+        //if folder not exist load english in default
+        $defaultLanguage = file_exists ("{$languageFolder}/{$language}.js") ? "{$languageFolder}/{$language}.js": "{$languageFolder}/en.js";
         $chosenLanguage = "{$languageFolder}/{$language}.js";
         $cacheBuster = $this->getCacheBuster();
         return (file_exists($this->options->getAbsoluteWebPath() . $chosenLanguage) ? $chosenLanguage : $defaultLanguage) . $cacheBuster;
