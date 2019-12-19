@@ -30,7 +30,7 @@ class LibrariesLanguagesRepository extends EntityRepository
     public function findForLibraryAllLanguages($machineName, $majorVersion, $minorVersion, $defaultlang = "en")
     {
         $qb = $this->createQueryBuilder('ll')
-            ->select('ll.languageJson')
+            ->select('ll.languageCode')
             ->join('ll.library', 'l', 'WITH', 'l.machineName = :machineName and l.majorVersion = :majorVersion and l.minorVersion = :minorVersion')
             ->setParameters(['majorVersion' => $majorVersion, 'machineName' => $machineName, 'minorVersion' => $minorVersion]);
         try {
@@ -40,7 +40,7 @@ class LibrariesLanguagesRepository extends EntityRepository
         }
         $codes = array('en'); // Semantics is 'en' by default.
         foreach ($results as $result) {
-            $codes[] = $result['languageJson'];
+            $codes[] = $result['languageCode'];
         }
         return $codes;
         //return $result['languageJson'] ? $result['languageJson'] : null;
