@@ -154,7 +154,7 @@ class H5PIntegration
             }
         }
         $filteredParameters = $this->getFilteredParameters($content);
-        $embedUrl = $this->router->generate('studit_h5p_h5p_interaction_embed', ['content' => $content->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $embedUrl = $this->router->generate('studit_h5p_h5pinteraction_embed', ['content' => $content->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
         $resizerUrl = $this->getH5PAssetUrl() . '/h5p-core/js/h5p-resizer.js';
         $displayOptions = $this->core->getDisplayOptionsForView($content->getDisabledFeatures(), $content->getId());
         return array(
