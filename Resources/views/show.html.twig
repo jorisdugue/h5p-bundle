@@ -10,9 +10,9 @@
 {% endblock %}
 
 {% block navbar_elements %}
-<li class="nav-item">
-    <a class="nav-link" href="{{ path('studit_h5p_h5p_edit', { 'content': contentId }) }}">Edit</a>
-</li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('studit_h5p_h5p_edit', { 'content': contentId }) }}">Edit</a>
+    </li>
 {% endblock %}
 
 {% block content %}
@@ -24,7 +24,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    {{ include('@studitH5P/javascripts.html.twig') }}
+    {{ include('@StuditH5P/javascripts.html.twig') }}
     {% if not isFrame %}
         {% for script in files.scripts %}
             <script src="{{ asset(script.path ~ script.version) }}"></script>
