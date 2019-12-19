@@ -22,15 +22,17 @@
 
             var h5peditor;
             var $editor = $('#h5p-editor');
-            var $parameters = $('#h5p_parameters');
-            var $library = $('#h5p_library');
+            //change if bug name of your entity form here it H5_P
+            var $parameters = $('#h5_p_parameters');
+            var $library = $('#h5_p_library');
             var library = $library.val();
 
             if (h5peditor === undefined) {
                 h5peditor = new ns.Editor(library, $parameters.val(), $editor[0]);
             }
 
-            $("form[name='h5p']").submit(function () {
+            //modify with name of your entity in demo is H5_P why ? idk
+            $("form[name='h5_p']").submit(function () {
                 if (h5peditor !== undefined) {
                     var editorParameters = h5peditor.getParams();
 
