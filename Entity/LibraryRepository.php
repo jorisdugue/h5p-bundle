@@ -3,6 +3,7 @@
 
 namespace Studit\H5PBundle\Entity;
 
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -129,5 +130,21 @@ EOT;
             ->where('l.machineName = :machineName and l.majorVersion = :majorVersion and l.minorVersion = :minorVersion and l.patchVersion < :patchVersion')
             ->setParameters(['machineName' => $library['machineName'], 'majorVersion' => $library['majorVersion'], 'minorVersion' => $library['minorVersion'], 'patchVersion' => $library['patchVersion']]);
         return $qb->getQuery()->getSingleScalarResult() > 0;
+    }
+
+    /**
+     * return array of data (id)
+     * @param string $nameoftable - Name of the table
+     * @return array
+     * @throws DBALException
+     */
+    public function findFuturCreatedItem($nameoftable){
+        //require ENTITYMANGER
+        $em = $this->getEntityManager();
+        $nameofdb = $em->getConnection()->getDatabase();
+        $rawSql = "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA ='$nameofdb' AND TABLE_NAME ='$nameoftable';";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($rawSql);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 }

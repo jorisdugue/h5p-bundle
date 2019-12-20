@@ -102,7 +102,6 @@ class H5POptions
         return "/". $this->getOption('storage_dir');
     }
 
-
     public function getAbsoluteH5PPath()
     {
         return $this->getAbsoluteWebPath() . '/' . $this->getOption('storage_dir');
@@ -110,7 +109,7 @@ class H5POptions
 
     public function getAbsoluteWebPath()
     {
-        return $this->projectRootDir . $this->getOption('web_dir');
+        return $this->projectRootDir .'/'. $this->getOption('web_dir');
     }
 
     public function getLibraryFileUrl($libraryFolderName, $fileName)

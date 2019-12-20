@@ -136,7 +136,7 @@ class H5PAJAXController extends AbstractController
             \H5PEditorEndpoints::LIBRARY_UPLOAD,
             $request->get('token', 1),
             $filePath,
-            $request->get('id')
+            $request->get('contentId')
         );
         exit();
     }
@@ -151,10 +151,11 @@ class H5PAJAXController extends AbstractController
     function filesCallback(Request $request)
     {
         $editor = $this->h5peditor;
+        $id = $request->get('id') != null ? $request->get('id') : $request->get('contentId');
         $editor->ajax->action(
             \H5PEditorEndpoints::FILES,
             $request->get('token', 1),
-            $request->get('id')
+            $id
         );
         exit();
     }

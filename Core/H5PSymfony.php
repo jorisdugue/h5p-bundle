@@ -105,9 +105,6 @@ class H5PSymfony implements \H5PFrameworkInterface
         return $this->options->getRelativeH5PPath();
     }
 
-    public function getAbsoluteH5PPath(){
-        return $this->options->getAbsoluteH5PPath();
-    }
     /**
      * Implements getPlatformInfo
      */
@@ -153,7 +150,7 @@ class H5PSymfony implements \H5PFrameworkInterface
         }
         if ($stream && empty($response->error)) {
             // Create file from data need disable move file or enable ? default set is a fail
-            $this->editorStorage->saveFileTemporarily($response_data, true);
+            $this->editorStorage->saveFileTemporarily($response_data, false);
             // TODO: Cannot rely on H5PEditor module – Perhaps we could use the
             // save_to/sink option to save directly to file when streaming ?
             // http://guzzle.readthedocs.io/en/latest/request-options.html#sink-option
