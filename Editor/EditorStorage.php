@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use H5peditorFile;
 use Studit\H5PBundle\Core\H5POptions;
+use Studit\H5PBundle\Core\H5PSymfony;
 use Studit\H5PBundle\Entity\Library;
 use Studit\H5PBundle\Event\H5PEvents;
 use Studit\H5PBundle\Event\LibraryFileEvent;
@@ -107,6 +108,7 @@ class EditorStorage implements \H5peditorStorage
      */
     public function keepFile($path)
     {
+        var_dump($path);
     }
 
     /**
@@ -253,6 +255,33 @@ class EditorStorage implements \H5peditorStorage
      */
     public static function markFileForCleanup($file, $content_id = null)
     {
+        /**
+         * @var $h5psymfony H5PSymfony
+        */
+        $h5psymfony = H5PSymfony::class;
+        $uri =  $h5psymfony->getAbsoluteH5PPath();
+        $file_type = $file->getType();
+        $file_name = $file->getName();
+
+        if ($content_id) {
+            $uri .= "content/{$content_id}/{$file_type}s/{$file_name}";
+        }
+        else {
+            $uri .= "editor/{$file_type}s/{$file_name}";
+        }
+
+        $file_data = [
+            'uid' => 0,
+            'filename' => $file->getName(),
+            'uri' => $uri,
+            'filemime' => $file->type,
+            'filesize' => $file->size,
+            'status' => 0,
+            'timestamp' => 0
+        ];
+        var_dump($file_data);
+        //$file_managed = File::create($file_data);
+
     }
 
     /**
