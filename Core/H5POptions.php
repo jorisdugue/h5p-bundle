@@ -102,6 +102,9 @@ class H5POptions
         return "/". $this->getOption('storage_dir');
     }
 
+    public function getAbsoluteH5PPathWithSlash(){
+        return $this->getAbsoluteWebPath() . '/' . $this->getOption('storage_dir') .'/';
+    }
     public function getAbsoluteH5PPath()
     {
         return $this->getAbsoluteWebPath() . '/' . $this->getOption('storage_dir');
