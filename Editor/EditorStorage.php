@@ -255,46 +255,7 @@ class EditorStorage implements \H5peditorStorage
      */
     public static function markFileForCleanup($file, $content_id = null)
     {
-        /**
-         * @var $h5psymfony H5PSymfony
-         */
-        //saveFileTemporarilyUnstatic($data, $move_file);
-
-        $uri =  self::$instance->options->getAbsoluteH5PPathWithSlash();
-        $nameoftable = self::$instance->options->getOption("nameoftable", "h5p_content");
-        $file_type = $file->getType();
-        $file_name = $file->getName();
-
-        if ($content_id) {
-            $uri .= "/content/{$content_id}/{$file_type}s/{$file_name}";
-        }
-        else {
-            $uri .= "editor/{$file_type}s/";
-            //if content_id doesn"t exist need get the new pre folder
-            $em = self::$instance->entityManager;
-            $idfolder = null;
-            //WARNING you need accès to information_schema table
-            //return number for next id for copy the file into new folder
-            try {
-                $idinfo = $em->getRepository('StuditH5PBundle:Library')->findFuturCreatedItem($nameoftable);
-                $idfolder = $idinfo[0]["AUTO_INCREMENT"];
-                //surround error if exist
-            } catch (IOException $e) {
-            }
-            //create for the first folder if id folder doesn"t exists
-            if($idfolder == null){
-                $idfolder = 1;
-            }
-            $uriprecontent = self::$instance->options->getAbsoluteH5PPathWithSlash()."content/$idfolder/{$file_type}s/";
-            //check if folder exists
-            if(!is_dir($uriprecontent)){
-                //create the directory
-                mkdir($uriprecontent, 0777, TRUE);
-            }
-            //copy file into futur file
-            copy($uri.$file_name, $uriprecontent.$file_name);
-        }
-        return TRUE;
+        //clean file after editor
     }
 
     /**
