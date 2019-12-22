@@ -91,7 +91,10 @@ class H5PController extends AbstractController
         $form = $this->createForm(H5pType::class, $formData);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            //get data
             $data = $form->getData();
+            $dt = $data['parameters'];
+            //create h5p content
             $contentId = $this->get('studit_h5p.library_storage')->storeLibraryData($data['library'], $data['parameters'], $content);
             return $this->redirectToRoute('studit_h5p_h5p_show', ['content' => $contentId]);
         }

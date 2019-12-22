@@ -61,6 +61,10 @@ class LibraryStorage
             $contentData['id'] = $content->getId();
         }
         $contentId = $this->core->saveContent($contentData);
+        //add id to data
+        if (!$content){
+            $contentData['id'] = $contentId;
+        }
         $this->updateLibraryFiles($contentId, $contentData, $oldLibrary, $oldParameters);
         return $contentId;
     }
@@ -70,7 +74,7 @@ class LibraryStorage
         $this->editor->processParameters(
             $contentId,
             $contentData['library'],
-            json_decode($contentData['params']),
+            json_decode($contentData['params'])->params,
             $oldLibrary,
             $oldParameters
         );
