@@ -1,7 +1,7 @@
 # H5PBundle
 Bundle to integrate H5P into Symfony. This bundle is a port of the H5P Drupal module. For more info about H5P see [H5P.org](https://h5p.org)
 
-For Symfony 3.X => [H5PBundle for Symfony 2.X and 3.X](https://github.com/Emmedy/h5p-bundle/tree/193db01f03584a131b011e7ab8ed9973b1496b6d)
+For Symfony 3.X => [H5PBundle for Symfony 2.X and 3.X](https://github.com/studit/h5p-bundle/tree/193db01f03584a131b011e7ab8ed9973b1496b6d)
 
 This bundle was tested on Symfony 4.0 and Symfony 5.0
 
@@ -48,7 +48,7 @@ studit_h5p.demo:
     resource: "@StuditH5PBundle/Resources/config/routing_demo.yml"
     prefix:   /
 
-emmedy_h5p:
+studit_h5p:
     resource: "@StuditH5PBundle/Resources/config/routing.yml"
     prefix:   /
 ```
@@ -78,5 +78,5 @@ Todo
 Not everything is ported yet. The following things still need to be done:
 * Upload library. Currently only H5P default libraries can be selected from Hub.
 * Download package
-* Embed package
+* Embed package (incomming)
 * Store usage data and points
