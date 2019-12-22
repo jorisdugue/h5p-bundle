@@ -936,6 +936,8 @@ class H5PSymfony implements \H5PFrameworkInterface
                 return $this->authorizationChecker->isGranted('ROLE_H5P_UPDATE_LIBRARIES');
             case \H5PPermission::INSTALL_RECOMMENDED:
                 return $this->authorizationChecker->isGranted('ROLE_H5P_INSTALL_RECOMMENDED_LIBRARIES');
+            case \H5PPermission::COPY_H5P:
+                return $content_id !== NULL && $this->authorizationChecker->isGranted('ROLE_H5P_COPY_ALL');
         }
         return FALSE;
     }

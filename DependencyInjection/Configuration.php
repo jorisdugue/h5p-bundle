@@ -44,6 +44,7 @@ class Configuration implements ConfigurationInterface
             ->booleanNode(\H5PCore::DISPLAY_OPTION_FRAME)->defaultTrue()->end()
             ->integerNode(\H5PCore::DISPLAY_OPTION_DOWNLOAD)->defaultValue(\H5PDisplayOptionBehaviour::NEVER_SHOW)->end()
             ->integerNode(\H5PCore::DISPLAY_OPTION_EMBED)->defaultValue(\H5PDisplayOptionBehaviour::NEVER_SHOW)->end()
+            ->booleanNode(\H5PCore::DISPLAY_OPTION_COPY)->defaultValue(\H5PDisplayOptionBehaviour::NEVER_SHOW)->end()
             ->booleanNode(\H5PCore::DISPLAY_OPTION_COPYRIGHT)->defaultTrue()->end()
             ->integerNode('content_type_cache_updated_at')->defaultValue(0)->end()
             ->booleanNode('enable_lrs_content_types')->defaultFalse()->end()
