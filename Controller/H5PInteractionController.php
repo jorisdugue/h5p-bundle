@@ -5,6 +5,7 @@ namespace Studit\H5PBundle\Controller;
 
 
 use Studit\H5PBundle\Entity\Content;
+use Studit\H5PBundle\Service\ResultService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,14 +29,13 @@ class H5PInteractionController extends AbstractController{
         if (!\H5PCore::validToken('result', $token)) {
             \H5PCore::ajaxError('Invalid security token');
         }
-        return new JsonResponse();
-        /*@var ResultService $rs */
-        //$rs = $this->get('studit_h5p.result_storage');
-        //$result = $rs->handleRequest($request, $this->getUser()->getId());
-        /* $em = $this->getDoctrine()->getManager();
-         $em->persist($result);
-         $em->flush();
-         return new JsonResponse(['success' => true]);*/
+        /* @var ResultService $rs */
+        $rs = $this->get('studit_h5p.result_storage');
+        $result = $rs->handleRequest($request, $this->getUser()->getId());
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($result);
+        $em->flush();
+        return new JsonResponse(['success' => true]);
     }
     /**
      * Handles insert, updating and deleting content user data through AJAX.
