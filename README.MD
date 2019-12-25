@@ -77,5 +77,4 @@ Todo
 
 Not everything is ported yet. The following things still need to be done:
 * Upload library. Currently only H5P default libraries can be selected from Hub.
-* Download package
 * Store usage data and points
