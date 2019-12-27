@@ -4,7 +4,9 @@
 namespace Studit\H5PBundle\Controller;
 
 
+use Exception;
 use Studit\H5PBundle\Entity\Content;
+use Studit\H5PBundle\Entity\ContentUserData;
 use Studit\H5PBundle\Service\ResultService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,6 +39,7 @@ class H5PInteractionController extends AbstractController{
         $em->flush();
         return new JsonResponse(['success' => true]);
     }
+
     /**
      * Handles insert, updating and deleting content user data through AJAX.
      *
@@ -46,16 +49,18 @@ class H5PInteractionController extends AbstractController{
      * @param $dataType
      * @param $subContentId
      * @return JsonResponse
+     * @throws Exception
      */
     public function contentUserData(Request $request, $contentId, $dataType, $subContentId)
     {
         $response = [
-            'success' => false
+            'success' => TRUE
         ];
         $user = $this->getUser();
         $data = $request->get("data");
         $preload = $request->get("preload");
         $invalidate = $request->get("invalidate");
+        $em = $this->getDoctrine()->getManager();
         if ($data !== NULL && $preload !== NULL && $invalidate !== NULL) {
             if(!\H5PCore::validToken('contentuserdata', $request->get("token"))){
                 $response->success = FALSE;
@@ -67,14 +72,67 @@ class H5PInteractionController extends AbstractController{
                 //remove data here
                 /* @var ResultService $rs */
                 $rs = $this->get('studit_h5p.result_storage');
-                $rs->removeData($contentId, $dataType, $this->getUser(), $subContentId);
+                $rs->removeData($contentId, $dataType, $user, $subContentId);
             }else{
                 // Wash values to ensure 0 or 1.
                 $preload = ($preload === '0' ? 0 : 1);
                 $invalidate = ($invalidate === '0' ? 0 : 1);
-
+                //get if exists
+                /**
+                 * @var ContentUserData $update
+                 */
+                $update = $em->getRepository("StuditH5PBundle:ContentUserData")->findOneBy(
+                    [
+                        'subContentId' => $subContentId,
+                        'mainContent' => $contentId,
+                        'dataId' => $dataType,
+                        'user' => $user
+                    ]
+                );
+                if(!$update){
+                    /**
+                     * insert data
+                     * @var ContentUserData $contentUserData
+                     */
+                    $contentUserData = new ContentUserData();
+                    $contentUserData->setUser($user->getId());
+                    $contentUserData->setData($data);
+                    $contentUserData->setDataId($dataType);
+                    $contentUserData->setSubContentId($subContentId);
+                    $contentUserData->setPreloaded($preload);
+                    $contentUserData->setDeleteOnContentChange($invalidate);
+                    $contentUserData->setTimestamp( time ());
+                    /**
+                     * @var $content Content
+                     */
+                    $content = $em->getRepository('StuditH5PBundle:Content')->findOneBy(['id' => $contentId]);
+                    $contentUserData->setMainContent($content);
+                    $em->persist($contentUserData);
+                    $em->flush();
+                }else{
+                    //update data
+                    $update->setTimestamp(time());
+                    $update->setPreloaded($preload);
+                    $update->setData($data);
+                    $update->setDeleteOnContentChange($invalidate);
+                    $em->persist($update);
+                    $em->flush();
+                }
             }
+            return new JsonResponse($response);
+        }else{
+            $data = $em->getRepository("StuditH5PBundle:ContentUserData")->findOneBy(
+                [
+                    'subContentId' => $subContentId,
+                    'mainContent' => $contentId,
+                    'dataId' => $dataType,
+                    'user' => $user
+                ]
+            );
+            //decode for read the informations
+            $response['data'] = json_decode($this->get('serializer')->serialize($data,'json'));
         }
+        return new JsonResponse($response);
 
     }
     /**

@@ -13,7 +13,7 @@ class ResultService
 {
     /**
      * @var ContainerInterface
-    */
+     */
     private $container;
 
     /**
@@ -63,7 +63,7 @@ class ResultService
     {
         /**
          * @var $em EntityManagerInterface
-        */
+         */
         $em = $this->container->get('doctrine');
         $ContenUserData = $em->getRepository('StuditH5PBundle:ContentUserData')
             ->findBy(
