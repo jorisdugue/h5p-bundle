@@ -4,6 +4,7 @@
 namespace Studit\H5PBundle\Service;
 
 
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
 use Studit\H5PBundle\Entity\ContentResult;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +30,7 @@ class ResultService
      * @param $userId
      * @return ContentResult
      */
-    public function handleRequest(Request $request, $userId)
+    public function handleRequestFinished(Request $request, $userId)
     {
         $contentId = $request->get('contentId', false);
         if (!$contentId) {
@@ -49,5 +50,35 @@ class ResultService
         $result->setScore($request->get('score') ?? $result->getScore());
         $result->setTime($request->get('time') ?? $result->getTime());
         return $result;
+    }
+
+    /**
+     * remove data in content User Data
+     * @param integer $contentId
+     * @param string $dataType
+     * @param $user
+     * @param integer $subContentId
+     */
+    public function removeData($contentId, $dataType, $user, $subContentId)
+    {
+        /**
+         * @var $em EntityManagerInterface
+        */
+        $em = $this->container->get('doctrine');
+        $ContenUserData = $em->getRepository('StuditH5PBundle:ContentUserData')
+            ->findBy(
+                [
+                    'subContentId' => $subContentId,
+                    'mainContent' => $contentId,
+                    'dataId' => $dataType,
+                    'user' => $user
+                ]
+            );
+        if (count($ContenUserData) > 0){
+            foreach ($ContenUserData as $content){
+                $em->remove($content);
+            }
+            $em->flush();
+        }
     }
 }

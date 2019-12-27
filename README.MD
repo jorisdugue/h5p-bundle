@@ -64,6 +64,8 @@ studit_h5_p:
     use_permission: true # This is false by default to let the demo work out of the box.
     storage_dir: h5p # Location to store all H5P libraries and files
     web_dir: public # Location of the public web directory
+    export: 3 #for all
+    embed: 3 #for all
 ```
 For all configurations see [Configuration.php](DependencyInjection/Configuration.php)
 
@@ -74,7 +76,18 @@ First add a virtual host that points to you project. Then in your browser go to 
 
 Todo
 -------------
+Working: 
+- Store usage data and points (only if user is connected)
+- Download a H5P
+- Upload H5P
+- Update / Install H5P library
 
 Not everything is ported yet. The following things still need to be done:
 * Upload library. Currently only H5P default libraries can be selected from Hub.
-* Store usage data and points
+* Store usage data and points (not finish)
+
+Changelog: 
+-------------
+- Fix many bug ... and update to SF5 :) 
+- Fix bug with missing link img 
+- Fix Download package

@@ -31,7 +31,7 @@ class H5PInteractionController extends AbstractController{
         }
         /* @var ResultService $rs */
         $rs = $this->get('studit_h5p.result_storage');
-        $result = $rs->handleRequest($request, $this->getUser()->getId());
+        $result = $rs->handleRequestFinished($request, $this->getUser()->getId());
         $em = $this->getDoctrine()->getManager();
         $em->persist($result);
         $em->flush();
@@ -49,7 +49,33 @@ class H5PInteractionController extends AbstractController{
      */
     public function contentUserData(Request $request, $contentId, $dataType, $subContentId)
     {
-        return new JsonResponse();
+        $response = [
+            'success' => false
+        ];
+        $user = $this->getUser();
+        $data = $request->get("data");
+        $preload = $request->get("preload");
+        $invalidate = $request->get("invalidate");
+        if ($data !== NULL && $preload !== NULL && $invalidate !== NULL) {
+            if(!\H5PCore::validToken('contentuserdata', $request->get("token"))){
+                $response->success = FALSE;
+                $response->message = 'Invalid security token.';
+                return new JsonResponse($response);
+            }
+            //remove data if data = 0
+            if ($data === '0'){
+                //remove data here
+                /* @var ResultService $rs */
+                $rs = $this->get('studit_h5p.result_storage');
+                $rs->removeData($contentId, $dataType, $this->getUser(), $subContentId);
+            }else{
+                // Wash values to ensure 0 or 1.
+                $preload = ($preload === '0' ? 0 : 1);
+                $invalidate = ($invalidate === '0' ? 0 : 1);
+
+            }
+        }
+
     }
     /**
      * @Route("/embed/{content}")

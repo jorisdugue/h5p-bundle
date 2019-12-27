@@ -13,7 +13,7 @@ class Configuration implements ConfigurationInterface
     /**
      * Generates the configuration tree.
      *
-     * @return NodeInterface
+     * @return TreeBuilder|NodeInterface
      */
     public function getConfigTreeBuilder()
     {
@@ -32,7 +32,7 @@ class Configuration implements ConfigurationInterface
             ->booleanNode('hub_is_enabled')->defaultTrue()->end()
             ->booleanNode('send_usage_statistics')->defaultTrue()->end()
             ->booleanNode('save_content_state')->defaultFalse()->end()
-            ->integerNode('save_content_fequency')->defaultValue(30)->end()
+            ->integerNode('save_content_frequency')->defaultValue(30)->end()
             ->scalarNode('whitelist')->defaultValue(\H5PCore::$defaultContentWhitelist)->end()
             ->scalarNode('library_whitelist_extras')->defaultValue(\H5PCore::$defaultLibraryWhitelistExtras)->end()
             ->booleanNode('dev_mode')->defaultFalse()->end()
