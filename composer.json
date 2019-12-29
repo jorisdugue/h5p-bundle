@@ -1,7 +1,7 @@
 {
     "name": "jorisdugue/h5p-bundle",
     "type": "symfony-bundle",
-    "description": "H5P Bundle for Symfony 4",
+    "description": "H5P Bundle for Symfony 4 and Symfony 5",
     "keywords": ["h5p", "symfony", "interactive", "content", "php"],
     "authors": [
         {
@@ -23,8 +23,6 @@
         "guzzlehttp/guzzle": "^6.5",
         "h5p/h5p-core": "^1.24",
         "h5p/h5p-editor": "^1.24",
-        "symfony/asset": "^5.0",
-        "symfony/console": "5.0.*",
         "symfony/framework-bundle": "~4.0|~5.0",
         "twig/extensions": "^1.5",
         "symfony/serializer": "^5.0"
