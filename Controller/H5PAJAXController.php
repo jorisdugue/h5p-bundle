@@ -2,7 +2,9 @@
 
 namespace Studit\H5PBundle\Controller;
 
+use Exception;
 use Studit\H5PBundle\Core\H5POptions;
+use Studit\H5PBundle\Event\H5PEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -110,6 +112,10 @@ class H5PAJAXController extends AbstractController
             '',
             $locale
         );
+        new H5PEvents('library', NULL, NULL, NULL,
+            $request->get('machineName'), $request->get('majorVersion') . '.' . $request->get('minorVersion'),
+             $this->getUser() != null ? $this->getUser()->getId() : 0, $this->getDoctrine()->getManager()
+        );
         exit();
     }
 
@@ -118,9 +124,9 @@ class H5PAJAXController extends AbstractController
      * Callback for uploading a library
      * @param string $token Editor security token
      * @param int $content_id Id of content that is being edited
-     * @Route("/library-upload/")
      * @param Request $request
-     *
+     * @throws Exception
+     * @Route("/library-upload/")
      */
     public function libraryUploadCallback(Request $request){
         $editor = $this->h5peditor;
@@ -129,7 +135,7 @@ class H5PAJAXController extends AbstractController
             $filePath = $_FILES['h5p']['tmp_name'];
         }else{
             //generate error
-            throw new \Exception("POST file is missing");
+            throw new Exception("POST file is missing");
         }
 
         $editor->ajax->action(
@@ -143,7 +149,7 @@ class H5PAJAXController extends AbstractController
     /**
      * Callback for file uploads.
      *
-     * @param string $token Security token
+     * @param string $token SecuritlibraryCallbacky token
      * @param int $content_id Content id
      * @param Request $request
      * @Route("/files/")
