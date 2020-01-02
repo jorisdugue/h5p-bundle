@@ -4,7 +4,7 @@
 namespace Studit\H5PBundle\Twig;
 
 use Studit\H5PBundle\Core\H5PIntegration;
-
+use Twig\TwigFilter;
 class H5PExtension extends \Twig\Extension\AbstractExtension
 {
     /**
@@ -24,7 +24,7 @@ class H5PExtension extends \Twig\Extension\AbstractExtension
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('h5pCacheBuster', array($this, 'getH5PCacheBuster')),
+            new TwigFilter('h5pCacheBuster', array($this, 'getH5PCacheBuster')),
         );
     }
 
