@@ -15,10 +15,10 @@ composer require studit/h5p-bundle
 
 Enable the bundle in `AppKernel.php`
 ``` php
-$bundles = array(
-    // ...
-    new Studit\H5PBundle\StuditH5PBundle(),
-)
+return [
+// ...
+    \Studit\H5PBundle\StuditH5PBundle::class => ['all' => true]
+]
 ```
 **Warning for Windows** : You need launch the cmd in administrator
 
