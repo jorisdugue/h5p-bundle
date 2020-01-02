@@ -5,7 +5,7 @@ namespace Studit\H5PBundle\Twig;
 
 use Studit\H5PBundle\Core\H5PIntegration;
 
-class H5PExtension extends \Twig_Extension
+class H5PExtension extends \Twig\Extension\AbstractExtension
 {
     /**
      * @var H5PIntegration
