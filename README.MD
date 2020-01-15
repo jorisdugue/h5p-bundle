@@ -27,7 +27,7 @@ Add the H5P assets to the bundle
 php bin/console h5p-bundle:IncludeAssetsCommand
 php bin/console assets:install --symlink
 ```
-and reexcute ...
+and reexecute ...
 ```bash
 php bin/console h5p-bundle:IncludeAssetsCommand
 ```
@@ -69,6 +69,17 @@ studit_h5_p:
 ```
 For all configurations see [Configuration.php](DependencyInjection/Configuration.php)
 
+if you are using permissions here is the current list of permissions in the bundle :
+
+| Permission  | Description |
+|---|---|
+| ROLE_H5P_DOWNLOAD_ALL  |  Download the H5P packages |
+| ROLE_H5P_EMBED_ALL  | Embed/Share to everyone the H5P   |
+| ROLE_H5P_CREATE_RESTRICTED_CONTENT_TYPES  | Restrict for user the type install  |
+| ROLE_H5P_UPDATE_LIBRARIES  | Allow/Disallow the update of package H5P  |
+| ROLE_H5P_INSTALL_RECOMMENDED_LIBRARIES  | Allow/Disallow to install libraries |
+| ROLE_H5P_COPY_ALL  | Allow/Disallow to copy H5P (If you want to Download, you must install to have this role too) |
+
 Usage
 -------------
 
@@ -88,6 +99,7 @@ Not everything is ported yet. The following things still need to be done:
 
 Changelog: 
 -------------
+- Fix bug and update the readme
 - Fix many bug ... and update to SF5 :) 
 - Fix bug with missing link img 
 - Fix Download package
