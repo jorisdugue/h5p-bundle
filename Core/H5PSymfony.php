@@ -13,6 +13,7 @@ use Studit\H5PBundle\DependencyInjection\Configuration;
 use Studit\H5PBundle\Editor\EditorStorage;
 use Studit\H5PBundle\Entity\Content;
 use Studit\H5PBundle\Entity\ContentLibraries;
+use Studit\H5PBundle\Entity\Counters;
 use Studit\H5PBundle\Entity\LibrariesHubCache;
 use Studit\H5PBundle\Entity\LibrariesLanguages;
 use Studit\H5PBundle\Entity\Library;
@@ -854,6 +855,9 @@ class H5PSymfony implements \H5PFrameworkInterface
     public function getLibraryStats($type)
     {
         $count = [];
+        /**
+         * @var Counters $results
+        */
         $results = $this->manager->getRepository('StuditH5PBundle:Counters')->findBy(['type' => $type]);
         // Extract results
         foreach ($results as $library) {

@@ -47,7 +47,7 @@ class H5PEvents extends \H5PEventBase
      */
     protected function save()
     {
-        $data = $this->getDataArray();
+        /*$data = $this->getDataArray();
         $event = new Event();
         $event->setUser($this->userid);
         $event->setContent($data['content_id']);
@@ -57,7 +57,7 @@ class H5PEvents extends \H5PEventBase
         $this->em->persist($event);
         $this->em->flush();
         //$this->id = $event->getId();
-        return $event->getId();
+        return $event->getId();*/
     }
 
 
@@ -72,7 +72,7 @@ class H5PEvents extends \H5PEventBase
         /**
          * @var Counters $current_num
         */
-        $current_num = $this->em->getRepository("StuditH5PBundle:Counters")->findOneBy(['type' => $type, 'libraryName' => $this->library_name, 'libraryVersion' => $this->library_version]);
+        /*$current_num = $this->em->getRepository("StuditH5PBundle:Counters")->findOneBy(['type' => $type, 'libraryName' => $this->library_name, 'libraryVersion' => $this->library_version]);
         if(!$current_num){
             $current_num = new Counters();
             $current_num->setNum(1);
@@ -85,6 +85,6 @@ class H5PEvents extends \H5PEventBase
             $current_num->setNum($current_num->getNum()+1);
             $this->em->persist($current_num);
             $this->em->flush();
-        }
+        }*/
     }
 }

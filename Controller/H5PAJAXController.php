@@ -112,10 +112,10 @@ class H5PAJAXController extends AbstractController
             '',
             $locale
         );
-        new H5PEvents('library', NULL, NULL, NULL,
+        /*new H5PEvents('library', NULL, NULL, NULL,
             $request->get('machineName'), $request->get('majorVersion') . '.' . $request->get('minorVersion'),
              $this->getUser() != null ? $this->getUser()->getId() : 0, $this->getDoctrine()->getManager()
-        );
+        );*/
         exit();
     }
 
