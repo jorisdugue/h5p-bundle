@@ -296,4 +296,13 @@ class H5PIntegration
     {
         return $this->assetsPaths->getUrl($this->options->getH5PAssetPath());
     }
+    
+    /**
+     * Access to direct access to the configuration to save time
+     * @return H5POptions
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
 }
