@@ -1,5 +1,5 @@
 studit_h5p.ajax:
-  resource: "@StuditH5PBundle/Controller/H5PAjaxController.php"
+  resource: "@StuditH5PBundle/Controller/H5PAJAXController.php"
   type:     annotation
 
 studit_h5p.interaction:
