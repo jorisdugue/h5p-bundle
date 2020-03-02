@@ -3,6 +3,9 @@
     "type": "symfony-bundle",
     "description": "H5P Bundle for Symfony 4 and Symfony 5",
     "keywords": ["h5p", "symfony", "interactive", "content", "php"],
+    "license": [
+                "MIT"
+    ],
     "authors": [
         {
             "name": "Nieck Moorman",
