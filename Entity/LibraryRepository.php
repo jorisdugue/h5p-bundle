@@ -3,12 +3,11 @@
 
 namespace Studit\H5PBundle\Entity;
 
-use Doctrine\DBAL\DBALException;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\Persistence\ManagerRegistry;
+
 /**
  * LibraryRepository
  *
@@ -16,8 +15,13 @@ use Doctrine\ORM\Query\ResultSetMapping;
  * repository methods below.
  */
 
-class LibraryRepository extends EntityRepository
+class LibraryRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Library::class);
+    }
+
     public function countContentLibrary($libraryId)
     {
         $qb = $this->createQueryBuilder('l')
