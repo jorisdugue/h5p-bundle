@@ -31,7 +31,9 @@ class H5pBundleIncludeAssetsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->includeAssets();
+	$this->includeAssets();
+
+	return 0;
     }
 
     private function includeAssets()

@@ -22,7 +22,9 @@ class H5pBundleCleanUpFilesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->cleanupFiles($input);
+	$this->cleanupFiles($input);
+
+        return 0;
     }
 
     private function cleanupFiles(InputInterface $input)
