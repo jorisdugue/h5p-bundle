@@ -84,3 +84,7 @@ services:
     Studit\H5PBundle\Controller\H5PAJAXController:
         autowire: true
         tags: [ 'controller.service_arguments']
+
+    Studit\H5PBundle\Entity\EventRepository:
+        autowire: true
+        tags: ['doctrine.repository_service']
