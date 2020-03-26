@@ -24,7 +24,7 @@ class H5pBundleCleanUpFilesCommand extends Command
     {
 	$this->cleanupFiles($input);
 
-        return 0;
+	return 0;
     }
 
     private function cleanupFiles(InputInterface $input)
