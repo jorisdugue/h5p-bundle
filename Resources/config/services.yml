@@ -97,6 +97,10 @@ services:
         autowire: true
         tags: ['doctrine.repository_service']
 
+    Studit\H5PBundle\Entity\LibraryLibrariesRepository:
+        autowire: true
+        tags: ['doctrine.repository_service']
+
     Studit\H5PBundle\Entity\ContentRepository:
         autowire: true
         tags: ['doctrine.repository_service']
