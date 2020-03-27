@@ -6,7 +6,7 @@ use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="EventRepository")
+ * @ORM\Entity(repositoryClass="OptionRepository")
  * @ORM\Table(name="h5p_option")
  */
 class Option

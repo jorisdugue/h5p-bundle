@@ -84,3 +84,27 @@ services:
     Studit\H5PBundle\Controller\H5PAJAXController:
         autowire: true
         tags: [ 'controller.service_arguments']
+
+    Studit\H5PBundle\Entity\EventRepository:
+        autowire: true
+        tags: ['doctrine.repository_service']
+
+    Studit\H5PBundle\Entity\LibraryRepository:
+        autowire: true
+        tags: ['doctrine.repository_service']
+
+    Studit\H5PBundle\Entity\LibrariesLanguagesRepository:
+        autowire: true
+        tags: ['doctrine.repository_service']
+
+    Studit\H5PBundle\Entity\LibraryLibrariesRepository:
+        autowire: true
+        tags: ['doctrine.repository_service']
+
+    Studit\H5PBundle\Entity\ContentRepository:
+        autowire: true
+        tags: ['doctrine.repository_service']
+
+    Studit\H5PBundle\Entity\OptionRepository:
+        autowire: true
+        tags: ['doctrine.repository_service']

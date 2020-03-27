@@ -3,13 +3,19 @@
 
 namespace Studit\H5PBundle\Entity;
 
-use Doctrine\ORM\EntityRepository;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+
 /**
  * EventRepository
  */
-class EventRepository extends EntityRepository
+class EventRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Event::class);
+    }
+
     public function findRecentlyUsedLibraries($userId)
     {
         $qb = $this->createQueryBuilder('e')

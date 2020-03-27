@@ -4,15 +4,20 @@
 namespace Studit\H5PBundle\Entity;
 
 
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NoResultException;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * LibrariesLanguagesRepository
  */
-class LibrariesLanguagesRepository extends EntityRepository
+class LibrariesLanguagesRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, LibrariesLanguages::class);
+    }
+
     public function findForLibrary($machineName, $majorVersion, $minorVersion, $languageCode)
     {
         $qb = $this->createQueryBuilder('ll')
