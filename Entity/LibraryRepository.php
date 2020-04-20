@@ -38,7 +38,7 @@ class LibraryRepository extends ServiceEntityRepository
   SELECT hl.machine_name, 
          MAX(hl.major_version) AS major_version
     FROM h5p_library hl
-   WHERE hl.runnable = 1
+   WHERE hl.runnable = true
 GROUP BY hl.machine_name
 EOT;
         $minor_versions_sql = <<< EOT
