@@ -3,6 +3,8 @@
 
 namespace Studit\H5PBundle\Controller;
 
+use Studit\H5PBundle\Core\H5POptions;
+use Studit\H5PBundle\Editor\LibraryStorage;
 use Studit\H5PBundle\Entity\Content;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,9 +21,14 @@ class H5PController extends AbstractController
 {
 
     protected $h5PIntegrations;
-    public function __construct(H5PIntegration $h5PIntegration)
-    {
+    protected $libraryStorage;
+
+    public function __construct(
+        H5PIntegration $h5PIntegration,
+        LibraryStorage $libraryStorage
+    ) {
         $this->h5PIntegrations = $h5PIntegration;
+        $this->libraryStorage = $libraryStorage;
     }
 
     /**
@@ -39,13 +46,13 @@ class H5PController extends AbstractController
      * @param Content $content
      * @return Response
      */
-    public function showAction(Content $content)
+    public function showAction(Content $content, \H5PCore $h5PCore, H5POptions $h5POptions)
     {
-        $h5pIntegration = $this->get('studit_h5p.integration')->getGenericH5PIntegrationSettings();
+        $h5pIntegration = $this->h5PIntegrations->getGenericH5PIntegrationSettings();
         $contentIdStr = 'cid-' . $content->getId();
-        $h5pIntegration['contents'][$contentIdStr] = $this->get('studit_h5p.integration')->getH5PContentIntegrationSettings($content);
-        $preloaded_dependencies = $this->get('studit_h5p.core')->loadContentDependencies($content->getId(), 'preloaded');
-        $files = $this->get('studit_h5p.core')->getDependenciesFiles($preloaded_dependencies, $this->get('studit_h5p.options')->getRelativeH5PPath());
+        $h5pIntegration['contents'][$contentIdStr] = $this->h5PIntegrations->getH5PContentIntegrationSettings($content);
+        $preloaded_dependencies = $h5PCore->loadContentDependencies($content->getId(), 'preloaded');
+        $files = $h5PCore->getDependenciesFiles($preloaded_dependencies, $h5POptions->getRelativeH5PPath());
         if ($content->getLibrary()->isFrame()) {
             $jsFilePaths = array_map(function ($asset) {
                 return $asset->path;
@@ -53,7 +60,7 @@ class H5PController extends AbstractController
             $cssFilePaths = array_map(function ($asset) {
                 return $asset->path;
             }, $files['styles']);
-            $coreAssets = $this->get('studit_h5p.integration')->getCoreAssets();
+            $coreAssets = $this->h5PIntegrations->getCoreAssets();
             $h5pIntegration['core']['scripts'] = $coreAssets['scripts'];
             $h5pIntegration['core']['styles'] = $coreAssets['styles'];
             $h5pIntegration['contents'][$contentIdStr]['scripts'] = $jsFilePaths;
@@ -94,20 +101,20 @@ class H5PController extends AbstractController
             //get data
             $data = $form->getData();
             //create h5p content
-            $contentId = $this->get('studit_h5p.library_storage')->storeLibraryData($data['library'], $data['parameters'], $content);
+            $contentId = $this->libraryStorage->storeLibraryData($data['library'], $data['parameters'], $content);
             return $this->redirectToRoute('studit_h5p_h5p_show', ['content' => $contentId]);
         }
         $h5pIntegration = $this->h5PIntegrations->getEditorIntegrationSettings($content ? $content->getId() : null);
-        return $this->render('@StuditH5P/edit.html.twig', ['form' => $form->createView(), 'h5pIntegration' => $h5pIntegration, 'h5pCoreTranslations' => $this->get('studit_h5p.integration')->getTranslationFilePath()]);
+        return $this->render('@StuditH5P/edit.html.twig', ['form' => $form->createView(), 'h5pIntegration' => $h5pIntegration, 'h5pCoreTranslations' => $this->h5PIntegrations->getTranslationFilePath()]);
     }
     /**
      * @Route("delete/{contentId}")
      * @param integer $contentId
      * @return RedirectResponse
      */
-    public function deleteAction($contentId)
+    public function deleteAction($contentId, \H5PStorage $h5PStorage)
     {
-        $this->get('studit_h5p.storage')->deletePackage([
+        $h5PStorage->deletePackage([
             'id' => $contentId,
             'slug' => 'interactive-content'
         ]);

@@ -7,8 +7,7 @@ services:
     studit_h5p.options:
         class: Studit\H5PBundle\Core\H5POptions
         arguments: [~, '%kernel.project_dir%', '@doctrine.orm.entity_manager']
-    Studit\H5PBundle\Core\H5POptions:
-        arguments: [~, '%kernel.project_dir%', '@doctrine.orm.entity_manager']
+    Studit\H5PBundle\Core\H5POptions: '@studit_h5p.options'
 
     studit_h5p.editor_storage:
         class: Studit\H5PBundle\Editor\EditorStorage
@@ -18,14 +17,17 @@ services:
     studit_h5p.interface:
         class: Studit\H5PBundle\Core\H5PSymfony
         arguments: ['@studit_h5p.options', '@studit_h5p.editor_storage','@security.token_storage', '@doctrine.orm.entity_manager', '@session.flash_bag', '@security.authorization_checker', '@event_dispatcher', '@router.default']
+    Studit\H5PBundle\Core\H5PSymfony: '@studit_h5p.interface'
 
     studit_h5p.core:
         class: H5PCore
         arguments: ['@studit_h5p.interface', ~, ~]
+    H5PCore: '@studit_h5p.core'
 
     studit_h5p.editor_ajax:
         class: Studit\H5PBundle\Editor\EditorAjax
         arguments: ['@doctrine.orm.entity_manager', '@security.token_storage']
+    Studit\H5PBundle\Editor\EditorAjax: '@studit_h5p.editor_ajax'
 
     studit_h5p.editor:
         class: H5peditor
@@ -35,18 +37,22 @@ services:
     studit_h5p.validator:
         class: H5PValidator
         arguments: ['@studit_h5p.interface', '@studit_h5p.core']
+    H5PValidator: '@studit_h5p.validator'
 
     studit_h5p.storage:
         class: H5PStorage
         arguments: ['@studit_h5p.interface', '@studit_h5p.core']
+    H5PStorage: '@studit_h5p.storage'
 
     studit_h5p.contentvalidator:
         class: H5PContentValidator
         arguments: ['@studit_h5p.interface', '@studit_h5p.core']
+    H5PContentValidator: '@studit_h5p.contentvalidator'
 
     studit_h5p.export:
         class: H5PExport
         arguments: ['@studit_h5p.interface', '@studit_h5p.core']
+    H5PExport: '@studit_h5p.export'
 
     studit_h5p.integration:
         class: Studit\H5PBundle\Core\H5PIntegration
@@ -56,16 +62,19 @@ services:
     studit_h5p.library_storage:
         class: Studit\H5PBundle\Editor\LibraryStorage
         arguments: ['@studit_h5p.core', '@studit_h5p.editor', '@doctrine.orm.entity_manager']
+    Studit\H5PBundle\Editor\LibraryStorage: '@studit_h5p.library_storage'
 
     studit_h5p.twig.h5p_extension:
         class: Studit\H5PBundle\Twig\H5PExtension
         arguments: ['@studit_h5p.integration']
         tags:
             - { name: twig.extension }
+    Studit\H5PBundle\Twig\H5PExtension: '@studit_h5p.twig.h5p_extension'
 
     studit_h5p.result_storage:
         class: Studit\H5PBundle\Service\ResultService
         arguments: ['@service_container']
+    Studit\H5PBundle\Service\ResultService: '@studit_h5p.result_storage'
 
     Studit\H5PBundle\Command\H5pBundleIncludeAssetsCommand:
         autowire: true
