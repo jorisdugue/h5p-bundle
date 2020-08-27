@@ -86,7 +86,7 @@ class H5PInteractionController extends AbstractController{
                         'subContentId' => $subContentId,
                         'mainContent' => $contentId,
                         'dataId' => $dataType,
-                        'user' => $user
+                        'user' => $user->getId()
                     ]
                 );
                 if(!$update){
@@ -126,7 +126,7 @@ class H5PInteractionController extends AbstractController{
                     'subContentId' => $subContentId,
                     'mainContent' => $contentId,
                     'dataId' => $dataType,
-                    'user' => $user
+                    'user' => $user->getId()
                 ]
             );
             //decode for read the informations
