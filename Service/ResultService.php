@@ -71,7 +71,7 @@ class ResultService
                     'subContentId' => $subContentId,
                     'mainContent' => $contentId,
                     'dataId' => $dataType,
-                    'user' => $user
+                    'user' => $user->getId()
                 ]
             );
         if (count($ContenUserData) > 0){
