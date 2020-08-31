@@ -23,7 +23,7 @@ use Studit\H5PBundle\Event\LibrarySemanticsEvent;
 use GuzzleHttp\Client;
 use H5PPermission;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
@@ -42,9 +42,9 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     private $manager;
     /**
-     * @var FlashBagInterface
+     * @var Session
      */
-    private $flashBag;
+    private $session;
     /**
      * @var AuthorizationCheckerInterface
      */
@@ -72,25 +72,25 @@ class H5PSymfony implements \H5PFrameworkInterface
      * @param EditorStorage $editorStorage
      * @param TokenStorageInterface $tokenStorage
      * @param EntityManagerInterface $manager
-     * @param FlashBagInterface $flashBag
+     * @param Session $session
      * @param AuthorizationCheckerInterface $authorizationChecker
      * @param EventDispatcherInterface $eventDispatcher
      * @param RouterInterface $router
      */
     public function __construct(H5POptions $options,
-                                EditorStorage $editorStorage,
-                                TokenStorageInterface $tokenStorage,
-                                EntityManagerInterface $manager,
-                                FlashBagInterface $flashBag,
-                                AuthorizationCheckerInterface $authorizationChecker,
-                                EventDispatcherInterface $eventDispatcher,
-                                RouterInterface $router)
+        EditorStorage $editorStorage,
+        TokenStorageInterface $tokenStorage,
+        EntityManagerInterface $manager,
+        Session $session,
+        AuthorizationCheckerInterface $authorizationChecker,
+        EventDispatcherInterface $eventDispatcher,
+        RouterInterface $router)
     {
         $this->options = $options;
         $this->editorStorage = $editorStorage;
         $this->tokenStorage = $tokenStorage;
         $this->manager = $manager;
-        $this->flashBag = $flashBag;
+        $this->session = $session;
         $this->authorizationChecker = $authorizationChecker;
         $this->eventDispatcher = $eventDispatcher;
         $this->router = $router;
@@ -192,7 +192,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function setErrorMessage($message, $code = NULL)
     {
-        $this->flashBag->add("error", "[$code]: $message");
+        $this->session->getFlashBag()->add("error", "[$code]: $message");
     }
 
     /**
@@ -201,7 +201,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function setInfoMessage($message)
     {
-        $this->flashBag->add("info", "$message");
+        $this->session->getFlashBag()->add("info", "$message");
     }
 
     /**
@@ -211,10 +211,10 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function getMessages($type)
     {
-        if (!$this->flashBag->has($type)) {
+        if (!$this->session->getFlashBag()->has($type)) {
             return NULL;
         }
-        $messages = $this->flashBag->get($type);
+        $messages = $this->session->getFlashBag()->get($type);
         return $messages;
     }
 
@@ -857,7 +857,7 @@ class H5PSymfony implements \H5PFrameworkInterface
         $count = [];
         /**
          * @var Counters $results
-        */
+         */
         $results = $this->manager->getRepository('StuditH5PBundle:Counters')->findBy(['type' => $type]);
         // Extract results
         foreach ($results as $library) {
