@@ -99,15 +99,23 @@ class H5POptions
 
     public function getRelativeH5PPath()
     {
-        return "/". $this->getOption('storage_dir');
+        $dir = $this->getOption('storage_dir');
+
+        return $dir[0] === '/' ? $dir : '/' . $dir;
     }
 
     public function getAbsoluteH5PPathWithSlash(){
-        return $this->getAbsoluteWebPath() . '/' . $this->getOption('storage_dir') .'/';
+        $dir = $this->getOption('storage_dir');
+        $dir = $dir[0] === '/' ? $dir : '/' . $dir;
+
+        return $this->getAbsoluteWebPath() . $dir .'/';
     }
     public function getAbsoluteH5PPath()
     {
-        return $this->getAbsoluteWebPath() . '/' . $this->getOption('storage_dir');
+        $dir = $this->getOption('storage_dir');
+        $dir = $dir[0] === '/' ? $dir : '/' . $dir;
+
+        return $this->getAbsoluteWebPath() . $dir;
     }
 
     public function getAbsoluteWebPath()

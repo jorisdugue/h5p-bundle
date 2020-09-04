@@ -65,7 +65,7 @@ class LibraryStorage
         if (!$content){
             $contentData['id'] = $contentId;
         }
-        $this->updateLibraryFiles($contentId, $contentData, $oldLibrary, $oldParameters);
+        $this->updateLibraryFiles($contentId, $contentData, $oldLibrary, $oldParameters->params ?? null);
         return $contentId;
     }
     private function updateLibraryFiles($contentId, $contentData, $oldLibrary, $oldParameters)
