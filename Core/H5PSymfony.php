@@ -523,7 +523,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     {
         $library = $this->manager->getRepository('StuditH5PBundle:Library')->find($contentData['library']['libraryId']);
         $content->setLibrary($library);
-        $content->setParameters($contentData['params']);
+        $content->setParameters(str_replace('#tmp','', $contentData['params']));
         $content->setDisabledFeatures($contentData['disable']);
         $content->setFilteredParameters(null);
         $this->manager->persist($content);
