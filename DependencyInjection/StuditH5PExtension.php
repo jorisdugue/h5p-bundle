@@ -23,15 +23,6 @@ class StuditH5PExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
-        /** @var $definition Definition **/
-        $definition = $container->getDefinition("studit_h5p.core");
-        $dir = $config["storage_dir"];
-        $dir[0] === '/' ? $dir : '/' . $dir;
-
-        $definition->setArgument(1, $container->getParameter('kernel.project_dir') . '/' . $config['web_dir'] . $dir);
-        $definition->setArgument(2, '/');
-        $definition->setArgument(3, 'en');
-        $definition->setArgument(4, true);
         $definition = $container->getDefinition("studit_h5p.options");
         $definition->setArgument(0, $config);
     }
