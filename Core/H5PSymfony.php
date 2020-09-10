@@ -30,6 +30,8 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Doctrine\ORM\Query\Expr;
+use Doctrine\DBAL\Exception\ConnectionException;
+use Doctrine\DBAL\Exception\TableNotFoundException;
 
 class H5PSymfony implements \H5PFrameworkInterface
 {
@@ -778,7 +780,12 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function getOption($name, $default = NULL)
     {
-        return $this->options->getOption($name, $default);
+        try {
+            // return default if db/table still not created
+            return $this->options->getOption($name, $default);
+        } catch (ConnectionException | TableNotFoundException $e) {
+            return $default;
+        }
     }
 
     /**
