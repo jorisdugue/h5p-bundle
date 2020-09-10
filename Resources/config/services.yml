@@ -22,11 +22,11 @@ services:
     studit_h5p.filestorage:
         class: Studit\H5PBundle\Service\H5PFileStorage
         arguments: ['@studit_h5p.options']
-    Studit\H5PBundle\Service\H5PFileStorage: '@studit_h5p.storage'
+    Studit\H5PBundle\Service\H5PFileStorage: '@studit_h5p.filestorage'
 
     studit_h5p.core:
         class: H5PCore
-        arguments: ['@studit_h5p.interface', '@studit_h5p.filestorage', 'en', '/', true]
+        arguments: ['@studit_h5p.interface', '@studit_h5p.filestorage', ~, 'en' , true]
     H5PCore: '@studit_h5p.core'
 
     studit_h5p.editor_ajax:
