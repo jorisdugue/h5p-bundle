@@ -3,11 +3,9 @@
 namespace Studit\H5PBundle\Core;
 
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\ORM\EntityManagerInterface;
 use Studit\H5PBundle\Entity\Option;
-use Doctrine\DBAL\Exception\ConnectionException;
-use Doctrine\DBAL\Exception\TableNotFoundException;
 
 class H5POptions
 {
@@ -45,7 +43,7 @@ class H5POptions
     {
         try {
             $this->retrieveStoredConfig();
-        } catch (ConnectionException | TableNotFoundException $e) {
+        } catch (DriverException $e) {
         }
 
         if (isset($this->storedConfig[$name])) {
