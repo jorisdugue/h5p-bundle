@@ -20,9 +20,10 @@ class ContentResult
      */
     private $id;
     /**
-     * @var Content|null
+     * @var Content
      *
      * @ORM\ManyToOne(targetEntity="Studit\H5PBundle\Entity\Content")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $content;
     /**
