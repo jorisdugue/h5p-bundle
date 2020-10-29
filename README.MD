@@ -1,9 +1,9 @@
 # H5PBundle
 Bundle to integrate H5P into Symfony. This bundle is a port of the H5P Drupal module. For more info about H5P see [H5P.org](https://h5p.org)
 
-For Symfony 3.X => [H5PBundle for Symfony 2.X and 3.X](https://github.com/studit/h5p-bundle/tree/193db01f03584a131b011e7ab8ed9973b1496b6d)
+For Symfony 3.X => [H5PBundle for Symfony 2.X and 3.X](https://github.com/Emmedy/h5p-bundle)
 
-This bundle was tested on Symfony 4.0 and Symfony 5.0
+This bundle was tested on Symfony 4.X and Symfony 5.X
 
 Installation
 ------------
@@ -14,7 +14,7 @@ composer require jorisdugue/h5p-bundle
 ```
 
 Enable the bundle in `AppKernel.php`
-``` php
+```php
 return [
 // ...
     \Studit\H5PBundle\StuditH5PBundle::class => ['all' => true]
@@ -43,7 +43,7 @@ php bin/console make:migrations
 ````
 
 Enable the routing in `routes.yaml`
-``` yaml
+```yaml
 studit_h5p.demo:
     resource: "@StuditH5PBundle/Resources/config/routing_demo.yml"
     prefix:   /
@@ -58,16 +58,29 @@ studit_h5p.demo is optional. It can be used as an example how to use H5P within 
 Configuration
 -------------
 
+For SF4: 
 Configure the bundle in `services.yaml`. (Watch for the underscore between h5 and p)
-``` yml
+```yaml
 parameters:
     studit_h5_p:
         use_permission: true # This is false by default to let the demo work out of the box.
-        storage_dir: h5p # Location to store all H5P libraries and files
+        storage_dir: / # Location to store all H5P libraries and files
         web_dir: public # Location of the public web directory
         export: 3 #for all
         embed: 3 #for all
 ```
+
+For Symfony 5:
+Configure the bundle in `packages > h5pBundle.yml`.
+```yaml
+studit_h5_p:
+    use_permission: true # This is false by default to let the demo work out of the box.
+    storage_dir: / # Location to store all H5P libraries and files
+    web_dir: public # Location of the public web directory
+    export: 3 #for all
+    embed: 3 #for all
+```
+
 For all configurations see [Configuration.php](DependencyInjection/Configuration.php)
 
 if you are using permissions here is the current list of permissions in the bundle :
