@@ -53,7 +53,7 @@ class H5PInteractionController extends AbstractController{
      */
     public function contentUserData(Request $request, $contentId, $dataType, $subContentId)
     {
-        if ((int)$contentId === 0) {
+        if (!$contentId) {
             return new JsonResponse(['success' => false, 'message' => 'No content']);
         }
 
