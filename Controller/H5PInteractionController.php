@@ -53,9 +53,10 @@ class H5PInteractionController extends AbstractController{
      */
     public function contentUserData(Request $request, $contentId, $dataType, $subContentId)
     {
-        $response = [
-            'success' => TRUE
-        ];
+        if ((int)$contentId === 0) {
+            return new JsonResponse(['success' => false, 'message' => 'No content']);
+        }
+
         $user = $this->getUser();
         $data = $request->get("data");
         $preload = $request->get("preload");
@@ -63,9 +64,7 @@ class H5PInteractionController extends AbstractController{
         $em = $this->getDoctrine()->getManager();
         if ($data !== NULL && $preload !== NULL && $invalidate !== NULL) {
             if(!\H5PCore::validToken('contentuserdata', $request->get("token"))){
-                $response->success = FALSE;
-                $response->message = 'Invalid security token.';
-                return new JsonResponse($response);
+                return new JsonResponse(['success' => false, 'message' => 'No content']);
             }
             //remove data if data = 0
             if ($data === '0'){
@@ -119,7 +118,8 @@ class H5PInteractionController extends AbstractController{
                     $em->flush();
                 }
             }
-            return new JsonResponse($response);
+
+            return new JsonResponse(['success' => true]);
         }else{
             $data = $em->getRepository("StuditH5PBundle:ContentUserData")->findOneBy(
                 [
@@ -129,11 +129,13 @@ class H5PInteractionController extends AbstractController{
                     'user' => $user->getId()
                 ]
             );
-            //decode for read the informations
-            $response['data'] = json_decode($this->get('serializer')->serialize($data,'json'));
-        }
-        return new JsonResponse($response);
 
+            //decode for read the information
+            return new JsonResponse([
+                'success' => true,
+                'data' => json_decode($this->get('serializer')->serialize($data, 'json')),
+            ]);
+        }
     }
     /**
      * @Route("/embed/{content}")
