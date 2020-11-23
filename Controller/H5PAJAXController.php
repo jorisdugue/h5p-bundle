@@ -17,6 +17,7 @@ class H5PAJAXController extends AbstractController
 {
     protected $h5peditor;
     protected $serviceh5poptions;
+
     public function __construct(\H5peditor $h5peditor, H5POptions $h5poption)
     {
         $this->h5peditor = $h5peditor;
@@ -67,11 +68,14 @@ class H5PAJAXController extends AbstractController
 
     /**
      * Callback for translations
+     *
      * @param Request $request
      * @Route("/translations/")
-     * @return string
+     *
+     * @return JsonResponse
      */
-    public function TranslationsCallback(Request $request) {
+    public function TranslationsCallback(Request $request)
+    {
         ob_start();
 
         $editor = $this->h5peditor;
@@ -86,6 +90,7 @@ class H5PAJAXController extends AbstractController
 
         return $this->json(json_decode($output, true));
     }
+
     /**
      * Callback Install library from external file
      *
@@ -151,24 +156,26 @@ class H5PAJAXController extends AbstractController
     }
 
     /**
-     *
      * Callback for uploading a library
+     *
      * @param string $token Editor security token
      * @param int $content_id Id of content that is being edited
      * @param Request $request
+     *
      * @throws Exception
      * @Route("/library-upload/")
      */
-    public function libraryUploadCallback(Request $request) {
+    public function libraryUploadCallback(Request $request)
+    {
         ob_start();
 
         $editor = $this->h5peditor;
         $filePath = null;
-        if (isset($_FILES['h5p'])){
+        if (isset($_FILES['h5p'])) {
             $filePath = $_FILES['h5p']['tmp_name'];
-        }else{
+        } else {
             //generate error
-            throw new Exception("POST file is missing");
+            throw new Exception('POST file is missing');
         }
 
         $editor->ajax->action(
@@ -183,6 +190,7 @@ class H5PAJAXController extends AbstractController
 
         return $this->json(json_decode($output, true));
     }
+
     /**
      * Callback for file uploads.
      *
@@ -191,7 +199,7 @@ class H5PAJAXController extends AbstractController
      * @param Request $request
      * @Route("/files/")
      */
-    function filesCallback(Request $request)
+    public function filesCallback(Request $request)
     {
         ob_start();
 
@@ -217,7 +225,8 @@ class H5PAJAXController extends AbstractController
      * @param Request $request
      * @Route("/filter/")
      */
-    function filterCallback(Request $request) {
+    public function filterCallback(Request $request)
+    {
         ob_start();
 
         $editor = $this->h5peditor;
