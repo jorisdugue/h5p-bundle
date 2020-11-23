@@ -32,13 +32,19 @@ class H5PAJAXController extends AbstractController
      */
     public function librariesCallback(Request $request)
     {
+        ob_start();
+
         if ($request->get('machineName')) {
             return $this->libraryCallback($request);
         }
         //get editor
         $editor = $this->h5peditor;
         $editor->ajax->action(\H5PEditorEndpoints::LIBRARIES);
-        exit();
+
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        return $this->json(json_decode($output, true));
     }
 
     /**
@@ -48,9 +54,15 @@ class H5PAJAXController extends AbstractController
      */
     public function contentTypeCacheCallback()
     {
+        ob_start();
+
         $editor = $this->h5peditor;
         $editor->ajax->action(\H5PEditorEndpoints::CONTENT_TYPE_CACHE);
-        exit();
+
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        return $this->json(json_decode($output, true));
     }
 
     /**
@@ -59,14 +71,20 @@ class H5PAJAXController extends AbstractController
      * @Route("/translations/")
      * @return string
      */
-    public function TranslationsCallback(Request $request){
+    public function TranslationsCallback(Request $request) {
+        ob_start();
+
         $editor = $this->h5peditor;
         $language = $request->get('language');
         $editor->ajax->action(
             \H5PEditorEndpoints::TRANSLATIONS,
             $language
         );
-        exit();
+
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        return $this->json(json_decode($output, true));
     }
     /**
      * Callback Install library from external file
@@ -80,13 +98,19 @@ class H5PAJAXController extends AbstractController
      */
     public function libraryInstallCallback(Request $request)
     {
+        ob_start();
+
         $editor = $this->h5peditor;
         $editor->ajax->action(
             \H5PEditorEndpoints::LIBRARY_INSTALL,
             $request->get('token', 1),
             $request->get('id')
         );
-        exit();
+
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        return $this->json(json_decode($output, true));
     }
 
     /**
@@ -99,7 +123,10 @@ class H5PAJAXController extends AbstractController
      * @param Request $request
      */
     private function libraryCallback(Request $request)
-    {//$machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '', $defaultLanguage
+    {
+        ob_start();
+
+        //$machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '', $defaultLanguage
         $editor = $this->h5peditor;
         $locale = $request->getLocale() != null ? $request->getLocale() : 'en';
         $editor->ajax->action(
@@ -116,7 +143,11 @@ class H5PAJAXController extends AbstractController
             $request->get('machineName'), $request->get('majorVersion') . '.' . $request->get('minorVersion'),
              $this->getUser() != null ? $this->getUser()->getId() : 0, $this->getDoctrine()->getManager()
         );*/
-        exit();
+
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        return $this->json(json_decode($output, true));
     }
 
     /**
@@ -128,7 +159,9 @@ class H5PAJAXController extends AbstractController
      * @throws Exception
      * @Route("/library-upload/")
      */
-    public function libraryUploadCallback(Request $request){
+    public function libraryUploadCallback(Request $request) {
+        ob_start();
+
         $editor = $this->h5peditor;
         $filePath = null;
         if (isset($_FILES['h5p'])){
@@ -144,7 +177,11 @@ class H5PAJAXController extends AbstractController
             $filePath,
             $request->get('contentId')
         );
-        exit();
+
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        return $this->json(json_decode($output, true));
     }
     /**
      * Callback for file uploads.
@@ -156,6 +193,8 @@ class H5PAJAXController extends AbstractController
      */
     function filesCallback(Request $request)
     {
+        ob_start();
+
         $editor = $this->h5peditor;
         $id = $request->get('id') != null ? $request->get('id') : $request->get('contentId');
         $editor->ajax->action(
@@ -163,7 +202,11 @@ class H5PAJAXController extends AbstractController
             $request->get('token', 1),
             $id
         );
-        exit();
+
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        return $this->json(json_decode($output, true));
     }
 
     /**
@@ -174,13 +217,19 @@ class H5PAJAXController extends AbstractController
      * @param Request $request
      * @Route("/filter/")
      */
-    function filterCallback(Request $request){
+    function filterCallback(Request $request) {
+        ob_start();
+
         $editor = $this->h5peditor;
         $editor->ajax->action(
             \H5PEditorEndpoints::FILTER,
             $request->get('token', 1),
             $request->get('libraryParameters')
         );
-        exit();
+
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        return $this->json(json_decode($output, true));
     }
 }
