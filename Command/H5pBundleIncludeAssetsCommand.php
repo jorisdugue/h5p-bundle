@@ -37,7 +37,7 @@ class H5pBundleIncludeAssetsCommand extends Command
         return 0;
     }
 
-    private function includeAssets(bool $relative)
+    private function includeAssets(bool $copy)
     {
         //get dir of vendor H5P
 
@@ -53,21 +53,21 @@ class H5pBundleIncludeAssetsCommand extends Command
 
         $coreSubDir = "h5p-core/";
         $coreDirs = ["fonts", "images", "js", "styles"];
-        $this->createFiles($fromDir, $toDir, $coreSubDir, $coreDirs, $relative);
+        $this->createFiles($fromDir, $toDir, $coreSubDir, $coreDirs, $copy);
 
         $editorSubDir = "h5p-editor/";
         $editorDirs = ["ckeditor", "images", "language", "libs", "scripts", "styles"];
-        $this->createFiles($fromDir, $toDir, $editorSubDir, $editorDirs, $relative);
+        $this->createFiles($fromDir, $toDir, $editorSubDir, $editorDirs, $copy);
 
     }
 
-    private function createFiles($fromDir, $toDir, $subDir, $subDirs, $relative)
+    private function createFiles($fromDir, $toDir, $subDir, $subDirs, $copy)
     {
         foreach ($subDirs as $dir) {
             $src = $fromDir . $subDir . $dir;
             $dist = $toDir . $subDir . $dir;
 
-            $relative
+            $copy
                 ? $this->recurseCopy($src, $dist)
                 : symlink($src, $dist);
             }
