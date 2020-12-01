@@ -26,7 +26,7 @@ class H5pBundleIncludeAssetsCommand extends Command
     {
         $this
             ->setDescription('Include the assets from the h5p vendor bundle in the public resources directory of this bundle.')
-            ->addOption('relative', 'r', InputOption::VALUE_NONE, 'Copy files')
+            ->addOption('copy', 'c', InputOption::VALUE_NONE, 'Copy files')
         ;
     }
 
