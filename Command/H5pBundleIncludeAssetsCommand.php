@@ -32,7 +32,7 @@ class H5pBundleIncludeAssetsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->includeAssets($input->getOption('relative') ?? false);
+        $this->includeAssets($input->getOption('copy') ?? false);
 
         return 0;
     }
