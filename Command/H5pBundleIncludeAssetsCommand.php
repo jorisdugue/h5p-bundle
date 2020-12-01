@@ -25,20 +25,20 @@ class H5pBundleIncludeAssetsCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Include the assets from the h5p vendor bundle in the public resources directory of this bundle.');
+            ->setDescription('Include the assets from the h5p vendor bundle in the public resources directory of this bundle.')
+            ->addOption('copy', 'c', InputOption::VALUE_NONE, 'Copy files')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-	$this->includeAssets();
+        $this->includeAssets($input->getOption('copy') ?? false);
 
-	return 0;
+        return 0;
     }
 
-    private function includeAssets()
+    private function includeAssets(bool $copy)
     {
-
         //get dir of vendor H5P
 
         $fromDir = $this->appKernel->getProjectDir()."/vendor/h5p/";
@@ -53,18 +53,39 @@ class H5pBundleIncludeAssetsCommand extends Command
 
         $coreSubDir = "h5p-core/";
         $coreDirs = ["fonts", "images", "js", "styles"];
-        $this->createSymLinks($fromDir, $toDir, $coreSubDir, $coreDirs);
+        $this->createFiles($fromDir, $toDir, $coreSubDir, $coreDirs, $copy);
 
         $editorSubDir = "h5p-editor/";
         $editorDirs = ["ckeditor", "images", "language", "libs", "scripts", "styles"];
-        $this->createSymLinks($fromDir, $toDir, $editorSubDir, $editorDirs);
+        $this->createFiles($fromDir, $toDir, $editorSubDir, $editorDirs, $copy);
 
     }
 
-    private function createSymLinks($fromDir, $toDir, $subDir, $subDirs)
+    private function createFiles($fromDir, $toDir, $subDir, $subDirs, $copy)
     {
         foreach ($subDirs as $dir) {
-            symlink($fromDir . $subDir . $dir, $toDir . $subDir . $dir);
+            $src = $fromDir . $subDir . $dir;
+            $dist = $toDir . $subDir . $dir;
+
+            $copy
+                ? $this->recurseCopy($src, $dist)
+                : symlink($src, $dist);
+            }
+    }
+
+    private function recurseCopy($src, $dst)
+    {
+        $dir = opendir($src);
+        @mkdir($dst);
+        while (false !== ($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
+                if (is_dir($src . '/' . $file)) {
+                    $this->recurseCopy($src . '/' . $file, $dst . '/' . $file);
+                } else {
+                    copy($src . '/' . $file, $dst . '/' . $file);
+                }
+            }
         }
+        closedir($dir);
     }
 }
