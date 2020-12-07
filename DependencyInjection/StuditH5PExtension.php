@@ -25,5 +25,11 @@ class StuditH5PExtension extends Extension
         $loader->load('services.yml');
         $definition = $container->getDefinition("studit_h5p.options");
         $definition->setArgument(0, $config);
+
+        // stop saving the .h5p files if export/frame false
+        if(!$config['frame'] || !$config['export']){
+            $definition = $container->getDefinition("studit_h5p.core");
+            $definition->setArgument(4, false);
+        }
     }
 }
