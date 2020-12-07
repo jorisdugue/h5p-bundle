@@ -630,6 +630,19 @@ class H5PSymfony implements \H5PFrameworkInterface
             }
         }
         foreach ($librariesInUse as $dependency) {
+            // avoid content libraries inserted at the same time from two diff requests
+            $ContentLibraryExist = $this->manager->getRepository('StuditH5PBundle:ContentLibraries')
+                ->findOneBy([
+                    'content' => $contentId,
+                    'weight' => $dependency['weight'],
+                    'library' => $dependency['library']['libraryId'],
+                ])
+            ;
+
+            if ($ContentLibraryExist) {
+                continue;
+            }
+
             $dropCss = in_array($dependency['library']['machineName'], $dropLibraryCssList);
             $contentLibrary = new ContentLibraries();
             $contentLibrary->setContent($content);
