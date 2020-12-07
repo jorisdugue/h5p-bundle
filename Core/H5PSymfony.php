@@ -32,6 +32,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Exception\TableNotFoundException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class H5PSymfony implements \H5PFrameworkInterface
 {
@@ -630,19 +631,6 @@ class H5PSymfony implements \H5PFrameworkInterface
             }
         }
         foreach ($librariesInUse as $dependency) {
-            // avoid content libraries inserted at the same time from two diff requests
-            $ContentLibraryExist = $this->manager->getRepository('StuditH5PBundle:ContentLibraries')
-                ->findOneBy([
-                    'content' => $contentId,
-                    'weight' => $dependency['weight'],
-                    'library' => $dependency['library']['libraryId'],
-                ])
-            ;
-
-            if ($ContentLibraryExist) {
-                continue;
-            }
-
             $dropCss = in_array($dependency['library']['machineName'], $dropLibraryCssList);
             $contentLibrary = new ContentLibraries();
             $contentLibrary->setContent($content);
@@ -653,7 +641,11 @@ class H5PSymfony implements \H5PFrameworkInterface
             $contentLibrary->setDependencyType($dependency['type']);
             $this->manager->persist($contentLibrary);
         }
-        $this->manager->flush();
+        try {
+            // avoid content libraries inserted at the same time from two diff requests
+            $this->manager->flush();
+        } catch (UniqueConstraintViolationException $exception) {
+        }
     }
 
     /**
