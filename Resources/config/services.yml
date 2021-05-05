@@ -78,7 +78,7 @@ services:
 
     studit_h5p.result_storage:
         class: Studit\H5PBundle\Service\ResultService
-        arguments: ['@service_container']
+        arguments: ['@doctrine.orm.entity_manager']
     Studit\H5PBundle\Service\ResultService: '@studit_h5p.result_storage'
 
     Studit\H5PBundle\Command\H5pBundleIncludeAssetsCommand:
