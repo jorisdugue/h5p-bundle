@@ -5,24 +5,22 @@ namespace Studit\H5PBundle\Service;
 
 
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Container\ContainerInterface;
 use Studit\H5PBundle\Entity\ContentResult;
 use Symfony\Component\HttpFoundation\Request;
 
 class ResultService
 {
     /**
-     * @var ContainerInterface
+     * @var EntityManagerInterface
      */
-    private $container;
+    private $em;
 
     /**
      * ResultService constructor.
-     * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(EntityManagerInterface $em)
     {
-        $this->container = $container;
+        $this->em = $em;
     }
 
     /**
@@ -37,8 +35,8 @@ class ResultService
             \H5PCore::ajaxError('Invalid content');
         }
         // TODO: Fire 'h5p_alter_user_result' event here.
-        $contentRepo = $this->container->get('doctrine')->getRepository('StuditH5PBundle:Content');
-        $contentResultRepo = $this->container->get('doctrine')->getRepository('StuditH5PBundle:ContentResult');
+        $contentRepo = $this->em->getRepository('StuditH5PBundle:Content');
+        $contentResultRepo = $this->em->getRepository('StuditH5PBundle:ContentResult');
         $result = $contentResultRepo->findOneBy(['userId' => $userId, 'content' => $contentId]);
         if (!$result) {
             $result = new ContentResult($userId);
@@ -61,11 +59,7 @@ class ResultService
      */
     public function removeData($contentId, $dataType, $user, $subContentId)
     {
-        /**
-         * @var $em EntityManagerInterface
-         */
-        $em = $this->container->get('doctrine');
-        $ContenUserData = $em->getRepository('StuditH5PBundle:ContentUserData')
+        $ContentUserData = $this->em->getRepository('StuditH5PBundle:ContentUserData')
             ->findBy(
                 [
                     'subContentId' => $subContentId,
@@ -74,11 +68,11 @@ class ResultService
                     'user' => $user->getId()
                 ]
             );
-        if (count($ContenUserData) > 0){
-            foreach ($ContenUserData as $content){
-                $em->remove($content);
+        if (count($ContentUserData) > 0){
+            foreach ($ContentUserData as $content){
+                $this->em->remove($content);
             }
-            $em->flush();
+            $this->em->flush();
         }
     }
 }
