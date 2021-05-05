@@ -64,7 +64,7 @@ class ResultService
                 [
                     'subContentId' => $subContentId,
                     'mainContent' => $contentId,
-                    'dataId' => 'state',
+                    'dataId' => $dataType,
                     'user' => $user->getId()
                 ]
             );
