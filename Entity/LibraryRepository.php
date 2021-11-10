@@ -76,7 +76,7 @@ GROUP BY hl4.machine_name,
 EOT;
         $em = $this->getEntityManager();
         $stmt = $em->getConnection()->prepare($sql);
-        $stmt->execute();
+        $stmt = $stmt->execute();
         $libraryVersions = $stmt->fetchAll();
         foreach ($libraryVersions as &$libraryVersion) {
             $libraryVersion = (object)$libraryVersion;
