@@ -72,7 +72,7 @@ class H5PEvents extends \H5PEventBase
         /**
          * @var Counters $current_num
         */
-        /*$current_num = $this->em->getRepository("StuditH5PBundle:Counters")->findOneBy(['type' => $type, 'libraryName' => $this->library_name, 'libraryVersion' => $this->library_version]);
+        /*$current_num = $this->em->getRepository("Studit\H5PBundle\Entity\Counters")->findOneBy(['type' => $type, 'libraryName' => $this->library_name, 'libraryVersion' => $this->library_version]);
         if(!$current_num){
             $current_num = new Counters();
             $current_num->setNum(1);

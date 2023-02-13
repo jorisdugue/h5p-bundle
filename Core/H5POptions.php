@@ -61,7 +61,7 @@ class H5POptions
 
         if (!isset($this->storedConfig[$name]) || $this->storedConfig[$name] !== $value) {
             $this->storedConfig[$name] = $value;
-            $option = $this->manager->getRepository('StuditH5PBundle:Option')->find($name);
+            $option = $this->manager->getRepository('Studit\H5PBundle\Entity\Option')->find($name);
             if (!$option) {
                 $option = new Option($name);
             }
@@ -75,7 +75,7 @@ class H5POptions
     {
         if ($this->storedConfig === null) {
             $this->storedConfig = [];
-            $options = $this->manager->getRepository('StuditH5PBundle:Option')->findAll();
+            $options = $this->manager->getRepository('Studit\H5PBundle\Entity\Option')->findAll();
             foreach ($options as $option) {
                 $this->storedConfig[$option->getName()] = $option->getValue();
             }

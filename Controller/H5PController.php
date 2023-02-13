@@ -37,7 +37,7 @@ class H5PController extends AbstractController
      */
     public function listAction()
     {
-        $contents = $this->getDoctrine()->getRepository('StuditH5PBundle:Content')->findAll();
+        $contents = $this->getDoctrine()->getRepository('Studit\H5PBundle\Entity\Content')->findAll();
         return $this->render('@StuditH5P/list.html.twig', ['contents' => $contents]);
     }
     /**

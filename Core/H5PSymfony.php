@@ -284,9 +284,9 @@ class H5PSymfony implements \H5PFrameworkInterface
                 'l1.preloadedJs as preloadedJs',
                 'l1.preloadedCss as preloadedCss',
             ])
-            ->from('StuditH5PBundle:Library', 'l1')
+            ->from('Studit\H5PBundle\Entity\Library', 'l1')
             ->leftJoin(
-                'StuditH5PBundle:Library',
+                'Studit\H5PBundle\Entity\Library',
                 'l2',
                 Expr\Join::WITH,
                 new Expr\Andx([
@@ -321,7 +321,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function loadLibraries()
     {
-        $res = $this->manager->getRepository('StuditH5PBundle:Library')->findBy([], ['title' => 'ASC', 'majorVersion' => 'ASC', 'minorVersion' => 'ASC']);
+        $res = $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->findBy([], ['title' => 'ASC', 'majorVersion' => 'ASC', 'minorVersion' => 'ASC']);
         $libraries = [];
         foreach ($res as $library) {
             $libraries[$library->getMachineName()][] = $library;
@@ -348,7 +348,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function getLibraryId($machineName, $majorVersion = NULL, $minorVersion = NULL)
     {
-        $library = $this->manager->getRepository('StuditH5PBundle:Library')->findOneBy(['machineName' => $machineName, 'majorVersion' => $majorVersion, 'minorVersion' => $minorVersion]);
+        $library = $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->findOneBy(['machineName' => $machineName, 'majorVersion' => $majorVersion, 'minorVersion' => $minorVersion]);
         return $library ? $library->getId() : null;
     }
 
@@ -378,7 +378,7 @@ class H5PSymfony implements \H5PFrameworkInterface
         if ($this->getOption('dev_mode', FALSE)) {
             return TRUE;
         }
-        return $this->manager->getRepository('StuditH5PBundle:Library')->isPatched($library);
+        return $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->isPatched($library);
     }
 
 
@@ -458,7 +458,7 @@ class H5PSymfony implements \H5PFrameworkInterface
                 }
             }
         } else {
-            $library = $this->manager->getRepository('StuditH5PBundle:Library')->find($libraryData['libraryId']);
+            $library = $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->find($libraryData['libraryId']);
             $library->setTitle($libraryData['title']);
             $library->setPatchVersion($libraryData['patchVersion']);
             $library->setFullscreen($libraryData['fullscreen']);
@@ -474,7 +474,7 @@ class H5PSymfony implements \H5PFrameworkInterface
             $this->manager->flush();
             $this->deleteLibraryDependencies($libraryData['libraryId']);
         }
-        $languages = $this->manager->getRepository('StuditH5PBundle:LibrariesLanguages')->findBy(['library' => $library]);
+        $languages = $this->manager->getRepository('Studit\H5PBundle\Entity\LibrariesLanguages')->findBy(['library' => $library]);
         foreach ($languages as $language) {
             $this->manager->remove($language);
         }
@@ -524,7 +524,7 @@ class H5PSymfony implements \H5PFrameworkInterface
 
     private function storeContent($contentData, Content $content)
     {
-        $library = $this->manager->getRepository('StuditH5PBundle:Library')->find($contentData['library']['libraryId']);
+        $library = $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->find($contentData['library']['libraryId']);
         $content->setLibrary($library);
         $content->setParameters(str_replace('#tmp','', $contentData['params']));
         $content->setDisabledFeatures($contentData['disable']);
@@ -540,7 +540,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     public function updateContent($contentData, $contentMainId = NULL)
     {
         /** @var $content Content*/
-        $content = $this->manager->getRepository('StuditH5PBundle:Content')->find($contentData['id']);
+        $content = $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->find($contentData['id']);
         return $this->storeContent($contentData, $content);
     }
 
@@ -549,7 +549,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function resetContentUserData($contentId)
     {
-        $contentUserDatas = $this->manager->getRepository('StuditH5PBundle:ContentUserData')->findBy(['mainContent' => $contentId, 'deleteOnContentChange' => true]);
+        $contentUserDatas = $this->manager->getRepository('Studit\H5PBundle\Entity\ContentUserData')->findBy(['mainContent' => $contentId, 'deleteOnContentChange' => true]);
         foreach ($contentUserDatas as $contentUserData) {
             $contentUserData->setData('RESET');
             $contentUserData->setTimestamp(time());
@@ -565,9 +565,9 @@ class H5PSymfony implements \H5PFrameworkInterface
     {
         foreach ($dependencies as $dependency) {
             /** @var Library $library*/
-            $library = $this->manager->getRepository('StuditH5PBundle:Library')->find($libraryId);
+            $library = $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->find($libraryId);
             /** @var Library $requiredLibrary*/
-            $requiredLibrary = $this->manager->getRepository('StuditH5PBundle:Library')->findOneBy(['machineName' => $dependency['machineName'], 'majorVersion' => $dependency['majorVersion'], 'minorVersion' => $dependency['minorVersion']]);
+            $requiredLibrary = $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->findOneBy(['machineName' => $dependency['machineName'], 'majorVersion' => $dependency['majorVersion'], 'minorVersion' => $dependency['minorVersion']]);
             $libraryLibraries = new LibraryLibraries();
             $libraryLibraries->setLibrary($library);
             $libraryLibraries->setRequiredLibrary($requiredLibrary);
@@ -582,8 +582,8 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function copyLibraryUsage($contentId, $copyFromId, $contentMainId = NULL)
     {
-        $contentLibrariesFrom = $this->manager->getRepository('StuditH5PBundle:ContentLibraries')->findBy(['content' => $copyFromId]);
-        $contentTo = $this->manager->getRepository('StuditH5PBundle:Content')->find($contentId);
+        $contentLibrariesFrom = $this->manager->getRepository('Studit\H5PBundle\Entity\ContentLibraries')->findBy(['content' => $copyFromId]);
+        $contentTo = $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->find($contentId);
         foreach ($contentLibrariesFrom as $contentLibrary) {
             $contentLibraryTo = clone $contentLibrary;
             $contentLibraryTo->setContent($contentTo);
@@ -597,7 +597,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function deleteContentData($contentId)
     {
-        $content = $this->manager->getRepository('StuditH5PBundle:Content')->find($contentId);
+        $content = $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->find($contentId);
         if ($content) {
             $this->manager->remove($content);
             $this->manager->flush();
@@ -609,7 +609,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function deleteLibraryUsage($contentId)
     {
-        $contentLibraries = $this->manager->getRepository('StuditH5PBundle:ContentLibraries')->findBy(['content' => $contentId]);
+        $contentLibraries = $this->manager->getRepository('Studit\H5PBundle\Entity\ContentLibraries')->findBy(['content' => $contentId]);
         foreach ($contentLibraries as $contentLibrary) {
             $this->manager->remove($contentLibrary);
         }
@@ -623,7 +623,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     public function saveLibraryUsage($contentId, $librariesInUse)
     {
 
-        $content = $this->manager->getRepository('StuditH5PBundle:Content')->find($contentId);
+        $content = $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->find($contentId);
         $dropLibraryCssList = array();
         foreach ($librariesInUse as $dependency) {
             if (!empty($dependency['library']['dropLibraryCss'])) {
@@ -634,7 +634,7 @@ class H5PSymfony implements \H5PFrameworkInterface
             $dropCss = in_array($dependency['library']['machineName'], $dropLibraryCssList);
             $contentLibrary = new ContentLibraries();
             $contentLibrary->setContent($content);
-            $library = $this->manager->getRepository('StuditH5PBundle:Library')->find($dependency['library']['libraryId']);
+            $library = $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->find($dependency['library']['libraryId']);
             $contentLibrary->setLibrary($library);
             $contentLibrary->setWeight($dependency['weight']);
             $contentLibrary->setDropCss($dropCss);
@@ -665,9 +665,9 @@ class H5PSymfony implements \H5PFrameworkInterface
         if ($skipContent) {
             $usage['content'] = -1;
         } else {
-            $usage['content'] = $this->manager->getRepository('StuditH5PBundle:Library')->countContentLibrary($libraryId);
+            $usage['content'] = $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->countContentLibrary($libraryId);
         }
-        $usage['libraries'] = $this->manager->getRepository('StuditH5PBundle:LibraryLibraries')->countLibraries($libraryId);
+        $usage['libraries'] = $this->manager->getRepository('Studit\H5PBundle\Entity\LibraryLibraries')->countLibraries($libraryId);
         return $usage;
     }
 
@@ -676,12 +676,12 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function loadLibrary($machineName, $majorVersion, $minorVersion)
     {
-        $library = $this->manager->getRepository('StuditH5PBundle:Library')->findOneArrayBy(['machineName' => $machineName, 'majorVersion' => $majorVersion, 'minorVersion' => $minorVersion]);
+        $library = $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->findOneArrayBy(['machineName' => $machineName, 'majorVersion' => $majorVersion, 'minorVersion' => $minorVersion]);
         if (!$library) {
             return false;
         }
         $library['libraryId'] = $library['id'];
-        $libraryLibraries = $this->manager->getRepository('StuditH5PBundle:LibraryLibraries')->findBy(['library' => $library['id']]);
+        $libraryLibraries = $this->manager->getRepository('Studit\H5PBundle\Entity\LibraryLibraries')->findBy(['library' => $library['id']]);
         foreach ($libraryLibraries as $dependency) {
             $requiredLibrary = $dependency->getRequiredLibrary();
             $library["{$dependency->getDependencyType()}Dependencies"][] = [
@@ -698,7 +698,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function loadLibrarySemantics($machineName, $majorVersion, $minorVersion)
     {
-        $library = $this->manager->getRepository('StuditH5PBundle:Library')->findOneBy(['machineName' => $machineName, 'majorVersion' => $majorVersion, 'minorVersion' => $minorVersion]);
+        $library = $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->findOneBy(['machineName' => $machineName, 'majorVersion' => $majorVersion, 'minorVersion' => $minorVersion]);
         if ($library) {
             return $library->getSemantics();
         }
@@ -719,7 +719,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function deleteLibraryDependencies($libraryId)
     {
-        $libraries = $this->manager->getRepository('StuditH5PBundle:LibraryLibraries')->findBy(['library' => $libraryId]);
+        $libraries = $this->manager->getRepository('Studit\H5PBundle\Entity\LibraryLibraries')->findBy(['library' => $libraryId]);
         foreach ($libraries as $library) {
             $this->manager->remove($library);
         }
@@ -746,7 +746,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function deleteLibrary($library)
     {
-        $library = $this->manager->getRepository('StuditH5PBundle:Library')->find($library);
+        $library = $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->find($library);
         $this->manager->remove($library);
         $this->manager->flush();
         // Delete files
@@ -769,7 +769,7 @@ class H5PSymfony implements \H5PFrameworkInterface
         if ($type !== NULL) {
             $query['dependencyType'] = $type;
         }
-        $contentLibraries = $this->manager->getRepository('StuditH5PBundle:ContentLibraries')->findBy($query, ['weight' => 'ASC']);
+        $contentLibraries = $this->manager->getRepository('Studit\H5PBundle\Entity\ContentLibraries')->findBy($query, ['weight' => 'ASC']);
         $dependencies = [];
         foreach ($contentLibraries as $contentLibrary) {
             /** @var Library $library */
@@ -812,7 +812,7 @@ class H5PSymfony implements \H5PFrameworkInterface
         if (!isset($fields['filtered'])) {
             return;
         }
-        $content = $this->manager->getRepository('StuditH5PBundle:Content')->find($id);
+        $content = $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->find($id);
         $content->setFilteredParameters($fields['filtered']);
         $this->manager->persist($content);
         $this->manager->flush();
@@ -827,7 +827,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function clearFilteredParameters($library_id)
     {
-        $contents = $this->manager->getRepository('StuditH5PBundle:Content')->findBy(['library' => $library_id]);
+        $contents = $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->findBy(['library' => $library_id]);
         foreach ($contents as $content) {
             $content->setFilteredParameters('');
             $this->manager->persist($content);
@@ -840,7 +840,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function getNumNotFiltered()
     {
-        return $this->manager->getRepository('StuditH5PBundle:Content')->countNotFiltered();
+        return $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->countNotFiltered();
     }
 
     /**
@@ -848,7 +848,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function getNumContent($libraryId, $skip = NULL)
     {
-        return $this->manager->getRepository('StuditH5PBundle:Content')->countLibraryContent($libraryId);
+        return $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->countLibraryContent($libraryId);
     }
 
     /**
@@ -870,7 +870,7 @@ class H5PSymfony implements \H5PFrameworkInterface
         /**
          * @var Counters $results
          */
-        $results = $this->manager->getRepository('StuditH5PBundle:Counters')->findBy(['type' => $type]);
+        $results = $this->manager->getRepository('Studit\H5PBundle\Entity\Counters')->findBy(['type' => $type]);
         // Extract results
         foreach ($results as $library) {
             $count[$library->getLibraryName() . " " . $library->getLibraryVersion()] = $library->getNum();
@@ -883,7 +883,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function getNumAuthors()
     {
-        $contents = $this->manager->getRepository('StuditH5PBundle:Content')->countContent();
+        $contents = $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->countContent();
         // Return 1 if there is content and 0 if there is none
         return !$contents;
     }
@@ -915,7 +915,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     public function getLibraryContentCount()
     {
         $contentCount = [];
-        $results = $this->manager->getRepository('StuditH5PBundle:Content')->libraryContentCount();
+        $results = $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->libraryContentCount();
         // Format results
         foreach ($results as $library) {
             $contentCount[$library['machineName'] . " " . $library['majorVersion'] . "." . $library['minorVersion']] = $library[1];

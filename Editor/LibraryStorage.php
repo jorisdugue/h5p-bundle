@@ -39,7 +39,7 @@ class LibraryStorage
     public function storeLibraryData($library, $parameters, Content $content = null)
     {
         $libraryData = Utilities::getLibraryProperties($library);
-        $libraryData['libraryId'] = $this->entityManager->getRepository('StuditH5PBundle:Library')->findIdBy($libraryData['machineName'], $libraryData['majorVersion'], $libraryData['minorVersion']);
+        $libraryData['libraryId'] = $this->entityManager->getRepository('Studit\H5PBundle\Entity\Library')->findIdBy($libraryData['machineName'], $libraryData['majorVersion'], $libraryData['minorVersion']);
         if ($content) {
             $oldLibrary = [
                 'name' => $content->getLibrary()->getMachineName(),
