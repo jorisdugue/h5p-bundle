@@ -35,8 +35,8 @@ class ResultService
             \H5PCore::ajaxError('Invalid content');
         }
         // TODO: Fire 'h5p_alter_user_result' event here.
-        $contentRepo = $this->em->getRepository('StuditH5PBundle:Content');
-        $contentResultRepo = $this->em->getRepository('StuditH5PBundle:ContentResult');
+        $contentRepo = $this->em->getRepository('Studit\H5PBundle\Entity\Content');
+        $contentResultRepo = $this->em->getRepository('Studit\H5PBundle\Entity\ContentResult');
         $result = $contentResultRepo->findOneBy(['userId' => $userId, 'content' => $contentId]);
         if (!$result) {
             $result = new ContentResult($userId);
@@ -59,7 +59,7 @@ class ResultService
      */
     public function removeData($contentId, $dataType, $user, $subContentId)
     {
-        $ContentUserData = $this->em->getRepository('StuditH5PBundle:ContentUserData')
+        $ContentUserData = $this->em->getRepository('Studit\H5PBundle\Entity\ContentUserData')
             ->findBy(
                 [
                     'subContentId' => $subContentId,

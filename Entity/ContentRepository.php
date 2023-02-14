@@ -55,7 +55,7 @@ class ContentRepository extends ServiceEntityRepository
      */
     public function findUserResult($userId, Content $content)
     {
-        $contentResultRepo = $this->getEntityManager()->getRepository('StuditH5PBundle:ContentResult');
+        $contentResultRepo = $this->getEntityManager()->getRepository('Studit\H5PBundle\Entity\ContentResult');
         $response = $contentResultRepo->createQueryBuilder('cr')
             ->where('cr.userId = :userId')
             ->andWhere('cr.content = :content')

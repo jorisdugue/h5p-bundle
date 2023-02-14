@@ -35,7 +35,7 @@ class EditorAjax implements \H5PEditorAjaxInterface
      */
     public function getLatestLibraryVersions()
     {
-        return $this->manager->getRepository('StuditH5PBundle:Library')->findLatestLibraryVersions();
+        return $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->findLatestLibraryVersions();
     }
 
 
@@ -51,11 +51,11 @@ class EditorAjax implements \H5PEditorAjaxInterface
     {
         // Get only the specified content type from cache
         if ($machineName !== NULL) {
-            $contentTypeCache = $this->manager->getRepository('StuditH5PBundle:LibrariesHubCache')->findOneBy(['machineName' => $machineName]);
+            $contentTypeCache = $this->manager->getRepository('Studit\H5PBundle\Entity\LibrariesHubCache')->findOneBy(['machineName' => $machineName]);
             return [$contentTypeCache];
         }
         // Get all cached content types
-        return $this->manager->getRepository('StuditH5PBundle:LibrariesHubCache')->findAll();
+        return $this->manager->getRepository('Studit\H5PBundle\Entity\LibrariesHubCache')->findAll();
     }
 
     /**
@@ -69,7 +69,7 @@ class EditorAjax implements \H5PEditorAjaxInterface
         $recentlyUsed = [];
         $user = $this->tokenStorage->getToken()->getUser();
         if (is_object($user)) {
-            $events = $this->manager->getRepository('StuditH5PBundle:Event')->findRecentlyUsedLibraries($user->getId());
+            $events = $this->manager->getRepository('Studit\H5PBundle\Entity\Event')->findRecentlyUsedLibraries($user->getId());
             foreach ($events as $event) {
                 $recentlyUsed[] = $event['libraryName'];
             }

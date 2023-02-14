@@ -148,7 +148,7 @@ class H5PIntegration
             ]
         ];
         if (is_object($this->tokenStorage->getToken()->getUser())) {
-            $contentUserData = $this->entityManager->getRepository('StuditH5PBundle:ContentUserData')->findOneBy(['mainContent' => $content, 'user' => $this->tokenStorage->getToken()->getUser()->getId()]);
+            $contentUserData = $this->entityManager->getRepository('Studit\H5PBundle\Entity\ContentUserData')->findOneBy(['mainContent' => $content, 'user' => $this->tokenStorage->getToken()->getUser()->getId()]);
             if ($contentUserData) {
                 $content_user_data[$contentUserData->getSubContentId()][$contentUserData->getDataId()] = $contentUserData->getData();
             }

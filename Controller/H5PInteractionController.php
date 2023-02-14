@@ -80,7 +80,7 @@ class H5PInteractionController extends AbstractController{
                 /**
                  * @var ContentUserData $update
                  */
-                $update = $em->getRepository("StuditH5PBundle:ContentUserData")->findOneBy(
+                $update = $em->getRepository("Studit\H5PBundle\Entity\ContentUserData")->findOneBy(
                     [
                         'subContentId' => $subContentId,
                         'mainContent' => $contentId,
@@ -104,7 +104,7 @@ class H5PInteractionController extends AbstractController{
                     /**
                      * @var $content Content
                      */
-                    $content = $em->getRepository('StuditH5PBundle:Content')->findOneBy(['id' => $contentId]);
+                    $content = $em->getRepository('Studit\H5PBundle\Entity\Content')->findOneBy(['id' => $contentId]);
                     $contentUserData->setMainContent($content);
                     $em->persist($contentUserData);
                     $em->flush();
@@ -121,7 +121,7 @@ class H5PInteractionController extends AbstractController{
 
             return new JsonResponse(['success' => true]);
         }else{
-            $data = $em->getRepository("StuditH5PBundle:ContentUserData")->findOneBy(
+            $data = $em->getRepository("Studit\H5PBundle\Entity\ContentUserData")->findOneBy(
                 [
                     'subContentId' => $subContentId,
                     'mainContent' => $contentId,
