@@ -1,39 +1,47 @@
 {
-    "name": "jorisdugue/h5p-bundle",
-    "type": "symfony-bundle",
-    "description": "H5P Bundle for Symfony 4 and Symfony 5",
-    "keywords": ["h5p", "symfony", "interactive", "content", "php"],
-    "license": [
-                "MIT"
-    ],
-    "authors": [
-        {
-            "name": "Nieck Moorman",
-            "email": "nieck@emmedy.com",
-            "homepage": "https://emmedy.com",
-            "role": "developer"
-        },
-        {
-            "name": "Joris Dugué",
-            "email": "joris@studit.fr",
-            "role": "developer",
-            "homepage": "https://joris.dugue.ml"
-        }
-    ],
-    "require": {
-        "php": "^7.2.5 || ^8.0",
-        "doctrine/orm": "^2.7",
-        "guzzlehttp/guzzle": "^7.3",
-        "h5p/h5p-core": "^1.24",
-        "h5p/h5p-editor": "^1.24",
-        "symfony/framework-bundle": "~4.0|~5.0",
-        "symfony/serializer": "~4.0|~5.0",
-        "twig/extra-bundle": "^3.0",
-        "doctrine/doctrine-bundle": "^2.0",
-        "symfony/security-bundle": "~4.0|~5.0",
-        "symfony/asset": "~4.0|~5.0"
+  "name": "jorisdugue/h5p-bundle",
+  "type": "symfony-bundle",
+  "description": "H5P Bundle for Symfony 4 and Symfony 5",
+  "keywords": [
+    "h5p",
+    "symfony",
+    "interactive",
+    "content",
+    "php"
+  ],
+  "license": [
+    "MIT"
+  ],
+  "authors": [
+    {
+      "name": "Nieck Moorman",
+      "email": "nieck@emmedy.com",
+      "homepage": "https://emmedy.com",
+      "role": "developer"
     },
-    "autoload": {
-        "psr-4": { "Studit\\H5PBundle\\": "" }
+    {
+      "name": "Joris Dugué",
+      "email": "joris@studit.fr",
+      "role": "developer",
+      "homepage": "https://joris.dugue.ml"
     }
+  ],
+  "require": {
+    "php": ">= 7.2.5",
+    "doctrine/orm": "^2.14.1",
+    "guzzlehttp/guzzle": "^7.5",
+    "h5p/h5p-core": "^1.24",
+    "h5p/h5p-editor": "^1.25",
+    "symfony/framework-bundle": "~4.0|~5.0|~6.0",
+    "symfony/serializer": "~4.0|~5.0|~6.0",
+    "twig/extra-bundle": "^3.0",
+    "doctrine/doctrine-bundle": "^2.0",
+    "symfony/security-bundle": "~4.0|~5.0|~6.0",
+    "symfony/asset": "~4.0|~5.0|~6.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Studit\\H5PBundle\\": ""
+    }
+  }
 }
