@@ -16,7 +16,7 @@ services:
 
     studit_h5p.interface:
         class: Studit\H5PBundle\Core\H5PSymfony
-        arguments: ['@studit_h5p.options', '@studit_h5p.editor_storage','@security.token_storage', '@doctrine.orm.entity_manager', '@session', '@security.authorization_checker', '@event_dispatcher', '@router.default']
+        arguments: ['@studit_h5p.options', '@studit_h5p.editor_storage','@security.token_storage', '@doctrine.orm.entity_manager', '@?session', '@?request_stack', '@security.authorization_checker', '@event_dispatcher', '@router.default']
     Studit\H5PBundle\Core\H5PSymfony: '@studit_h5p.interface'
 
     studit_h5p.filestorage:
@@ -91,12 +91,15 @@ services:
 
     Studit\H5PBundle\Controller\H5PController:
         autowire: true
+        autoconfigure: true
         tags: [ 'controller.service_arguments']
     Studit\H5PBundle\Controller\H5PInteractionController:
         autowire: true
+        autoconfigure: true
         tags: [ 'controller.service_arguments']
     Studit\H5PBundle\Controller\H5PAJAXController:
         autowire: true
+        autoconfigure: true
         tags: [ 'controller.service_arguments']
 
     Studit\H5PBundle\Entity\EventRepository:
