@@ -3,7 +3,7 @@ Bundle to integrate H5P into Symfony. This bundle is a port of the H5P Drupal mo
 
 For Symfony 3.X => [H5PBundle for Symfony 2.X and 3.X](https://github.com/Emmedy/h5p-bundle)
 
-This bundle was tested on Symfony 4.X and Symfony 5.X
+This bundle was tested on Symfony 4.X, Symfony 5.X, Symfony 6.X, Symfony 7.X-dev
 
 Installation
 ------------
@@ -32,7 +32,6 @@ and reexecute ...
 php bin/console h5p-bundle:IncludeAssetsCommand
 ```
   
-
 Add required tables and relations to the database
 ``` bash
 php bin/console doctrine:schema:update --force 
@@ -85,14 +84,14 @@ For all configurations see [Configuration.php](DependencyInjection/Configuration
 
 if you are using permissions here is the current list of permissions in the bundle :
 
-| Permission  | Description |
-|---|---|
-| ROLE_H5P_DOWNLOAD_ALL  |  Download the H5P packages |
-| ROLE_H5P_EMBED_ALL  | Embed/Share to everyone the H5P   |
-| ROLE_H5P_CREATE_RESTRICTED_CONTENT_TYPES  | Restrict for user the type install  |
-| ROLE_H5P_UPDATE_LIBRARIES  | Allow/Disallow the update of package H5P  |
-| ROLE_H5P_INSTALL_RECOMMENDED_LIBRARIES  | Allow/Disallow to install libraries |
-| ROLE_H5P_COPY_ALL  | Allow/Disallow to copy H5P (If you want to Download, you must install to have this role too) |
+| Permission                               | Description                                                                                  |
+|------------------------------------------|----------------------------------------------------------------------------------------------|
+| ROLE_H5P_DOWNLOAD_ALL                    | Download the H5P packages                                                                    |
+| ROLE_H5P_EMBED_ALL                       | Embed/Share to everyone the H5P                                                              |
+| ROLE_H5P_CREATE_RESTRICTED_CONTENT_TYPES | Restrict for user the type install                                                           |
+| ROLE_H5P_UPDATE_LIBRARIES                | Allow/Disallow the update of package H5P                                                     |
+| ROLE_H5P_INSTALL_RECOMMENDED_LIBRARIES   | Allow/Disallow to install libraries                                                          |
+| ROLE_H5P_COPY_ALL                        | Allow/Disallow to copy H5P (If you want to Download, you must install to have this role too) |
 
 Usage
 -------------
