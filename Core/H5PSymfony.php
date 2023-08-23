@@ -23,6 +23,8 @@ use Studit\H5PBundle\Event\LibrarySemanticsEvent;
 use GuzzleHttp\Client;
 use H5PPermission;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Router;
@@ -84,7 +86,8 @@ class H5PSymfony implements \H5PFrameworkInterface
         EditorStorage $editorStorage,
         TokenStorageInterface $tokenStorage,
         EntityManagerInterface $manager,
-        Session $session,
+        ?Session $session,
+        ?RequestStack $requestStack,
         AuthorizationCheckerInterface $authorizationChecker,
         EventDispatcherInterface $eventDispatcher,
         RouterInterface $router)
@@ -93,10 +96,16 @@ class H5PSymfony implements \H5PFrameworkInterface
         $this->editorStorage = $editorStorage;
         $this->tokenStorage = $tokenStorage;
         $this->manager = $manager;
-        $this->session = $session;
         $this->authorizationChecker = $authorizationChecker;
         $this->eventDispatcher = $eventDispatcher;
         $this->router = $router;
+        try {
+            $this->session = !$requestStack ? null : $requestStack->getSession();
+        } catch (SessionNotFoundException $e) {
+        }
+        if (!$this->session) {
+            $this->session = $session;
+        }
     }
 
     /**
@@ -195,7 +204,9 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function setErrorMessage($message, $code = NULL)
     {
-        $this->session->getFlashBag()->add("error", "[$code]: $message");
+        if ($this->session) {
+            $this->session->getFlashBag()->add("error", "[$code]: $message");
+        }
     }
 
     /**
@@ -204,7 +215,9 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function setInfoMessage($message)
     {
-        $this->session->getFlashBag()->add("info", "$message");
+        if ($this->session) {
+            $this->session->getFlashBag()->add("info", "$message");
+        }
     }
 
     /**
@@ -214,11 +227,10 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function getMessages($type)
     {
-        if (!$this->session->getFlashBag()->has($type)) {
-            return NULL;
+        if (!$this->session || !$this->session->getFlashBag()->has($type)) {
+            return null;
         }
-        $messages = $this->session->getFlashBag()->get($type);
-        return $messages;
+        return $this->session->getFlashBag()->get($type);
     }
 
     /**
