@@ -32,12 +32,12 @@
     "guzzlehttp/guzzle": "^7.5",
     "h5p/h5p-core": "^1.24",
     "h5p/h5p-editor": "^1.25",
-    "symfony/framework-bundle": "~4.0|~5.0|~6.0",
+    "symfony/framework-bundle": "~4.0|~5.0|~6.0|~7.0",
     "symfony/serializer": "~4.0|~5.0|~6.0",
     "twig/extra-bundle": "^3.0",
     "doctrine/doctrine-bundle": "^2.0",
-    "symfony/security-bundle": "~4.0|~5.0|~6.0",
-    "symfony/asset": "~4.0|~5.0|~6.0"
+    "symfony/security-bundle": "~4.0|~5.0|~6.0|~7.0",
+    "symfony/asset": "~4.0|~5.0|~6.0|~7.0"
   },
   "autoload": {
     "psr-4": {
