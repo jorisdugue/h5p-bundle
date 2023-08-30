@@ -4,20 +4,50 @@
 namespace Studit\H5PBundle\Controller;
 
 
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use H5PCore;
+use Studit\H5PBundle\Core\H5PIntegration;
+use Studit\H5PBundle\Core\H5POptions;
 use Studit\H5PBundle\Entity\Content;
 use Studit\H5PBundle\Entity\ContentUserData;
 use Studit\H5PBundle\Service\ResultService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route("/h5p/interaction")
  */
 class H5PInteractionController extends AbstractController{
+
+    protected $entityManager;
+    protected $resultService;
+    protected $serializer;
+    protected $assetsPaths;
+    protected $options;
+    protected $h5PIntegration;
+    protected $h5PCore;
+    protected $kernel;
+
+    public function __construct(EntityManagerInterface $entityManager, ResultService $resultService, SerializerInterface $serializer, Packages $packages, H5POptions $options, H5PIntegration $h5PIntegration, H5PCore $h5PCore, KernelInterface $kernel)
+    {
+        $this->entityManager = $entityManager;
+        $this->resultService = $resultService;
+        $this->serializer = $serializer;
+        $this->assetsPaths = $packages;
+        $this->options = $options;
+        $this->h5PIntegration = $h5PIntegration;
+        $this->h5PCore = $h5PCore;
+        $this->kernel = $kernel;
+    }
+
     /**
      * Access callback for the setFinished feature
      *
@@ -32,9 +62,9 @@ class H5PInteractionController extends AbstractController{
             \H5PCore::ajaxError('Invalid security token');
         }
         /* @var ResultService $rs */
-        $rs = $this->get('studit_h5p.result_storage');
-        $result = $rs->handleRequestFinished($request, $this->getUser()->getId());
-        $em = $this->getDoctrine()->getManager();
+        $rs = $this->resultService;
+        $result = $rs->handleRequestFinished($request, $this->getUserId($this->getUser()));
+        $em = $this->entityManager;
         $em->persist($result);
         $em->flush();
         return new JsonResponse(['success' => true]);
@@ -61,7 +91,7 @@ class H5PInteractionController extends AbstractController{
         $data = $request->get("data");
         $preload = $request->get("preload");
         $invalidate = $request->get("invalidate");
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->entityManager;
         if ($data !== NULL && $preload !== NULL && $invalidate !== NULL) {
             if(!\H5PCore::validToken('contentuserdata', $request->get("token"))){
                 return new JsonResponse(['success' => false, 'message' => 'No content']);
@@ -70,7 +100,7 @@ class H5PInteractionController extends AbstractController{
             if ($data === '0'){
                 //remove data here
                 /* @var ResultService $rs */
-                $rs = $this->get('studit_h5p.result_storage');
+                $rs = $this->resultService;
                 $rs->removeData($contentId, $dataType, $user, $subContentId);
             }else{
                 // Wash values to ensure 0 or 1.
@@ -85,7 +115,7 @@ class H5PInteractionController extends AbstractController{
                         'subContentId' => $subContentId,
                         'mainContent' => $contentId,
                         'dataId' => $dataType,
-                        'user' => $user->getId()
+                        'user' => $this->getUserId($user),
                     ]
                 );
                 if(!$update){
@@ -94,16 +124,14 @@ class H5PInteractionController extends AbstractController{
                      * @var ContentUserData $contentUserData
                      */
                     $contentUserData = new ContentUserData();
-                    $contentUserData->setUser($user->getId());
+                    $contentUserData->setUser($this->getUserId($user));
                     $contentUserData->setData($data);
                     $contentUserData->setDataId($dataType);
                     $contentUserData->setSubContentId($subContentId);
                     $contentUserData->setPreloaded($preload);
                     $contentUserData->setDeleteOnContentChange($invalidate);
                     $contentUserData->setTimestamp( time ());
-                    /**
-                     * @var $content Content
-                     */
+                    /** @var Content|null $content */
                     $content = $em->getRepository('Studit\H5PBundle\Entity\Content')->findOneBy(['id' => $contentId]);
                     $contentUserData->setMainContent($content);
                     $em->persist($contentUserData);
@@ -126,14 +154,14 @@ class H5PInteractionController extends AbstractController{
                     'subContentId' => $subContentId,
                     'mainContent' => $contentId,
                     'dataId' => $dataType,
-                    'user' => $user->getId()
+                    'user' => $this->getUserId($user),
                 ]
             );
 
             //decode for read the information
             return new JsonResponse([
                 'success' => true,
-                'data' => json_decode($this->get('serializer')->serialize($data, 'json')),
+                'data' => json_decode($this->serializer->serialize($data, 'json')),
             ]);
         }
     }
@@ -154,18 +182,13 @@ class H5PInteractionController extends AbstractController{
             ],
         ];
         $h5p_content = $content;
-        if (empty($h5p_content)){
-            //change url here
-            $response['#markup'] = '<body style="margin:0"><div style="background: #fafafa url(' . $this->getH5PAssetUrl() . '/h5p-core/images/h5p.svg) no-repeat center;background-size: 50% 50%;width: 100%;height: 100%;"></div><div style="width:100%;position:absolute;top:75%;text-align:center;color:#434343;font-family: Consolas,monaco,monospace">' . t('Content unavailable.') . '</div></body>';
-            return new Response($response['#markup']);
-        }
         // Grab the core integration settings
-        $integration = $this->get('studit_h5p.integration')->getGenericH5PIntegrationSettings();
+        $integration = $this->h5PIntegration->getGenericH5PIntegrationSettings();
         $content_id_string = 'cid-' . $content->getId();
         // Add content specific settings
-        $integration['contents'][$content_id_string] = $this->get('studit_h5p.integration')->getH5PContentIntegrationSettings($content);
-        $preloaded_dependencies = $this->get('studit_h5p.core')->loadContentDependencies($content->getId(), 'preloaded');
-        $files = $this->get('studit_h5p.core')->getDependenciesFiles($preloaded_dependencies, $this->get('studit_h5p.options')->getRelativeH5PPath());
+        $integration['contents'][$content_id_string] = $this->h5PIntegration->getH5PContentIntegrationSettings($content);
+        $preloaded_dependencies = $this->h5PCore->loadContentDependencies($content->getId(), 'preloaded');
+        $files = $this->h5PCore->getDependenciesFiles($preloaded_dependencies, $this->options->getRelativeH5PPath());
         // Load public files
         $jsFilePaths = array_map(function ($asset) {
             return $asset->path;
@@ -174,7 +197,7 @@ class H5PInteractionController extends AbstractController{
             return $asset->path;
         }, $files['styles']);
         // Load core assets
-        $coreAssets = $this->get('studit_h5p.integration')->getCoreAssets();
+        $coreAssets = $this->h5PIntegration->getCoreAssets();
         // Merge assets
         $scripts = array_merge($coreAssets['scripts'], $jsFilePaths);
         $styles = array_merge($cssFilePaths, $coreAssets['styles']);
@@ -187,9 +210,22 @@ class H5PInteractionController extends AbstractController{
             'title' => "H5P Content {$id}",
         ];
         //include the embed file (provide in h5p-core)
-        include $this->get('kernel')->getProjectDir().'/vendor/h5p/h5p-core/embed.php';
+        include $this->kernel->getProjectDir().'/vendor/h5p/h5p-core/embed.php';
         $response['#markup'] = ob_get_clean();
         //return nes Response HTML
         return new Response($response['#markup']);
+    }
+
+    private function getH5PAssetUrl()
+    {
+        return $this->assetsPaths->getUrl($this->options->getH5PAssetPath());
+    }
+
+    private function getUserId(UserInterface $user)
+    {
+        if (method_exists($user, 'getId')) {
+            return $user->getId();
+        }
+        return $user->getUserIdentifier();
     }
 }

@@ -94,11 +94,9 @@ class H5PAJAXController extends AbstractController
     /**
      * Callback Install library from external file
      *
-     * @param string $token Security token
-     * @param int $content_id Id of content
-     * @param string $machine_name Machine name of library
      * @param Request $request
      *
+     * @return JsonResponse
      * @Route("/library-install/")
      */
     public function libraryInstallCallback(Request $request)
@@ -121,11 +119,8 @@ class H5PAJAXController extends AbstractController
     /**
      * Callback that returns data for a given library
      *
-     * @param string $machine_name Machine name of library
-     * @param int $major_version Major version of library
-     * @param int $minor_version Minor version of library
-     * @param string $locale Language of your website and plugins  for default is English (EN)
      * @param Request $request
+     * @return JsonResponse
      */
     private function libraryCallback(Request $request)
     {
@@ -140,7 +135,7 @@ class H5PAJAXController extends AbstractController
             $request->get('majorVersion'),
             $request->get('minorVersion'),
             $locale,
-            $this->get('studit_h5p.options')->getOption('storage_dir'),
+            $this->serviceh5poptions->getOption('storage_dir'),
             '',
             $locale
         );
@@ -158,10 +153,9 @@ class H5PAJAXController extends AbstractController
     /**
      * Callback for uploading a library
      *
-     * @param string $token Editor security token
-     * @param int $content_id Id of content that is being edited
      * @param Request $request
      *
+     * @return JsonResponse
      * @throws Exception
      * @Route("/library-upload/")
      */
@@ -194,9 +188,8 @@ class H5PAJAXController extends AbstractController
     /**
      * Callback for file uploads.
      *
-     * @param string $token SecuritlibraryCallbacky token
-     * @param int $content_id Content id
      * @param Request $request
+     * @return JsonResponse
      * @Route("/files/")
      */
     public function filesCallback(Request $request)
@@ -220,9 +213,8 @@ class H5PAJAXController extends AbstractController
     /**
      * Callback for filtering.
      *
-     * @param string $token Security token
-     * @param int $content_id Content id
      * @param Request $request
+     * @return JsonResponse
      * @Route("/filter/")
      */
     public function filterCallback(Request $request)

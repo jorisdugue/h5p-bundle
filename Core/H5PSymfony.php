@@ -4,24 +4,22 @@
 namespace Studit\H5PBundle\Core;
 
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Studit\H5PBundle\DependencyInjection\Configuration;
 use Studit\H5PBundle\Editor\EditorStorage;
 use Studit\H5PBundle\Entity\Content;
 use Studit\H5PBundle\Entity\ContentLibraries;
+use Studit\H5PBundle\Entity\ContentRepository;
 use Studit\H5PBundle\Entity\Counters;
 use Studit\H5PBundle\Entity\LibrariesHubCache;
 use Studit\H5PBundle\Entity\LibrariesLanguages;
 use Studit\H5PBundle\Entity\Library;
 use Studit\H5PBundle\Entity\LibraryLibraries;
+use Studit\H5PBundle\Entity\LibraryLibrariesRepository;
+use Studit\H5PBundle\Entity\LibraryRepository;
 use Studit\H5PBundle\Event\H5PEvents;
 use Studit\H5PBundle\Event\LibrarySemanticsEvent;
 use GuzzleHttp\Client;
-use H5PPermission;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -133,7 +131,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     /**
      * Implements fetchExternalData
      * @param $url
-     * @param null $data
+     * @param null|mixed $data
      * @param bool $blocking
      * @param null $stream
      * @return bool|string
@@ -347,8 +345,8 @@ class H5PSymfony implements \H5PFrameworkInterface
     public function getAdminUrl()
     {
         // Misplaced; not used by Core.
-        $url = Url::fromUri('internal:/admin/content/h5p')->toString();
-        return $url;
+        // $url = Url::fromUri('internal:/admin/content/h5p')->toString();
+        return '';
     }
 
     /**
@@ -390,7 +388,9 @@ class H5PSymfony implements \H5PFrameworkInterface
         if ($this->getOption('dev_mode', FALSE)) {
             return TRUE;
         }
-        return $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->isPatched($library);
+        /** @var LibraryRepository $repo */
+        $repo = $this->manager->getRepository('Studit\H5PBundle\Entity\Library');
+        return $repo->isPatched($library);
     }
 
 
@@ -551,7 +551,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function updateContent($contentData, $contentMainId = NULL)
     {
-        /** @var $content Content*/
+        /** @var Content $content */
         $content = $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->find($contentData['id']);
         return $this->storeContent($contentData, $content);
     }
@@ -677,9 +677,13 @@ class H5PSymfony implements \H5PFrameworkInterface
         if ($skipContent) {
             $usage['content'] = -1;
         } else {
-            $usage['content'] = $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->countContentLibrary($libraryId);
+            /** @var LibraryRepository $libraryRepository */
+            $libraryRepository = $this->manager->getRepository('Studit\H5PBundle\Entity\Library');
+            $usage['content'] = $libraryRepository->countContentLibrary($libraryId);
         }
-        $usage['libraries'] = $this->manager->getRepository('Studit\H5PBundle\Entity\LibraryLibraries')->countLibraries($libraryId);
+        /** @var LibraryLibrariesRepository $libraryLibrariesRepository */
+        $libraryLibrariesRepository = $this->manager->getRepository('Studit\H5PBundle\Entity\LibraryLibraries');
+        $usage['libraries'] = $libraryLibrariesRepository->countLibraries($libraryId);
         return $usage;
     }
 
@@ -688,7 +692,9 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function loadLibrary($machineName, $majorVersion, $minorVersion)
     {
-        $library = $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->findOneArrayBy(['machineName' => $machineName, 'majorVersion' => $majorVersion, 'minorVersion' => $minorVersion]);
+        /** @var LibraryRepository $libraryRepo */
+        $libraryRepo = $this->manager->getRepository('Studit\H5PBundle\Entity\Library');
+        $library = $libraryRepo->findOneArrayBy(['machineName' => $machineName, 'majorVersion' => $majorVersion, 'minorVersion' => $minorVersion]);
         if (!$library) {
             return false;
         }
@@ -770,6 +776,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function loadContent($id)
     {
+        return [];
     }
 
     /**
@@ -852,7 +859,9 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function getNumNotFiltered()
     {
-        return $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->countNotFiltered();
+        /** @var ContentRepository $contentRepo */
+        $contentRepo = $this->manager->getRepository('Studit\H5PBundle\Entity\Content');
+        return $contentRepo->countNotFiltered();
     }
 
     /**
@@ -860,7 +869,9 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function getNumContent($libraryId, $skip = NULL)
     {
-        return $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->countLibraryContent($libraryId);
+        /** @var ContentRepository $contentRepo */
+        $contentRepo = $this->manager->getRepository('Studit\H5PBundle\Entity\Content');
+        return $contentRepo->countLibraryContent($libraryId);
     }
 
     /**
@@ -895,7 +906,9 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function getNumAuthors()
     {
-        $contents = $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->countContent();
+        /** @var ContentRepository $contentRepo */
+        $contentRepo = $this->manager->getRepository('Studit\H5PBundle\Entity\Content');
+        $contents = $contentRepo->countContent();
         // Return 1 if there is content and 0 if there is none
         return !$contents;
     }
@@ -912,6 +925,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      */
     public function deleteCachedAssets($library_id)
     {
+        return [];
     }
 
     /**
@@ -927,7 +941,9 @@ class H5PSymfony implements \H5PFrameworkInterface
     public function getLibraryContentCount()
     {
         $contentCount = [];
-        $results = $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->libraryContentCount();
+        /** @var ContentRepository $contentRepo */
+        $contentRepo = $this->manager->getRepository('Studit\H5PBundle\Entity\Content');
+        $results = $contentRepo->libraryContentCount();
         // Format results
         foreach ($results as $library) {
             $contentCount[$library['machineName'] . " " . $library['majorVersion'] . "." . $library['minorVersion']] = $library[1];
@@ -1012,7 +1028,6 @@ class H5PSymfony implements \H5PFrameworkInterface
 
     /**
      * @param $tableClassName
-     * @throws DBALException
      */
     private function truncateTable($tableClassName)
     {
@@ -1027,8 +1042,8 @@ class H5PSymfony implements \H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function libraryHasUpgrade($library)
+    public function libraryHasUpgrade($library): bool
     {
-        // TODO: Implement libraryHasUpgrade() method.
+        return false;
     }
 }

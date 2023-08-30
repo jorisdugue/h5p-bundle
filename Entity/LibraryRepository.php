@@ -4,6 +4,7 @@
 namespace Studit\H5PBundle\Entity;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Statement;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -75,9 +76,10 @@ GROUP BY hl4.machine_name,
          hl4.has_icon
 EOT;
         $em = $this->getEntityManager();
+        /** @var Statement $stmt */
         $stmt = $em->getConnection()->prepare($sql);
-        $stmt->execute();
-        $libraryVersions = $stmt->fetchAll();
+        $result = $stmt->executeQuery();
+        $libraryVersions = $result->fetchAllAssociative();
         foreach ($libraryVersions as &$libraryVersion) {
             $libraryVersion = (object)$libraryVersion;
         }
