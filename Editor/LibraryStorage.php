@@ -7,6 +7,7 @@ namespace Studit\H5PBundle\Editor;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Studit\H5PBundle\Entity\Content;
+use Studit\H5PBundle\Entity\LibraryRepository;
 
 class LibraryStorage
 {
@@ -39,7 +40,9 @@ class LibraryStorage
     public function storeLibraryData($library, $parameters, Content $content = null)
     {
         $libraryData = Utilities::getLibraryProperties($library);
-        $libraryData['libraryId'] = $this->entityManager->getRepository('Studit\H5PBundle\Entity\Library')->findIdBy($libraryData['machineName'], $libraryData['majorVersion'], $libraryData['minorVersion']);
+        /** @var LibraryRepository $libraryRepo */
+        $libraryRepo = $this->entityManager->getRepository('Studit\H5PBundle\Entity\Library');
+        $libraryData['libraryId'] = $libraryRepo->findIdBy($libraryData['machineName'], $libraryData['majorVersion'], $libraryData['minorVersion']);
         if ($content) {
             $oldLibrary = [
                 'name' => $content->getLibrary()->getMachineName(),

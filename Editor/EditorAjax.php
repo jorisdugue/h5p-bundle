@@ -4,6 +4,8 @@ namespace Studit\H5PBundle\Editor;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Studit\H5PBundle\Entity\EventRepository;
+use Studit\H5PBundle\Entity\LibraryRepository;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class EditorAjax implements \H5PEditorAjaxInterface
@@ -35,7 +37,9 @@ class EditorAjax implements \H5PEditorAjaxInterface
      */
     public function getLatestLibraryVersions()
     {
-        return $this->manager->getRepository('Studit\H5PBundle\Entity\Library')->findLatestLibraryVersions();
+        /** @var LibraryRepository $repo */
+        $repo = $this->manager->getRepository('Studit\H5PBundle\Entity\Library');
+        return $repo->findLatestLibraryVersions();
     }
 
 
@@ -69,7 +73,9 @@ class EditorAjax implements \H5PEditorAjaxInterface
         $recentlyUsed = [];
         $user = $this->tokenStorage->getToken()->getUser();
         if (is_object($user)) {
-            $events = $this->manager->getRepository('Studit\H5PBundle\Entity\Event')->findRecentlyUsedLibraries($user->getId());
+            /** @var EventRepository $repo */
+            $repo = $this->manager->getRepository('Studit\H5PBundle\Entity\Event');
+            $events = $repo->findRecentlyUsedLibraries(method_exists($user, 'getId') ? $user->getId() : (method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : -1));
             foreach ($events as $event) {
                 $recentlyUsed[] = $event['libraryName'];
             }
@@ -96,5 +102,6 @@ class EditorAjax implements \H5PEditorAjaxInterface
      */
     public function getTranslations($libraries, $language_code)
     {
+        return [];
     }
 }

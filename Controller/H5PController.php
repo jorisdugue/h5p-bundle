@@ -3,6 +3,7 @@
 
 namespace Studit\H5PBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Studit\H5PBundle\Core\H5POptions;
 use Studit\H5PBundle\Editor\LibraryStorage;
 use Studit\H5PBundle\Entity\Content;
@@ -22,13 +23,16 @@ class H5PController extends AbstractController
 
     protected $h5PIntegrations;
     protected $libraryStorage;
+    protected $entityManager;
 
     public function __construct(
         H5PIntegration $h5PIntegration,
-        LibraryStorage $libraryStorage
+        LibraryStorage $libraryStorage,
+        EntityManagerInterface $entityManager
     ) {
         $this->h5PIntegrations = $h5PIntegration;
         $this->libraryStorage = $libraryStorage;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -37,7 +41,7 @@ class H5PController extends AbstractController
      */
     public function listAction()
     {
-        $contents = $this->getDoctrine()->getRepository('Studit\H5PBundle\Entity\Content')->findAll();
+        $contents = $this->entityManager->getRepository('Studit\H5PBundle\Entity\Content')->findAll();
         return $this->render('@StuditH5P/list.html.twig', ['contents' => $contents]);
     }
     /**
@@ -78,11 +82,12 @@ class H5PController extends AbstractController
     {
         return $this->handleRequest($request );
     }
+
     /**
      * @Route("edit/{content}")
      * @param Request $request
      * @param Content $content
-     * @return
+     * @return RedirectResponse|Response
      */
     public function editAction(Request $request, Content $content)
     {

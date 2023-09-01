@@ -5,10 +5,13 @@ namespace Studit\H5PBundle\Editor;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\NotSupported;
 use H5peditorFile;
 use Studit\H5PBundle\Core\H5POptions;
 use Studit\H5PBundle\Core\H5PSymfony;
+use Studit\H5PBundle\Entity\LibrariesLanguagesRepository;
 use Studit\H5PBundle\Entity\Library;
+use Studit\H5PBundle\Entity\LibraryRepository;
 use Studit\H5PBundle\Event\H5PEvents;
 use Studit\H5PBundle\Event\LibraryFileEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -79,7 +82,9 @@ class EditorStorage implements \H5peditorStorage
      */
     public function getLanguage($machineName, $majorVersion, $minorVersion, $language)
     {
-        return $this->entityManager->getRepository('Studit\H5PBundle\Entity\LibrariesLanguages')->findForLibrary($machineName, $majorVersion, $minorVersion, $language);
+        /** @var LibrariesLanguagesRepository $repo */
+        $repo = $this->entityManager->getRepository('Studit\H5PBundle\Entity\LibrariesLanguages');
+        return $repo->findForLibrary($machineName, $majorVersion, $minorVersion, $language);
     }
 
     /**
@@ -92,12 +97,14 @@ class EditorStorage implements \H5peditorStorage
      * @param string $machineName The machine readable name of the library(content type)
      * @param int $majorVersion Major part of version number
      * @param int $minorVersion Minor part of version number
-     * @param string $language Language code default is EN
-     * @return string Translation in JSON format
+     * @return string[] Translation in JSON format
+     * @throws NotSupported
      */
     public function getAvailableLanguages($machineName, $majorVersion, $minorVersion)
     {
-        return $this->entityManager->getRepository('Studit\H5PBundle\Entity\LibrariesLanguages')->findForLibraryAllLanguages($machineName, $majorVersion, $minorVersion);
+        /** @var LibrariesLanguagesRepository $repo */
+        $repo = $this->entityManager->getRepository('Studit\H5PBundle\Entity\LibrariesLanguages');
+        return $repo->findForLibraryAllLanguages($machineName, $majorVersion, $minorVersion);
     }
 
     /**
@@ -131,7 +138,9 @@ class EditorStorage implements \H5peditorStorage
             return $this->getLibrariesWithDetails($libraries, $canCreateRestricted);
         }
         $libraries = [];
-        $librariesResult = $this->entityManager->getRepository('Studit\H5PBundle\Entity\Library')->findAllRunnableWithSemantics();
+        /** @var LibraryRepository $libraryRepo */
+        $libraryRepo = $this->entityManager->getRepository('Studit\H5PBundle\Entity\Library');
+        $librariesResult = $libraryRepo->findAllRunnableWithSemantics();
         foreach ($librariesResult as $library) {
             //Decode metadata setting
             $library->metadataSettings = json_decode($library->metadataSettings);
@@ -164,8 +173,10 @@ class EditorStorage implements \H5peditorStorage
     {
         $librariesWithDetails = [];
         foreach ($libraries as $library) {
+            /** @var LibraryRepository $repo */
+            $repo = $this->entityManager->getRepository('Studit\H5PBundle\Entity\Library');
             /** @var Library $details */
-            $details = $this->entityManager->getRepository('Studit\H5PBundle\Entity\Library')->findHasSemantics($library->name, $library->majorVersion, $library->minorVersion);
+            $details = $repo->findHasSemantics($library->name, $library->majorVersion, $library->minorVersion);
             if ($details) {
                 $library->tutorialUrl = $details->getTutorialUrl();
                 $library->title = $details->getTitle();

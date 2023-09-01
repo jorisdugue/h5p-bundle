@@ -2,15 +2,26 @@
 
 namespace Studit\H5PBundle\Command;
 
+use Studit\H5PBundle\Core\H5POptions;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 class H5pBundleCleanUpFilesCommand extends Command
 {
+
+    /**
+     * @var H5POptions $h5POptions
+     */
+    private $h5POptions;
+
+    public function __construct(H5POptions $h5POptions)
+    {
+        $this->h5POptions = $h5POptions;
+        parent::__construct();
+    }
+
     protected static $defaultName = 'h5p-bundle:cleanup-files';
     protected function configure()
     {
@@ -31,7 +42,7 @@ class H5pBundleCleanUpFilesCommand extends Command
     {
         $location = $input->getArgument('location');
         if (!$location) {
-            $location = $this->get('studit_h5p.options')->getAbsoluteH5PPath() . '/editor';
+            $location = $this->h5POptions->getAbsoluteH5PPath() . '/editor';
         }
         \H5PCore::deleteFileTree($location);
     }

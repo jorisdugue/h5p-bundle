@@ -15,13 +15,13 @@ class H5PEvents extends \H5PEventBase
     const SEMANTICS = 'h5p.semantics';
 
     /**
-     * @var $userid int
+     * @var int $userid
     */
     private $userid;
 
     /**
-     * @var $em EntityManagerInterface
-    */
+     * @var EntityManagerInterface $em
+     */
     private $em;
     /**
      * H5PEvents constructor.
@@ -34,7 +34,7 @@ class H5PEvents extends \H5PEventBase
      * @param int $userId
      * @param EntityManagerInterface $em
      */
-    public function __construct($type, $sub_type = NULL, $content_id = NULL, $content_title = NULL, $library_name = NULL, $library_version = NULL, $userId= 0, EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, $type, $sub_type = NULL, $content_id = NULL, $content_title = NULL, $library_name = NULL, $library_version = NULL, $userId= 0)
     {
         parent::__construct($type, $sub_type, $content_id, $content_title, $library_name, $library_version);
         $this->userid = $userId;
@@ -69,7 +69,7 @@ class H5PEvents extends \H5PEventBase
     protected function saveStats()
     {
         $type = $this->type . ' ' . $this->sub_type;
-        /**
+        /*/**
          * @var Counters $current_num
         */
         /*$current_num = $this->em->getRepository("Studit\H5PBundle\Entity\Counters")->findOneBy(['type' => $type, 'libraryName' => $this->library_name, 'libraryVersion' => $this->library_version]);

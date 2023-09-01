@@ -5,13 +5,15 @@ namespace Studit\H5PBundle\Core;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use H5PCore;
+use H5peditor;
 use Studit\H5PBundle\Entity\Content;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
+use Symfony\Component\Security\Core\User\UserInterface;
 
 
 class H5PIntegration
@@ -108,8 +110,8 @@ class H5PIntegration
         );
         if (is_object($user)) {
             $settings['user'] = [
-                'name' => $user->getUsername(),
-                'mail' => $user->getEmail(),
+                'name' => method_exists($user, 'getUsername') ? $user->getUsername() : $user->getUserIdentifier(),
+                'mail' => method_exists($user, 'getEmail') ? $user->getEmail() : $user->getUserIdentifier().'@'.$_SERVER['HTTP_HOST'],
             ];
         }
         return $settings;
@@ -117,10 +119,10 @@ class H5PIntegration
     /**
      * Get a list with prepared asset links that is used when JS loads components.
      *
-     * @param array [$keys] Optional keys, first for JS second for CSS.
+     * @param null|array $keys [$keys] Optional keys, first for JS second for CSS.
      * @return array
      */
-    public function getCoreAssets($keys = NULL)
+    public function getCoreAssets($keys = null)
     {
         if (empty($keys)) {
             $keys = ['scripts', 'styles'];
@@ -148,7 +150,7 @@ class H5PIntegration
             ]
         ];
         if (is_object($this->tokenStorage->getToken()->getUser())) {
-            $contentUserData = $this->entityManager->getRepository('Studit\H5PBundle\Entity\ContentUserData')->findOneBy(['mainContent' => $content, 'user' => $this->tokenStorage->getToken()->getUser()->getId()]);
+            $contentUserData = $this->entityManager->getRepository('Studit\H5PBundle\Entity\ContentUserData')->findOneBy(['mainContent' => $content, 'user' => $this->getUserId($this->tokenStorage->getToken()->getUser())]);
             if ($contentUserData) {
                 $content_user_data[$contentUserData->getSubContentId()][$contentUserData->getDataId()] = $contentUserData->getData();
             }
@@ -232,12 +234,12 @@ class H5PIntegration
         $corePath = "{$h5pAssetUrl}/h5p-core/";
         $editorPath = "{$h5pAssetUrl}/h5p-editor/";
         $css = array_merge(
-            $this->getAssets(\H5PCore::$styles, $corePath),
-            $this->getAssets(\H5PEditor::$styles, $editorPath)
+            $this->getAssets(H5PCore::$styles, $corePath),
+            $this->getAssets(H5peditor::$styles, $editorPath)
         );
         $js = array_merge(
-            $this->getAssets(\H5PCore::$scripts, $corePath),
-            $this->getAssets(\H5PEditor::$scripts, $editorPath, ['scripts/h5peditor-editor.js'])
+            $this->getAssets(H5PCore::$scripts, $corePath),
+            $this->getAssets(H5PEditor::$scripts, $editorPath, ['scripts/h5peditor-editor.js'])
         );
         $js[] = $this->getTranslationFilePath();
         return ['css' => $css, 'js' => $js];
@@ -304,5 +306,13 @@ class H5PIntegration
     public function getOptions()
     {
         return $this->options;
+    }
+
+    private function getUserId(UserInterface $user)
+    {
+        if (method_exists($user, 'getId')) {
+            return $user->getId();
+        }
+        return $user->getUserIdentifier();
     }
 }

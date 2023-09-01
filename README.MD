@@ -117,3 +117,11 @@ Changelog:
 - Fix bug with missing link img 
 - Fix Download package
 - Store usage data and points
+
+
+Developing:
+-------------
+Run the static analyzer like that:
+```sh
+php -d memory_limit=-1 vendor/bin/phpstan.phar analyze .
+```

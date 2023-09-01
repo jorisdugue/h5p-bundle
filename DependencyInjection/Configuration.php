@@ -2,6 +2,7 @@
 
 namespace Studit\H5PBundle\DependencyInjection;
 
+use RuntimeException;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\NodeInterface;
@@ -19,12 +20,12 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('studit_h5_p');
 
-        if (method_exists($treeBuilder, 'getRootNode')) {
-            $rootNode = $treeBuilder->getRootNode();
-        } else {
-            // BC layer for symfony/config 4.1 and older
-            $rootNode = $treeBuilder->root('studit_h5_p');
+        $rootNode = $treeBuilder->getRootNode();
+
+        if (!method_exists($rootNode, 'children')) {
+            throw new RuntimeException('Your Symfony version does not support the children() method to define the root node in the H5P bundle configuration.');
         }
+
         $rootNode
             ->children()
             ->scalarNode('storage_dir')->defaultValue("h5p")->end()
