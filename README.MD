@@ -5,6 +5,15 @@ For Symfony 3.X => [H5PBundle for Symfony 2.X and 3.X](https://github.com/Emmedy
 
 This bundle was tested on Symfony 4.X, Symfony 5.X, Symfony 6.X, Symfony 7.X-dev
 
+Prerequisite
+------------
+
+You need install doctrine annotations and orm before running this installation
+```bash
+composer require orm
+composer require doctrine/annotations
+```
+
 Installation
 ------------
 
@@ -20,7 +29,7 @@ return [
     \Studit\H5PBundle\StuditH5PBundle::class => ['all' => true]
 ]
 ```
-**Warning for Windows** : You need launch the cmd in administrator
+**Warning for Windows** : You need launch the cmd in administrator or using option ``-c``
 
 Add the H5P assets to the bundle
 ``` bash
@@ -29,7 +38,10 @@ php bin/console assets:install --symlink
 ```
 and reexecute ...
 ```bash
+# For linux and mac only or windows admin
 php bin/console h5p-bundle:IncludeAssetsCommand
+# For all without admin perms
+php bin/console h5p-bundle:IncludeAssetsCommand -c
 ```
   
 Add required tables and relations to the database

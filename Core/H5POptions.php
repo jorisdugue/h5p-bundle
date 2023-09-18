@@ -4,6 +4,7 @@ namespace Studit\H5PBundle\Core;
 
 
 use Doctrine\DBAL\Exception\DriverException;
+use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Doctrine\ORM\EntityManagerInterface;
 use Studit\H5PBundle\Entity\Option;
 
@@ -28,7 +29,7 @@ class H5POptions
 
     /**
      * H5POptions constructor.
-     * @param array $config
+     * @param array|null $config
      * @param $projectRootDir
      * @param EntityManagerInterface $manager
      */
@@ -39,6 +40,11 @@ class H5POptions
         $this->manager = $manager;
     }
 
+    /**
+     * @param $name
+     * @param $default
+     * @return mixed|null
+     */
     public function getOption($name, $default = null)
     {
         try {
@@ -55,7 +61,10 @@ class H5POptions
         return $default;
     }
 
-    public function setOption($name, $value)
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setOption($name, $value): void
     {
         $this->retrieveStoredConfig();
 
@@ -71,7 +80,10 @@ class H5POptions
         }
     }
 
-    private function retrieveStoredConfig()
+    /**
+     * @return void
+     */
+    private function retrieveStoredConfig(): void
     {
         if ($this->storedConfig === null) {
             $this->storedConfig = [];
@@ -82,6 +94,10 @@ class H5POptions
         }
     }
 
+    /**
+     * @param $set
+     * @return mixed
+     */
     public function getUploadedH5pFolderPath($set = null)
     {
         if (!empty($set)) {
@@ -91,6 +107,10 @@ class H5POptions
         return $this->folderPath;
     }
 
+    /**
+     * @param $set
+     * @return mixed
+     */
     public function getUploadedH5pPath($set = null)
     {
         if (!empty($set)) {
@@ -100,6 +120,9 @@ class H5POptions
         return $this->h5pPath;
     }
 
+    /**
+     * @return mixed|string|null
+     */
     public function getRelativeH5PPath()
     {
         $dir = $this->getOption('storage_dir');
@@ -107,13 +130,14 @@ class H5POptions
         return $dir[0] === '/' ? $dir : '/' . $dir;
     }
 
-    public function getAbsoluteH5PPathWithSlash(){
+    public function getAbsoluteH5PPathWithSlash(): string
+    {
         $dir = $this->getOption('storage_dir');
         $dir = $dir[0] === '/' ? $dir : '/' . $dir;
 
         return $this->getAbsoluteWebPath() . $dir .'/';
     }
-    public function getAbsoluteH5PPath()
+    public function getAbsoluteH5PPath(): string
     {
         $dir = $this->getOption('storage_dir');
         $dir = $dir[0] === '/' ? $dir : '/' . $dir;
@@ -121,18 +145,17 @@ class H5POptions
         return $this->getAbsoluteWebPath() . $dir;
     }
 
-    public function getAbsoluteWebPath()
+    public function getAbsoluteWebPath(): string
     {
         return $this->projectRootDir .'/'. $this->getOption('web_dir');
     }
 
-    public function getLibraryFileUrl($libraryFolderName, $fileName)
+    public function getLibraryFileUrl($libraryFolderName, $fileName): string
     {
-
         return $this->getRelativeH5PPath() . "/libraries/$libraryFolderName/$fileName";
     }
 
-    public function getH5PAssetPath()
+    public function getH5PAssetPath(): string
     {
         return '/bundles/studith5p/h5p';
     }

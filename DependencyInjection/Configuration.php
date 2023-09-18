@@ -23,7 +23,10 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         if (!method_exists($rootNode, 'children')) {
-            throw new RuntimeException('Your Symfony version does not support the children() method to define the root node in the H5P bundle configuration.');
+            throw new RuntimeException(
+                'Your Symfony version does not support the children() method to define the root node in' .
+                ' the H5P bundle configuration.'
+            );
         }
 
         $rootNode
@@ -43,7 +46,9 @@ class Configuration implements ConfigurationInterface
             ->booleanNode('send_usage_statistics')->defaultTrue()->end()
             ->booleanNode(\H5PCore::DISPLAY_OPTION_ABOUT)->defaultTrue()->end()
             ->booleanNode(\H5PCore::DISPLAY_OPTION_FRAME)->defaultTrue()->end()
-            ->integerNode(\H5PCore::DISPLAY_OPTION_DOWNLOAD)->defaultValue(\H5PDisplayOptionBehaviour::NEVER_SHOW)->end()
+            ->integerNode(\H5PCore::DISPLAY_OPTION_DOWNLOAD)
+            ->defaultValue(\H5PDisplayOptionBehaviour::NEVER_SHOW)
+            ->end()
             ->integerNode(\H5PCore::DISPLAY_OPTION_EMBED)->defaultValue(\H5PDisplayOptionBehaviour::NEVER_SHOW)->end()
             ->booleanNode(\H5PCore::DISPLAY_OPTION_COPY)->defaultValue(\H5PDisplayOptionBehaviour::NEVER_SHOW)->end()
             ->booleanNode(\H5PCore::DISPLAY_OPTION_COPYRIGHT)->defaultTrue()->end()

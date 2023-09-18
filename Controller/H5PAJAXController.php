@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/h5p/ajax")
+ * @extends AbstractController
  */
 class H5PAJAXController extends AbstractController
 {
@@ -29,9 +30,9 @@ class H5PAJAXController extends AbstractController
      *
      * @Route("/libraries/")
      * @param Request $request
-     * @return string
+     * @return JsonResponse
      */
-    public function librariesCallback(Request $request)
+    public function librariesCallback(Request $request): JsonResponse
     {
         ob_start();
 
@@ -50,15 +51,33 @@ class H5PAJAXController extends AbstractController
 
     /**
      * Callback that returns the content type cache
-     *
      * @Route("/content-type-cache/")
      */
-    public function contentTypeCacheCallback()
+    public function contentTypeCacheCallback(): JsonResponse
     {
         ob_start();
 
         $editor = $this->h5peditor;
         $editor->ajax->action(\H5PEditorEndpoints::CONTENT_TYPE_CACHE);
+
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        return $this->json(json_decode($output, true));
+    }
+
+    /**
+     * Callback that return the content hub metadata cache
+     * @Route("/content-hub-metadata-cache")
+     * @return JsonResponse
+     */
+    public function contentHubMetadataCache(): JsonResponse
+    {
+        $lang = 'en';
+        ob_start();
+
+        $editor = $this->h5peditor;
+        $editor->ajax->action(\H5PEditorEndpoints::CONTENT_HUB_METADATA_CACHE, $lang);
 
         $output = ob_get_contents();
         ob_end_clean();
@@ -74,16 +93,13 @@ class H5PAJAXController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function TranslationsCallback(Request $request)
+    public function TranslationsCallback(Request $request): JsonResponse
     {
         ob_start();
 
         $editor = $this->h5peditor;
         $language = $request->get('language');
-        $editor->ajax->action(
-            \H5PEditorEndpoints::TRANSLATIONS,
-            $language
-        );
+        $editor->ajax->action(\H5PEditorEndpoints::TRANSLATIONS, $language);
 
         $output = ob_get_contents();
         ob_end_clean();
@@ -99,7 +115,7 @@ class H5PAJAXController extends AbstractController
      * @return JsonResponse
      * @Route("/library-install/")
      */
-    public function libraryInstallCallback(Request $request)
+    public function libraryInstallCallback(Request $request): JsonResponse
     {
         ob_start();
 
@@ -122,7 +138,7 @@ class H5PAJAXController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    private function libraryCallback(Request $request)
+    private function libraryCallback(Request $request): JsonResponse
     {
         ob_start();
 
@@ -139,10 +155,6 @@ class H5PAJAXController extends AbstractController
             '',
             $locale
         );
-        /*new H5PEvents('library', NULL, NULL, NULL,
-            $request->get('machineName'), $request->get('majorVersion') . '.' . $request->get('minorVersion'),
-             $this->getUser() != null ? $this->getUser()->getId() : 0, $this->getDoctrine()->getManager()
-        );*/
 
         $output = ob_get_contents();
         ob_end_clean();
@@ -159,7 +171,7 @@ class H5PAJAXController extends AbstractController
      * @throws Exception
      * @Route("/library-upload/")
      */
-    public function libraryUploadCallback(Request $request)
+    public function libraryUploadCallback(Request $request): JsonResponse
     {
         ob_start();
 
@@ -192,7 +204,7 @@ class H5PAJAXController extends AbstractController
      * @return JsonResponse
      * @Route("/files/")
      */
-    public function filesCallback(Request $request)
+    public function filesCallback(Request $request): JsonResponse
     {
         ob_start();
 
@@ -217,7 +229,7 @@ class H5PAJAXController extends AbstractController
      * @return JsonResponse
      * @Route("/filter/")
      */
-    public function filterCallback(Request $request)
+    public function filterCallback(Request $request): JsonResponse
     {
         ob_start();
 

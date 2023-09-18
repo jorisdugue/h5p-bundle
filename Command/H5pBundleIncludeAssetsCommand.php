@@ -16,6 +16,10 @@ class H5pBundleIncludeAssetsCommand extends Command
     protected static $defaultName = 'h5p-bundle:IncludeAssetsCommand';
     /** KernelInterface $appKernel */
     private $appKernel;
+
+    /**
+     * @param KernelInterface $appKernel
+     */
     public function __construct(KernelInterface $appKernel)
     {
         $this->appKernel = $appKernel;
@@ -25,31 +29,26 @@ class H5pBundleIncludeAssetsCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Include the assets from the h5p vendor bundle in the public resources directory of this bundle.')
+            ->setDescription(
+                'Include the assets from the h5p vendor bundle in the public resources directory of this bundle.'
+            )
             ->addOption('copy', 'c', InputOption::VALUE_NONE, 'Copy files')
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->includeAssets($input->getOption('copy') ?? false);
-
         return 0;
     }
 
-    private function includeAssets(bool $copy)
+    private function includeAssets(bool $copy): void
     {
         //get dir of vendor H5P
 
         $fromDir = $this->appKernel->getProjectDir()."/vendor/h5p/";
         //call service
-        //$toDir = $this->appKernel->getProjectDir().'/vendor/studit/h5p-bundle/public/h5p/';
         $toDir = $this->appKernel->getProjectDir().'/public/bundles/studith5p/h5p/';
-
-        //$toDir = new FileLocator($fromDir);
-        // $test = $fileLocator->locate('@StuditH5PBundle');
-
-        //$toDir = $fileLocator->locate();
 
         $coreSubDir = "h5p-core/";
         $coreDirs = ["fonts", "images", "js", "styles"];
@@ -76,7 +75,8 @@ class H5pBundleIncludeAssetsCommand extends Command
     private function recurseCopy($src, $dst)
     {
         $dir = opendir($src);
-        @mkdir($dst);
+        // Restrict the permission to 0750 not upper
+        @mkdir($dst, 0750);
         while (false !== ($file = readdir($dir))) {
             if (($file != '.') && ($file != '..')) {
                 if (is_dir($src . '/' . $file)) {
