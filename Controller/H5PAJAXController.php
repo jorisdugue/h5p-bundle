@@ -12,7 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/h5p/ajax")
- * @extends AbstractController
  */
 class H5PAJAXController extends AbstractController
 {
@@ -62,7 +61,6 @@ class H5PAJAXController extends AbstractController
 
         $output = ob_get_contents();
         ob_end_clean();
-
         return $this->json(json_decode($output, true));
     }
 

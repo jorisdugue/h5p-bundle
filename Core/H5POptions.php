@@ -2,7 +2,6 @@
 
 namespace Studit\H5PBundle\Core;
 
-
 use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -135,7 +134,7 @@ class H5POptions
         $dir = $this->getOption('storage_dir');
         $dir = $dir[0] === '/' ? $dir : '/' . $dir;
 
-        return $this->getAbsoluteWebPath() . $dir .'/';
+        return $this->getAbsoluteWebPath() . $dir . '/';
     }
     public function getAbsoluteH5PPath(): string
     {
@@ -147,7 +146,7 @@ class H5POptions
 
     public function getAbsoluteWebPath(): string
     {
-        return $this->projectRootDir .'/'. $this->getOption('web_dir');
+        return $this->projectRootDir . '/' . $this->getOption('web_dir');
     }
 
     public function getLibraryFileUrl($libraryFolderName, $fileName): string
@@ -159,5 +158,4 @@ class H5POptions
     {
         return '/bundles/studith5p/h5p';
     }
-
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Studit\H5PBundle\Editor;
-
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -65,7 +63,7 @@ class LibraryStorage
         }
         $contentId = $this->core->saveContent($contentData);
         //add id to data
-        if (!$content){
+        if (!$content) {
             $contentData['id'] = $contentId;
         }
         $this->updateLibraryFiles($contentId, $contentData, $oldLibrary, $oldParameters->params ?? null);

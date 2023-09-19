@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Studit\H5PBundle\Editor;
 
 use Doctrine\ORM\EntityManager;
@@ -21,7 +20,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class EditorStorage implements \H5peditorStorage
 {
-
     /**
      * @var H5POptions
      */
@@ -131,10 +129,10 @@ class EditorStorage implements \H5peditorStorage
      * @param array $libraries List of library names + version to load info for
      * @return array List of all libraries loaded
      */
-    public function getLibraries($libraries = NULL)
+    public function getLibraries($libraries = null)
     {
         $canCreateRestricted = $this->authorizationChecker->isGranted('ROLE_H5P_CREATE_RESTRICTED_CONTENT_TYPES');
-        if ($libraries !== NULL) {
+        if ($libraries !== null) {
             return $this->getLibrariesWithDetails($libraries, $canCreateRestricted);
         }
         $libraries = [];
@@ -149,8 +147,10 @@ class EditorStorage implements \H5peditorStorage
                 if ($library->name === $existingLibrary->name) {
                     // Mark old ones
                     // This is the newest
-                    if (($library->majorVersion === $existingLibrary->majorVersion && $library->minorVersion > $existingLibrary->minorVersion) ||
-                        ($library->majorVersion > $existingLibrary->majorVersion)) {
+                    if (
+                        ($library->majorVersion === $existingLibrary->majorVersion && $library->minorVersion > $existingLibrary->minorVersion) ||
+                        ($library->majorVersion > $existingLibrary->majorVersion)
+                    ) {
                         $existingLibrary->isOld = true;
                     } else {
                         $library->isOld = true;

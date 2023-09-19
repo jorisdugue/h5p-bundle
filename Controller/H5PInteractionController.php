@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Studit\H5PBundle\Controller;
-
 
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -27,7 +25,6 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class H5PInteractionController extends AbstractController
 {
-
     protected $entityManager;
     protected $resultService;
     protected $serializer;
@@ -39,15 +36,14 @@ class H5PInteractionController extends AbstractController
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        ResultService          $resultService,
-        SerializerInterface    $serializer,
-        Packages               $packages,
-        H5POptions             $options,
-        H5PIntegration         $h5PIntegration,
-        H5PCore                $h5PCore,
-        KernelInterface        $kernel
-    )
-    {
+        ResultService $resultService,
+        SerializerInterface $serializer,
+        Packages $packages,
+        H5POptions $options,
+        H5PIntegration $h5PIntegration,
+        H5PCore $h5PCore,
+        KernelInterface $kernel
+    ) {
         $this->entityManager = $entityManager;
         $this->resultService = $resultService;
         $this->serializer = $serializer;

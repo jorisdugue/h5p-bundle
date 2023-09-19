@@ -10,7 +10,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class H5pBundleCleanUpFilesCommand extends Command
 {
-
     /**
      * @var H5POptions $h5POptions
      */

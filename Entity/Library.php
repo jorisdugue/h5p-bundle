@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Studit\H5PBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -50,6 +49,12 @@ class Library
      * @ORM\Column(name="patch_version", type="integer")
      */
     private $patchVersion;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="patch_version_in_folder_name", type="boolean", options={"default": 0})
+     */
+    private $patchVersionInFolderName = false;
     /**
      * @var boolean
      *
@@ -138,21 +143,20 @@ class Library
         $name = $this->getLocalName($name);
         return $this->$name;
     }
-    public function __isset($name)
+    public function __isset($name): bool
     {
         $name = $this->getLocalName($name);
         return isset($this->$name);
     }
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
         $name = $this->getLocalName($name);
         $this->$name = $value;
     }
-    private function getLocalName($name)
+    private function getLocalName($name): string
     {
         $name = \H5PCore::snakeToCamel([$name => 1]);
-        $name = array_keys($name)[0];
-        return $name;
+        return array_keys($name)[0];
     }
     /**
      * Library constructor.
@@ -161,7 +165,7 @@ class Library
     {
         $this->contentLibraries = new ArrayCollection();
     }
-    public function __toString()
+    public function __toString(): string
     {
         return "{$this->machineName} {$this->majorVersion}.{$this->minorVersion}";
     }
@@ -426,5 +430,13 @@ class Library
         $this->addTo = $addTo;
     }
 
+    public function isPatchVersionInFolderName(): bool
+    {
+        return $this->patchVersionInFolderName;
+    }
 
+    public function setPatchVersionInFolderName(bool $patchVersionInFolderName): void
+    {
+        $this->patchVersionInFolderName = $patchVersionInFolderName;
+    }
 }

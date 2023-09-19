@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Studit\H5PBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,7 +19,6 @@ use Studit\H5PBundle\Form\Type\H5PType;
  */
 class H5PController extends AbstractController
 {
-
     protected $h5PIntegrations;
     protected $libraryStorage;
     protected $entityManager;
@@ -74,7 +72,8 @@ class H5PController extends AbstractController
             $h5pIntegration['contents'][$contentIdStr]['styles'] = $cssFilePaths;
         }
         return $this->render(
-            '@StuditH5P/show.html.twig', [
+            '@StuditH5P/show.html.twig',
+            [
                 'contentId' => $content->getId(),
                 'isFrame' => $content->getLibrary()->isFrame(),
                 'h5pIntegration' => $h5pIntegration,
@@ -127,11 +126,13 @@ class H5PController extends AbstractController
         }
         $h5pIntegration = $this->h5PIntegrations->getEditorIntegrationSettings($content ? $content->getId() : null);
         return $this->render(
-            '@StuditH5P/edit.html.twig', [
+            '@StuditH5P/edit.html.twig',
+            [
                 'form' => $form->createView(),
                 'h5pIntegration' => $h5pIntegration,
                 'h5pCoreTranslations' => $this->h5PIntegrations->getTranslationFilePath()
-            ]);
+            ]
+        );
     }
 
     /**

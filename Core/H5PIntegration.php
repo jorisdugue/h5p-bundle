@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Studit\H5PBundle\Core;
 
 use Doctrine\ORM\EntityManager;
@@ -14,7 +13,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-
 
 class H5PIntegration extends H5PUtils
 {
@@ -63,16 +61,15 @@ class H5PIntegration extends H5PUtils
      * @param \H5PContentValidator $contentValidator
      */
     public function __construct(
-        \H5PCore               $core,
-        H5POptions             $options,
-        TokenStorageInterface  $tokenStorage,
+        \H5PCore $core,
+        H5POptions $options,
+        TokenStorageInterface $tokenStorage,
         EntityManagerInterface $entityManager,
-        RouterInterface        $router,
-        RequestStack           $requestStack,
-        Packages               $packages,
-        \H5PContentValidator   $contentValidator
-    )
-    {
+        RouterInterface $router,
+        RequestStack $requestStack,
+        Packages $packages,
+        \H5PContentValidator $contentValidator
+    ) {
         parent::__construct($tokenStorage);
         $this->core = $core;
         $this->options = $options;
@@ -218,7 +215,9 @@ class H5PIntegration extends H5PUtils
             'filtered' => $content->getFilteredParameters(),
             'embedType' => 'div',
         ];
-        if (!empty($contentData['filtered'] && $contentData['filtered'] == '{}')) $contentData['filtered'] = null;
+        if (!empty($contentData['filtered'] && $contentData['filtered'] == '{}')) {
+            $contentData['filtered'] = null;
+        }
 
         return $this->core->filterParameters($contentData);
     }
@@ -349,5 +348,4 @@ class H5PIntegration extends H5PUtils
     {
         return $this->options;
     }
-
 }

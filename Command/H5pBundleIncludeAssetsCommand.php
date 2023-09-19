@@ -46,9 +46,9 @@ class H5pBundleIncludeAssetsCommand extends Command
     {
         //get dir of vendor H5P
 
-        $fromDir = $this->appKernel->getProjectDir()."/vendor/h5p/";
+        $fromDir = $this->appKernel->getProjectDir() . "/vendor/h5p/";
         //call service
-        $toDir = $this->appKernel->getProjectDir().'/public/bundles/studith5p/h5p/';
+        $toDir = $this->appKernel->getProjectDir() . '/public/bundles/studith5p/h5p/';
 
         $coreSubDir = "h5p-core/";
         $coreDirs = ["fonts", "images", "js", "styles"];
@@ -57,7 +57,6 @@ class H5pBundleIncludeAssetsCommand extends Command
         $editorSubDir = "h5p-editor/";
         $editorDirs = ["ckeditor", "images", "language", "libs", "scripts", "styles"];
         $this->createFiles($fromDir, $toDir, $editorSubDir, $editorDirs, $copy);
-
     }
 
     private function createFiles($fromDir, $toDir, $subDir, $subDirs, $copy)
@@ -69,7 +68,7 @@ class H5pBundleIncludeAssetsCommand extends Command
             $copy
                 ? $this->recurseCopy($src, $dist)
                 : symlink($src, $dist);
-            }
+        }
     }
 
     private function recurseCopy($src, $dst)

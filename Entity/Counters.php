@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Studit\H5PBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -94,5 +93,4 @@ class Counters
     {
         $this->num = $num;
     }
-
 }

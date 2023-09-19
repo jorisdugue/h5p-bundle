@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Studit\H5PBundle\Service;
 
 use Studit\H5PBundle\Core\H5POptions;

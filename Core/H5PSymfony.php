@@ -1,13 +1,12 @@
 <?php
 
-
 namespace Studit\H5PBundle\Core;
-
 
 use DateTimeInterface;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use JsonSerializable;
 use Studit\H5PBundle\DependencyInjection\Configuration;
 use Studit\H5PBundle\Editor\EditorStorage;
 use Studit\H5PBundle\Entity\Content;
@@ -23,8 +22,6 @@ use Studit\H5PBundle\Entity\LibraryRepository;
 use Studit\H5PBundle\Event\H5PEvents;
 use Studit\H5PBundle\Event\LibrarySemanticsEvent;
 use GuzzleHttp\Client;
-use Symfony\Component\Intl\Languages;
-use Symfony\Component\Intl\Timezones;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -87,16 +84,16 @@ class H5PSymfony implements \H5PFrameworkInterface
      * @param RouterInterface $router
      */
     public function __construct(
-        H5POptions                    $options,
-        EditorStorage                 $editorStorage,
-        TokenStorageInterface         $tokenStorage,
-        EntityManagerInterface        $manager,
-        ?Session                      $session,
-        ?RequestStack                 $requestStack,
+        H5POptions $options,
+        EditorStorage $editorStorage,
+        TokenStorageInterface $tokenStorage,
+        EntityManagerInterface $manager,
+        ?Session $session,
+        ?RequestStack $requestStack,
         AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface      $eventDispatcher,
-        RouterInterface               $router)
-    {
+        EventDispatcherInterface $eventDispatcher,
+        RouterInterface $router
+    ) {
         $this->options = $options;
         $this->editorStorage = $editorStorage;
         $this->tokenStorage = $tokenStorage;
@@ -158,8 +155,7 @@ class H5PSymfony implements \H5PFrameworkInterface
         $headers = [],
         $files = [],
         $method = 'POST'
-    )
-    {
+    ) {
         $options = [];
         if (!empty($data)) {
             $options['headers'] = ['Content-Type' => 'application/x-www-form-urlencoded'];
@@ -194,7 +190,7 @@ class H5PSymfony implements \H5PFrameworkInterface
             // http://guzzle.readthedocs.io/en/latest/request-options.html#sink-option
             return true;
         }
-        if($fullData){
+        if ($fullData) {
             // Compatibility with response of h5p.classe.php
             return [
                 'status' => $response->getStatusCode(),
@@ -510,7 +506,7 @@ class H5PSymfony implements \H5PFrameworkInterface
             $this->manager->flush();
             $libraryData['libraryId'] = $library->getId();
             if ($libraryData['runnable']) {
-                $h5p_first_runnable_saved = $this->getOption('first_runnable_saved', FALSE);
+                $h5p_first_runnable_saved = $this->getOption('first_runnable_saved', false);
                 if (!$h5p_first_runnable_saved) {
                     $this->setOption('first_runnable_saved', 1);
                 }
@@ -527,7 +523,7 @@ class H5PSymfony implements \H5PFrameworkInterface
             $library->setSemantics($libraryData['semantics']);
             $library->setHasIcon($libraryData['hasIcon']);
             $library->setMetadataSettings($libraryData['metadataSettings']);
-            $library->setAddTo(isset($libraryData['addTo']) ? json_encode($libraryData['addTo']) : NULL);
+            $library->setAddTo(isset($libraryData['addTo']) ? json_encode($libraryData['addTo']) : null);
             $this->manager->persist($library);
             $this->manager->flush();
             $this->deleteLibraryDependencies($libraryData['libraryId']);
@@ -574,7 +570,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function insertContent($contentData, $contentMainId = NULL)
+    public function insertContent($contentData, $contentMainId = null)
     {
         $content = new Content();
         return $this->storeContent($contentData, $content);
@@ -683,7 +679,6 @@ class H5PSymfony implements \H5PFrameworkInterface
             $this->manager->remove($contentLibrary);
         }
         $this->manager->flush();
-
     }
 
     /**
@@ -894,7 +889,7 @@ class H5PSymfony implements \H5PFrameworkInterface
         try {
             // return default if db/table still not created
             return $this->options->getOption($name, $default);
-        } catch (ConnectionException|TableNotFoundException $e) {
+        } catch (ConnectionException | TableNotFoundException $e) {
             return $default;
         }
     }
@@ -966,7 +961,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function isContentSlugAvailable($slug)
+    public function isContentSlugAvailable($slug): bool
     {
         throw new \Exception();
     }
@@ -1122,10 +1117,11 @@ class H5PSymfony implements \H5PFrameworkInterface
     }
 
     /**
-     * @param $tableClassName
+     * @param string $tableClassName
      * @throws Exception
+     * @return void
      */
-    private function truncateTable($tableClassName)
+    private function truncateTable(string $tableClassName): void
     {
         $cmd = $this->manager->getClassMetadata($tableClassName);
         $connection = $this->manager->getConnection();
@@ -1144,11 +1140,20 @@ class H5PSymfony implements \H5PFrameworkInterface
         return false;
     }
 
+    /**
+     * @param JsonSerializable $metadata
+     * @param string $lang
+     * @return mixed
+     */
     public function replaceContentHubMetadataCache($metadata, $lang)
     {
         // TODO: Implement replaceContentHubMetadataCache() method.
     }
 
+    /**
+     * @param string $lang
+     * @return JsonSerializable
+     */
     public function getContentHubMetadataCache($lang = 'en')
     {
         // TODO: Implement getContentHubMetadataCache() method.
@@ -1162,6 +1167,11 @@ class H5PSymfony implements \H5PFrameworkInterface
         return $date->format(DateTimeInterface::RFC7231);
     }
 
+    /**
+     * @param $time
+     * @param $lang
+     * @return bool
+     */
     public function setContentHubMetadataChecked($time, $lang = 'en')
     {
         // TODO: Implement setContentHubMetadataChecked() method.

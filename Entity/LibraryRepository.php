@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Studit\H5PBundle\Entity;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -33,7 +32,13 @@ class LibraryRepository extends ServiceEntityRepository
             ->setParameter('id', $libraryId);
         return $qb->getQuery()->getSingleScalarResult();
     }
-    public function findLatestLibraryVersions()
+
+    /**
+     * Find latest library
+     * @return array
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function findLatestLibraryVersions(): array
     {
         $major_versions_sql = <<< EOT
   SELECT hl.machine_name, 
@@ -60,16 +65,17 @@ EOT;
          hl4.title,
          hl4.patch_version,
          hl4.restricted,
-         hl4.has_icon
+         hl4.has_icon,
+         hl4.patch_version_in_folder_name
     FROM ({$minor_versions_sql}) hl3
     JOIN h5p_library hl4
       ON hl3.machine_name = hl4.machine_name
      AND hl3.major_version = hl4.major_version
      AND hl3.minor_version = hl4.minor_version
-GROUP BY hl4.machine_name, 
-         hl4.major_version, 
-         hl4.minor_version, 
-         hl4.id, 
+GROUP BY hl4.machine_name,
+         hl4.major_version,
+         hl4.minor_version,
+         hl4.id,
          hl4.title,
          hl4.patch_version,
          hl4.restricted,
@@ -129,7 +135,7 @@ EOT;
             return null;
         }
     }
-    public function isPatched($library)
+    public function isPatched($library): bool
     {
         $qb = $this->createQueryBuilder('l')
             ->select('COUNT(l)')

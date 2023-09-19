@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Studit\H5PBundle\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;

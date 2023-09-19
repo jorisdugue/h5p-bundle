@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Studit\H5PBundle\Editor;
 
 use Doctrine\ORM\EntityManager;
