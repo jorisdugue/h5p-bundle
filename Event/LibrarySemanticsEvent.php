@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Studit\H5PBundle\Event;
-
 
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -54,5 +52,4 @@ class LibrarySemanticsEvent extends Event
     {
         return $this->minorVersion;
     }
-
 }

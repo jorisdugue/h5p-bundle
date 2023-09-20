@@ -10,7 +10,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class H5pBundleCleanUpFilesCommand extends Command
 {
-
     /**
      * @var H5POptions $h5POptions
      */
@@ -23,22 +22,23 @@ class H5pBundleCleanUpFilesCommand extends Command
     }
 
     protected static $defaultName = 'h5p-bundle:cleanup-files';
-    protected function configure()
+
+    protected function configure(): void
     {
         $this
             ->addArgument('location', InputArgument::OPTIONAL, 'The location of the files to clean up.')
-            ->setDescription('Include the assets from the h5p vendor bundle in the public resources directory of this bundle.');
-        ;
+            ->setDescription(
+                'Include the assets from the h5p vendor bundle in the public resources directory of this bundle.'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-	$this->cleanupFiles($input);
-
-	return 0;
+        $this->cleanupFiles($input);
+        return 0;
     }
 
-    private function cleanupFiles(InputInterface $input)
+    private function cleanupFiles(InputInterface $input): void
     {
         $location = $input->getArgument('location');
         if (!$location) {

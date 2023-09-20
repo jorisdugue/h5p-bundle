@@ -9,10 +9,8 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
-
 class StuditH5PExtension extends Extension
 {
-
     /**
      * @inheritDoc
      * @throws Exception
@@ -27,7 +25,7 @@ class StuditH5PExtension extends Extension
         $definition->setArgument(0, $config);
 
         // stop saving the .h5p files if export/frame false
-        if(!$config['frame'] || !$config['export']){
+        if (!$config['frame'] || !$config['export']) {
             $definition = $container->getDefinition("studit_h5p.core");
             $definition->setArgument(4, false);
         }

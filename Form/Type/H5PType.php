@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Studit\H5PBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;

@@ -60,7 +60,7 @@ class Option
     {
         if ($this->type === self::INTEGER) {
             return intval($this->value);
-        } else if ($this->type === self::BOOLEAN) {
+        } elseif ($this->type === self::BOOLEAN) {
             return boolval($this->value);
         } else {
             return $this->value;
@@ -68,16 +68,16 @@ class Option
     }
 
     /**
-     * @param string $value
+     * @param string|int|bool $value
      * @throws InvalidArgumentException
      */
-    public function setValue($value)
+    public function setValue($value): void
     {
         if (is_int($value)) {
             $this->type = self::INTEGER;
-        } else if (is_bool($value)) {
+        } elseif (is_bool($value)) {
             $this->type = self::BOOLEAN;
-        } else if (is_string($value)) {
+        } elseif (is_string($value)) {
             $this->type = self::STRING;
         } else {
             throw new InvalidArgumentException("The value type is not supported.");

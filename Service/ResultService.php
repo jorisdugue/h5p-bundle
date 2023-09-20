@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Studit\H5PBundle\Service;
-
 
 use Doctrine\ORM\EntityManagerInterface;
 use Studit\H5PBundle\Entity\ContentResult;
@@ -68,8 +66,8 @@ class ResultService
                     'user' => $user->getId()
                 ]
             );
-        if (count($ContentUserData) > 0){
-            foreach ($ContentUserData as $content){
+        if (count($ContentUserData) > 0) {
+            foreach ($ContentUserData as $content) {
                 $this->em->remove($content);
             }
             $this->em->flush();

@@ -50,70 +50,70 @@ class Content
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
     /**
      * @param int $id
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
     }
     /**
      * @return Library
      */
-    public function getLibrary()
+    public function getLibrary(): Library
     {
         return $this->library;
     }
     /**
      * @param Library $library
      */
-    public function setLibrary($library)
+    public function setLibrary(Library $library)
     {
         $this->library = $library;
     }
     /**
      * @return string
      */
-    public function getParameters()
+    public function getParameters(): string
     {
         return $this->parameters;
     }
     /**
      * @param string $parameters
      */
-    public function setParameters($parameters)
+    public function setParameters(string $parameters)
     {
         $this->parameters = $parameters;
     }
     /**
      * @return string
      */
-    public function getFilteredParameters()
+    public function getFilteredParameters(): string
     {
         return $this->filteredParameters;
     }
     /**
      * @param string $filteredParameters
      */
-    public function setFilteredParameters($filteredParameters)
+    public function setFilteredParameters(string $filteredParameters)
     {
         $this->filteredParameters = $filteredParameters;
     }
     /**
      * @return int
      */
-    public function getDisabledFeatures()
+    public function getDisabledFeatures(): int
     {
         return $this->disabledFeatures;
     }
     /**
      * @param int $disabledFeatures
      */
-    public function setDisabledFeatures($disabledFeatures)
+    public function setDisabledFeatures(int $disabledFeatures)
     {
         $this->disabledFeatures = $disabledFeatures;
     }
