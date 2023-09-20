@@ -125,7 +125,6 @@ class H5POptions
     public function getRelativeH5PPath()
     {
         $dir = $this->getOption('storage_dir');
-
         return $dir[0] === '/' ? $dir : '/' . $dir;
     }
 
@@ -149,7 +148,7 @@ class H5POptions
         return $this->projectRootDir . '/' . $this->getOption('web_dir');
     }
 
-    public function getLibraryFileUrl($libraryFolderName, $fileName): string
+    public function getLibraryFileUrl(string $libraryFolderName, string $fileName): string
     {
         return $this->getRelativeH5PPath() . "/libraries/$libraryFolderName/$fileName";
     }

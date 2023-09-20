@@ -12,14 +12,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class H5PIntegration extends H5PUtils
 {
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
     /**
      * @var EntityManager
      */
@@ -73,7 +68,6 @@ class H5PIntegration extends H5PUtils
         parent::__construct($tokenStorage);
         $this->core = $core;
         $this->options = $options;
-        $this->tokenStorage = $tokenStorage;
         $this->entityManager = $entityManager;
         $this->router = $router;
         $this->requestStack = $requestStack;
@@ -107,26 +101,23 @@ class H5PIntegration extends H5PUtils
             'token' => \H5PCore::createToken('contentuserdata')
         ]);
         // Define the generic H5PIntegration settings
-        $settings = array(
+        $settings = [
             'baseUrl' => "/",
             'url' => $this->options->getRelativeH5PPath(),
             'postUserStatistics' => is_object($user),
-            'ajax' => array(
-                'setFinished' => $setFinishedUrl,
-                'contentUserData' => $contentUserDataUrl,
-            ),
+            'ajax' => ['setFinished' => $setFinishedUrl, 'contentUserData' => $contentUserDataUrl],
             'saveFreq' => $saveContentState ? $saveContentFrequency : false,
-            'l10n' => array(
-                'H5P' => $this->core->getLocalization(),
-            ),
+            'l10n' => ['H5P' => $this->core->getLocalization()],
             'hubIsEnabled' => $hubIsEnabled,
             'siteUrl' => $this->requestStack->getMainRequest()->getUri(),
             'librairyConfig' => $this->core->h5pF->getLibraryConfig()
-        );
+        ];
         if (is_object($user)) {
             $settings['user'] = [
                 'name' => method_exists($user, 'getUsername') ? $user->getUsername() : $user->getUserIdentifier(),
-                'mail' => method_exists($user, 'getEmail') ? $user->getEmail() : $user->getUserIdentifier() . '@' . $_SERVER['HTTP_HOST'],
+                'mail' => method_exists($user, 'getEmail') ?
+                    $user->getEmail() :
+                    $user->getUserIdentifier() . '@' . $_SERVER['HTTP_HOST'],
             ];
         }
         return $settings;
@@ -161,11 +152,7 @@ class H5PIntegration extends H5PUtils
 
     public function getH5PContentIntegrationSettings(Content $content): array
     {
-        $content_user_data = [
-            0 => [
-                'state' => '{}',
-            ]
-        ];
+        $content_user_data = [0 => ['state' => '{}']];
         if (is_object($this->getCurrentOrAnonymousUser())) {
             $contentUserData = $this->entityManager
                 ->getRepository('Studit\H5PBundle\Entity\ContentUserData')
@@ -174,7 +161,9 @@ class H5PIntegration extends H5PUtils
                     'user' => $this->getUserId($this->getCurrentOrAnonymousUser())
                 ]);
             if ($contentUserData) {
-                $content_user_data[$contentUserData->getSubContentId()][$contentUserData->getDataId()] = $contentUserData->getData();
+                $content_user_data[
+                    $contentUserData->getSubContentId()
+                ][$contentUserData->getDataId()] = $contentUserData->getData();
             }
         }
         $filteredParameters = $this->getFilteredParameters($content);
@@ -199,7 +188,7 @@ class H5PIntegration extends H5PUtils
         );
     }
 
-    public function getFilteredParameters(Content $content): ?object
+    public function getFilteredParameters(Content $content): ?string
     {
         $params = json_decode($content->getParameters());
         $contentData = [

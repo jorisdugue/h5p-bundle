@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\NodeInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    const H5P_VERSION = '0.1'; // version of Symfony H5P bundle
+    const H5P_VERSION = '2.1.0'; // version of Symfony H5P bundle
 
     /**
      * Generates the configuration tree.
@@ -21,7 +21,6 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('studit_h5_p');
 
         $rootNode = $treeBuilder->getRootNode();
-
         if (!method_exists($rootNode, 'children')) {
             throw new RuntimeException(
                 'Your Symfony version does not support the children() method to define the root node in' .

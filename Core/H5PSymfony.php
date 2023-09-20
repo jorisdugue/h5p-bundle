@@ -35,6 +35,7 @@ use Doctrine\ORM\Query\Expr;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer;
 
 class H5PSymfony implements \H5PFrameworkInterface
 {
@@ -280,8 +281,8 @@ class H5PSymfony implements \H5PFrameworkInterface
 
     /**
      * Implements getLibraryFileUrl
-     * @param $libraryFolderName
-     * @param $fileName
+     * @param string $libraryFolderName
+     * @param string $fileName
      * @return string
      */
     public function getLibraryFileUrl($libraryFolderName, $fileName): string
@@ -1152,11 +1153,11 @@ class H5PSymfony implements \H5PFrameworkInterface
 
     /**
      * @param string $lang
-     * @return JsonSerializable
+     * @return string
      */
-    public function getContentHubMetadataCache($lang = 'en')
+    public function getContentHubMetadataCache($lang = 'en'): string
     {
-        // TODO: Implement getContentHubMetadataCache() method.
+        return '';
     }
 
     public function getContentHubMetadataChecked($lang = 'en'): ?string
@@ -1168,12 +1169,14 @@ class H5PSymfony implements \H5PFrameworkInterface
     }
 
     /**
-     * @param $time
-     * @param $lang
+     * Update the database with the latest time was been checked
+     * @param int|null $time
+     * @param string $lang
      * @return bool
      */
-    public function setContentHubMetadataChecked($time, $lang = 'en')
+    public function setContentHubMetadataChecked($time, $lang = 'en'): bool
     {
-        // TODO: Implement setContentHubMetadataChecked() method.
+        // For moment only return true in future implement this db
+        return true;
     }
 }

@@ -67,15 +67,16 @@ class H5PAJAXController extends AbstractController
     /**
      * Callback that return the content hub metadata cache
      * @Route("/content-hub-metadata-cache")
+     * @param Request $request
      * @return JsonResponse
      */
-    public function contentHubMetadataCache(): JsonResponse
+    public function contentHubMetadataCache(Request $request): JsonResponse
     {
-        $lang = 'en';
+        $locale = $request->getLocale() != null ? $request->getLocale() : 'en';
         ob_start();
 
         $editor = $this->h5peditor;
-        $editor->ajax->action(\H5PEditorEndpoints::CONTENT_HUB_METADATA_CACHE, $lang);
+        $editor->ajax->action(\H5PEditorEndpoints::CONTENT_HUB_METADATA_CACHE, $locale);
 
         $output = ob_get_contents();
         ob_end_clean();
@@ -149,7 +150,7 @@ class H5PAJAXController extends AbstractController
             $request->get('majorVersion'),
             $request->get('minorVersion'),
             $locale,
-            $this->serviceh5poptions->getOption('storage_dir'),
+            $this->serviceh5poptions->getRelativeH5PPath(),
             '',
             $locale
         );
