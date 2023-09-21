@@ -41,7 +41,7 @@ class LibraryRepository extends ServiceEntityRepository
     public function findLatestLibraryVersions(): array
     {
         $major_versions_sql = <<< EOT
-  SELECT hl.machine_name, 
+  SELECT hl.machine_name,
          MAX(hl.major_version) AS major_version
     FROM h5p_library hl
    WHERE hl.runnable = true
@@ -84,8 +84,7 @@ EOT;
         $em = $this->getEntityManager();
         /** @var Statement $stmt */
         $stmt = $em->getConnection()->prepare($sql);
-        $result = $stmt->executeQuery();
-        $libraryVersions = $result->fetchAllAssociative();
+        $libraryVersions = $stmt->executeQuery()->fetchAllAssociative();
         foreach ($libraryVersions as &$libraryVersion) {
             $libraryVersion = (object)$libraryVersion;
         }
@@ -96,7 +95,11 @@ EOT;
         $qb = $this->createQueryBuilder('l')
             ->select('l')
             ->where('l.machineName = :machineName and l.majorVersion = :majorVersion and l.minorVersion = :minorVersion and l.semantics is not null')
-            ->setParameters(['machineName' => $machineName, 'majorVersion' => $majorVersion, 'minorVersion' => $minorVersion]);
+            ->setParameters([
+                'machineName' => $machineName,
+                'majorVersion' => $majorVersion,
+                'minorVersion' => $minorVersion
+            ]);
         try {
             $library = $qb->getQuery()->getSingleResult();
         } catch (NoResultException $e) {
@@ -128,7 +131,11 @@ EOT;
         $qb = $this->createQueryBuilder('l')
             ->select('l.id')
             ->where('l.machineName = :machineName and l.majorVersion = :majorVersion and l.minorVersion = :minorVersion and l.semantics is not null')
-            ->setParameters(['machineName' => $machineName, 'majorVersion' => $majorVersion, 'minorVersion' => $minorVersion]);
+            ->setParameters([
+                'machineName' => $machineName,
+                'majorVersion' => $majorVersion,
+                'minorVersion' => $minorVersion
+            ]);
         try {
             return $qb->getQuery()->getSingleScalarResult();
         } catch (NoResultException $e) {
@@ -140,7 +147,12 @@ EOT;
         $qb = $this->createQueryBuilder('l')
             ->select('COUNT(l)')
             ->where('l.machineName = :machineName and l.majorVersion = :majorVersion and l.minorVersion = :minorVersion and l.patchVersion < :patchVersion')
-            ->setParameters(['machineName' => $library['machineName'], 'majorVersion' => $library['majorVersion'], 'minorVersion' => $library['minorVersion'], 'patchVersion' => $library['patchVersion']]);
+            ->setParameters([
+                'machineName' => $library['machineName'],
+                'majorVersion' => $library['majorVersion'],
+                'minorVersion' => $library['minorVersion'],
+                'patchVersion' => $library['patchVersion']
+            ]);
         return $qb->getQuery()->getSingleScalarResult() > 0;
     }
 }

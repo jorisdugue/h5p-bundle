@@ -57,8 +57,13 @@ class EditorStorage implements \H5peditorStorage
      * @param EntityManagerInterface $entityManager
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(H5POptions $options, Filesystem $filesystem, AuthorizationCheckerInterface $authorizationChecker, EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        H5POptions $options,
+        Filesystem $filesystem,
+        AuthorizationCheckerInterface $authorizationChecker,
+        EntityManagerInterface $entityManager,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->options = $options;
         $this->filesystem = $filesystem;
         $this->authorizationChecker = $authorizationChecker;
@@ -98,7 +103,7 @@ class EditorStorage implements \H5peditorStorage
      * @return string[] Translation in JSON format
      * @throws NotSupported
      */
-    public function getAvailableLanguages($machineName, $majorVersion, $minorVersion)
+    public function getAvailableLanguages($machineName, $majorVersion, $minorVersion): array
     {
         /** @var LibrariesLanguagesRepository $repo */
         $repo = $this->entityManager->getRepository('Studit\H5PBundle\Entity\LibrariesLanguages');
@@ -129,7 +134,7 @@ class EditorStorage implements \H5peditorStorage
      * @param array $libraries List of library names + version to load info for
      * @return array List of all libraries loaded
      */
-    public function getLibraries($libraries = null)
+    public function getLibraries($libraries = null): array
     {
         $canCreateRestricted = $this->authorizationChecker->isGranted('ROLE_H5P_CREATE_RESTRICTED_CONTENT_TYPES');
         if ($libraries !== null) {
@@ -148,7 +153,10 @@ class EditorStorage implements \H5peditorStorage
                     // Mark old ones
                     // This is the newest
                     if (
-                        ($library->majorVersion === $existingLibrary->majorVersion && $library->minorVersion > $existingLibrary->minorVersion) ||
+                        (
+                            $library->majorVersion === $existingLibrary->majorVersion &&
+                            $library->minorVersion > $existingLibrary->minorVersion
+                        ) ||
                         ($library->majorVersion > $existingLibrary->majorVersion)
                     ) {
                         $existingLibrary->isOld = true;
@@ -169,7 +177,7 @@ class EditorStorage implements \H5peditorStorage
      * @param $canCreateRestricted
      * @return array
      */
-    private function getLibrariesWithDetails($libraries, $canCreateRestricted)
+    private function getLibrariesWithDetails($libraries, $canCreateRestricted): array
     {
         $librariesWithDetails = [];
         foreach ($libraries as $library) {
@@ -181,7 +189,7 @@ class EditorStorage implements \H5peditorStorage
                 $library->tutorialUrl = $details->getTutorialUrl();
                 $library->title = $details->getTitle();
                 $library->runnable = $details->isRunnable();
-                $library->restricted = $canCreateRestricted ? false : ($details->isRestricted() === '1');
+                $library->restricted = !$canCreateRestricted && $details->isRestricted();
                 $library->metadataSettings = json_decode($details->getMetadataSettings());
                 $librariesWithDetails[] = $library;
             }

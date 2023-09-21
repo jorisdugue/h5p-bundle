@@ -4,7 +4,6 @@ namespace Studit\H5PBundle\Controller;
 
 use Exception;
 use Studit\H5PBundle\Core\H5POptions;
-use Studit\H5PBundle\Event\H5PEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

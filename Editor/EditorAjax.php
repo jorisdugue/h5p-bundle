@@ -4,7 +4,6 @@ namespace Studit\H5PBundle\Editor;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\NotSupported;
 use Studit\H5PBundle\Core\H5PUtils;
 use Studit\H5PBundle\Entity\EventRepository;
 use Studit\H5PBundle\Entity\LibraryRepository;
