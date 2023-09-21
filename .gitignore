@@ -13,3 +13,5 @@ public/index.php
 .idea/*
 .idea
 composer.lock
+.DS_Store
+.thumbs

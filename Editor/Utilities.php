@@ -18,13 +18,12 @@ class Utilities
         $matches = [];
         preg_match_all('/(.+)\s(\d+)\.(\d+)$/', $library, $matches);
         if (count($matches) == 4) {
-            $libraryData = [
+            return [
                 'name' => $matches[1][0],
                 'machineName' => $matches[1][0],
                 'majorVersion' => $matches[2][0],
                 'minorVersion' => $matches[3][0],
             ];
-            return $libraryData;
         }
         return false;
     }
