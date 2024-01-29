@@ -11,14 +11,13 @@ class Configuration implements ConfigurationInterface
 {
     /**
      * version of Symfony H5P bundle
-     * @return {string}
+     * @return string
      */
     const H5P_VERSION = '2.1.0';
 
     /**
      * Generates the configuration tree.
-     *
-     * @return TreeBuilder|NodeInterface
+     * @return TreeBuilder
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
