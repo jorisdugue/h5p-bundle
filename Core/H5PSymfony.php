@@ -2,8 +2,10 @@
 
 namespace Studit\H5PBundle\Core;
 
+use DateTime;
 use DateTimeInterface;
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use JsonSerializable;
@@ -35,7 +37,6 @@ use Doctrine\ORM\Query\Expr;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer;
 
 class H5PSymfony implements \H5PFrameworkInterface
 {
@@ -85,16 +86,17 @@ class H5PSymfony implements \H5PFrameworkInterface
      * @param RouterInterface $router
      */
     public function __construct(
-        H5POptions $options,
-        EditorStorage $editorStorage,
-        TokenStorageInterface $tokenStorage,
-        EntityManagerInterface $manager,
-        ?Session $session,
-        ?RequestStack $requestStack,
+        H5POptions                    $options,
+        EditorStorage                 $editorStorage,
+        TokenStorageInterface         $tokenStorage,
+        EntityManagerInterface        $manager,
+        ?Session                      $session,
+        ?RequestStack                 $requestStack,
         AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher,
-        RouterInterface $router
-    ) {
+        EventDispatcherInterface      $eventDispatcher,
+        RouterInterface               $router
+    )
+    {
         $this->options = $options;
         $this->editorStorage = $editorStorage;
         $this->tokenStorage = $tokenStorage;
@@ -156,7 +158,8 @@ class H5PSymfony implements \H5PFrameworkInterface
         $headers = [],
         $files = [],
         $method = 'POST'
-    ) {
+    )
+    {
         $options = [];
         if (!empty($data)) {
             $options['headers'] = ['Content-Type' => 'application/x-www-form-urlencoded'];
@@ -890,7 +893,7 @@ class H5PSymfony implements \H5PFrameworkInterface
         try {
             // return default if db/table still not created
             return $this->options->getOption($name, $default);
-        } catch (ConnectionException | TableNotFoundException $e) {
+        } catch (ConnectionException|TableNotFoundException $e) {
             return $default;
         }
     }
@@ -1088,8 +1091,8 @@ class H5PSymfony implements \H5PFrameworkInterface
     {
         $this->truncateTable(LibrariesHubCache::class);
         foreach ($contentTypeCache->contentTypes as $ct) {
-            $created_at = new \DateTime($ct->createdAt);
-            $updated_at = new \DateTime($ct->updatedAt);
+            $created_at = new DateTime($ct->createdAt);
+            $updated_at = new DateTime($ct->updatedAt);
             $cache = new LibrariesHubCache();
             $cache->setMachineName($ct->id);
             $cache->setMajorVersion($ct->version->major);
@@ -1118,19 +1121,34 @@ class H5PSymfony implements \H5PFrameworkInterface
     }
 
     /**
-     * @param string $tableClassName
-     * @throws Exception
+     * Truncate the specified database table.
+     *
+     * This method truncates the given database table by executing SQL queries to temporarily
+     * disable foreign key checks, truncate the table, and then re-enable foreign key checks.
+     * Truncating a table removes all rows but keeps the table structure intact.
+     *
+     * @param string $tableClassName The fully qualified class name of the entity representing the table.
      * @return void
-     */
+     * @throws Exception
+     * */
     private function truncateTable(string $tableClassName): void
     {
         $cmd = $this->manager->getClassMetadata($tableClassName);
         $connection = $this->manager->getConnection();
         $dbPlatform = $connection->getDatabasePlatform();
-        $connection->executeQuery('SET FOREIGN_KEY_CHECKS=0');
-        $q = $dbPlatform->getTruncateTableSql($cmd->getTableName());
-        $connection->executeStatement($q);
-        $connection->executeQuery('SET FOREIGN_KEY_CHECKS=1');
+        // disable foreign key check or equivalent to pgsql
+        if ($dbPlatform instanceof PostgreSQLPlatform) {
+            $connection->executeQuery('SET session_replication_role = replica;');
+        } else {
+            $connection->executeQuery('SET FOREIGN_KEY_CHECKS=0');
+        }
+        $connection->executeStatement($dbPlatform->getTruncateTableSql($cmd->getTableName()));
+        // Enable foreign key check
+        if ($dbPlatform instanceof PostgreSQLPlatform) {
+            $connection->executeQuery('SET session_replication_role = DEFAULT;');
+        } else {
+            $connection->executeQuery('SET FOREIGN_KEY_CHECKS=1');
+        }
     }
 
     /**
@@ -1164,7 +1182,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     {
         // Todo fetch the timestamp of current language here
 //        dd(Languages::getName($lang));
-        $date = new \DateTime('now');
+        $date = new DateTime('now');
         return $date->format(DateTimeInterface::RFC7231);
     }
 
