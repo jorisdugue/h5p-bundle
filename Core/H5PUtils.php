@@ -31,11 +31,20 @@ class H5PUtils
         return 'anon.';
     }
 
-    public function getUserId(UserInterface $user)
+    /**
+     * Fetch current User ID
+     * @param UserInterface|null $user
+     * @return string|null|integer
+     */
+    public function getUserId(?UserInterface $user)
     {
-        if (method_exists($user, 'getId')) {
-            return $user->getId();
+        if ($user !== null) {
+            if (method_exists($user, 'getId')) {
+                return $user->getId();
+            }
+            return $user->getUserIdentifier();
+        } else {
+            return null;
         }
-        return $user->getUserIdentifier();
     }
 }

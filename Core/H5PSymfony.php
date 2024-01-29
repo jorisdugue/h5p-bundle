@@ -5,6 +5,7 @@ namespace Studit\H5PBundle\Core;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use JsonSerializable;
@@ -85,16 +86,17 @@ class H5PSymfony implements \H5PFrameworkInterface
      * @param RouterInterface $router
      */
     public function __construct(
-        H5POptions $options,
-        EditorStorage $editorStorage,
-        TokenStorageInterface $tokenStorage,
-        EntityManagerInterface $manager,
-        ?Session $session,
-        ?RequestStack $requestStack,
+        H5POptions                    $options,
+        EditorStorage                 $editorStorage,
+        TokenStorageInterface         $tokenStorage,
+        EntityManagerInterface        $manager,
+        ?Session                      $session,
+        ?RequestStack                 $requestStack,
         AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher,
-        RouterInterface $router
-    ) {
+        EventDispatcherInterface      $eventDispatcher,
+        RouterInterface               $router
+    )
+    {
         $this->options = $options;
         $this->editorStorage = $editorStorage;
         $this->tokenStorage = $tokenStorage;
@@ -156,7 +158,8 @@ class H5PSymfony implements \H5PFrameworkInterface
         $headers = [],
         $files = [],
         $method = 'POST'
-    ) {
+    )
+    {
         $options = [];
         if (!empty($data)) {
             $options['headers'] = ['Content-Type' => 'application/x-www-form-urlencoded'];
@@ -890,7 +893,7 @@ class H5PSymfony implements \H5PFrameworkInterface
         try {
             // return default if db/table still not created
             return $this->options->getOption($name, $default);
-        } catch (ConnectionException | TableNotFoundException $e) {
+        } catch (ConnectionException|TableNotFoundException $e) {
             return $default;
         }
     }
@@ -1133,9 +1136,19 @@ class H5PSymfony implements \H5PFrameworkInterface
         $cmd = $this->manager->getClassMetadata($tableClassName);
         $connection = $this->manager->getConnection();
         $dbPlatform = $connection->getDatabasePlatform();
-        $connection->executeQuery('SET FOREIGN_KEY_CHECKS=0');
+        // disable foreign key check or equivalent to pgsql
+        if ($dbPlatform instanceof PostgreSQLPlatform) {
+            $connection->executeQuery('SET session_replication_role = replica;');
+        } else {
+            $connection->executeQuery('SET FOREIGN_KEY_CHECKS=0');
+        }
         $connection->executeStatement($dbPlatform->getTruncateTableSql($cmd->getTableName()));
-        $connection->executeQuery('SET FOREIGN_KEY_CHECKS=1');
+        // Enable foreign key check
+        if ($dbPlatform instanceof PostgreSQLPlatform) {
+            $connection->executeQuery('SET session_replication_role = DEFAULT;');
+        } else {
+            $connection->executeQuery('SET FOREIGN_KEY_CHECKS=1');
+        }
     }
 
     /**

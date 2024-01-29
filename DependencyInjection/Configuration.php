@@ -9,14 +9,18 @@ use Symfony\Component\Config\Definition\NodeInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    const H5P_VERSION = '2.1.0'; // version of Symfony H5P bundle
+    /**
+     * version of Symfony H5P bundle
+     * @return {string}
+     */
+    const H5P_VERSION = '2.1.0';
 
     /**
      * Generates the configuration tree.
      *
      * @return TreeBuilder|NodeInterface
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('studit_h5_p');
 

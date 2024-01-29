@@ -67,7 +67,10 @@ class H5PInteractionController extends AbstractController
         if (!\H5PCore::validToken('result', $token)) {
             \H5PCore::ajaxError('Invalid security token');
         }
-        $result = $this->resultService->handleRequestFinished($request, $this->getUserId($this->getUser()));
+        $result = $this->resultService->handleRequestFinished(
+            $request,
+            $this->h5PIntegration->getUserId($this->getUser())
+        );
         $this->entityManager->persist($result);
         $this->entityManager->flush();
         return new JsonResponse(['success' => true]);
@@ -116,7 +119,7 @@ class H5PInteractionController extends AbstractController
                         'subContentId' => $subContentId,
                         'mainContent' => $contentId,
                         'dataId' => $dataType,
-                        'user' => $this->getUserId($user),
+                        'user' => $this->h5PIntegration->getUserId($user),
                     ]
                 );
                 if (!$update) {
@@ -125,7 +128,7 @@ class H5PInteractionController extends AbstractController
                      * @var ContentUserData $contentUserData
                      */
                     $contentUserData = new ContentUserData();
-                    $contentUserData->setUser($this->getUserId($user));
+                    $contentUserData->setUser($this->h5PIntegration->getUserId($user));
                     $contentUserData->setData($data);
                     $contentUserData->setDataId($dataType);
                     $contentUserData->setSubContentId($subContentId);
@@ -153,7 +156,7 @@ class H5PInteractionController extends AbstractController
                 'subContentId' => $subContentId,
                 'mainContent' => $contentId,
                 'dataId' => $dataType,
-                'user' => $this->getUserId($user),
+                'user' => $this->h5PIntegration->getUserId($user),
             ]);
 
             //decode for read the information
@@ -185,7 +188,9 @@ class H5PInteractionController extends AbstractController
         $integration = $this->h5PIntegration->getGenericH5PIntegrationSettings();
         $content_id_string = 'cid-' . $content->getId();
         // Add content specific settings
-        $integration['contents'][$content_id_string] = $this->h5PIntegration->getH5PContentIntegrationSettings($content);
+        $integration['contents'][$content_id_string] = $this->h5PIntegration->getH5PContentIntegrationSettings(
+            $content
+        );
         $preloaded_dependencies = $this->h5PCore->loadContentDependencies($content->getId(), 'preloaded');
         $files = $this->h5PCore->getDependenciesFiles($preloaded_dependencies, $this->options->getRelativeH5PPath());
         // Load public files
@@ -206,7 +211,7 @@ class H5PInteractionController extends AbstractController
         $lang = $request->getLocale();
         $content = [
             'id' => $id,
-            'title' => "H5P Content {$id}",
+            'title' => "H5P Content $id",
         ];
         //include the embed file (provide in h5p-core)
         include $this->kernel->getProjectDir() . '/vendor/h5p/h5p-core/embed.php';
@@ -215,16 +220,17 @@ class H5PInteractionController extends AbstractController
         return new Response($response['#markup']);
     }
 
+    /**
+     * Retrieves the URL for the H5P asset based on the configured asset path.
+     *
+     * This method generates and returns the URL for the H5P asset by using the
+     * configured asset path provided through the options service. The URL is
+     * constructed using the asset path and the Symfony Asset component.
+     *
+     * @return string The URL for the H5P asset.
+     */
     private function getH5PAssetUrl(): string
     {
         return $this->assetsPaths->getUrl($this->options->getH5PAssetPath());
-    }
-
-    private function getUserId(UserInterface $user)
-    {
-        if (method_exists($user, 'getId')) {
-            return $user->getId();
-        }
-        return $user->getUserIdentifier();
     }
 }
