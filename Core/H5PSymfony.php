@@ -2,6 +2,7 @@
 
 namespace Studit\H5PBundle\Core;
 
+use DateTime;
 use DateTimeInterface;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,7 +36,6 @@ use Doctrine\ORM\Query\Expr;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer;
 
 class H5PSymfony implements \H5PFrameworkInterface
 {
@@ -1088,8 +1088,8 @@ class H5PSymfony implements \H5PFrameworkInterface
     {
         $this->truncateTable(LibrariesHubCache::class);
         foreach ($contentTypeCache->contentTypes as $ct) {
-            $created_at = new \DateTime($ct->createdAt);
-            $updated_at = new \DateTime($ct->updatedAt);
+            $created_at = new DateTime($ct->createdAt);
+            $updated_at = new DateTime($ct->updatedAt);
             $cache = new LibrariesHubCache();
             $cache->setMachineName($ct->id);
             $cache->setMajorVersion($ct->version->major);
@@ -1118,18 +1118,23 @@ class H5PSymfony implements \H5PFrameworkInterface
     }
 
     /**
-     * @param string $tableClassName
-     * @throws Exception
+     * Truncate the specified database table.
+     *
+     * This method truncates the given database table by executing SQL queries to temporarily
+     * disable foreign key checks, truncate the table, and then re-enable foreign key checks.
+     * Truncating a table removes all rows but keeps the table structure intact.
+     *
+     * @param string $tableClassName The fully qualified class name of the entity representing the table.
      * @return void
-     */
+     * @throws Exception
+     * */
     private function truncateTable(string $tableClassName): void
     {
         $cmd = $this->manager->getClassMetadata($tableClassName);
         $connection = $this->manager->getConnection();
         $dbPlatform = $connection->getDatabasePlatform();
         $connection->executeQuery('SET FOREIGN_KEY_CHECKS=0');
-        $q = $dbPlatform->getTruncateTableSql($cmd->getTableName());
-        $connection->executeStatement($q);
+        $connection->executeStatement($dbPlatform->getTruncateTableSql($cmd->getTableName()));
         $connection->executeQuery('SET FOREIGN_KEY_CHECKS=1');
     }
 
@@ -1164,7 +1169,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     {
         // Todo fetch the timestamp of current language here
 //        dd(Languages::getName($lang));
-        $date = new \DateTime('now');
+        $date = new DateTime('now');
         return $date->format(DateTimeInterface::RFC7231);
     }
 
