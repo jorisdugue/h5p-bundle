@@ -23,7 +23,7 @@ class H5PExtension extends \Twig\Extension\AbstractExtension
 
     public function getFilters(): array
     {
-        return [new TwigFilter('h5pCacheBuster', [$this, 'getH5PCacheBuster']),];
+        return [new TwigFilter('h5pCacheBuster', [$this, 'getH5PCacheBuster'])];
     }
 
     public function getH5PCacheBuster($script): string
