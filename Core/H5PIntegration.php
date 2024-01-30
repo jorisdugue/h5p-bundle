@@ -110,7 +110,8 @@ class H5PIntegration extends H5PUtils
             'l10n' => ['H5P' => $this->core->getLocalization()],
             'hubIsEnabled' => $hubIsEnabled,
             'siteUrl' => $this->requestStack->getMainRequest()->getUri(),
-            'librairyConfig' => $this->core->h5pF->getLibraryConfig()
+            'libraryConfig' => $this->core->h5pF->getLibraryConfig(),
+            'reportingIsEnabled' => $this->core->h5pF->getOption('enable_lrs_content_type', false) === 1
         ];
         if (is_object($user)) {
             $settings['user'] = [
@@ -126,10 +127,10 @@ class H5PIntegration extends H5PUtils
     /**
      * Get a list with prepared asset links that is used when JS loads components.
      *
-     * @param null|array $keys [$keys] Optional keys, first for JS second for CSS.
+     * @param array|null $keys [$keys] Optional keys, first for JS second for CSS.
      * @return array
      */
-    public function getCoreAssets($keys = null): array
+    public function getCoreAssets(?array $keys = null): array
     {
         if (empty($keys)) {
             $keys = ['scripts', 'styles'];
@@ -141,11 +142,11 @@ class H5PIntegration extends H5PUtils
         ];
         // Add all core scripts
         foreach (\H5PCore::$scripts as $script) {
-            $assets[$keys[0]][] = "{$this->options->getH5PAssetPath()}/h5p-core/{$script}";
+            $assets[$keys[0]][] = "{$this->options->getH5PAssetPath()}/h5p-core/$script";
         }
         // and styles
         foreach (\H5PCore::$styles as $style) {
-            $assets[$keys[1]][] = "{$this->options->getH5PAssetPath()}/h5p-core/{$style}";
+            $assets[$keys[1]][] = "{$this->options->getH5PAssetPath()}/h5p-core/$style";
         }
         return $assets;
     }
@@ -284,7 +285,7 @@ class H5PIntegration extends H5PUtils
             if ($exceptions && in_array($item, $exceptions)) {
                 continue;
             }
-            $assets[] = "{$prefix}{$item}{$cacheBuster}";
+            $assets[] = "$prefix$item$cacheBuster";
         }
         return $assets;
     }
@@ -297,7 +298,7 @@ class H5PIntegration extends H5PUtils
     public function getCacheBuster(): string
     {
         $cache_buster = \H5PCore::$coreApi['majorVersion'] . '.' . \H5PCore::$coreApi['minorVersion'];
-        return $cache_buster ? "?={$cache_buster}" : '';
+        return $cache_buster ? "?=$cache_buster" : '';
     }
 
     /**

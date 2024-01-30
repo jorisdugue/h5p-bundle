@@ -21,14 +21,12 @@ class H5PExtension extends \Twig\Extension\AbstractExtension
         $this->h5pIntegration = $h5pIntegration;
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
-        return array(
-            new TwigFilter('h5pCacheBuster', array($this, 'getH5PCacheBuster')),
-        );
+        return [new TwigFilter('h5pCacheBuster', [$this, 'getH5PCacheBuster']),];
     }
 
-    public function getH5PCacheBuster($script)
+    public function getH5PCacheBuster($script): string
     {
         return $script . $this->h5pIntegration->getCacheBuster();
     }
@@ -38,7 +36,7 @@ class H5PExtension extends \Twig\Extension\AbstractExtension
      *
      * @return string The extension name
      */
-    public function getName()
+    public function getName(): string
     {
         return 'h5p_extension';
     }
