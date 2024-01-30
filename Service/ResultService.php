@@ -57,15 +57,14 @@ class ResultService
      */
     public function removeData($contentId, $dataType, $user, $subContentId)
     {
-        $ContentUserData = $this->em->getRepository('Studit\H5PBundle\Entity\ContentUserData')
-            ->findBy(
-                [
-                    'subContentId' => $subContentId,
-                    'mainContent' => $contentId,
-                    'dataId' => $dataType,
-                    'user' => $user->getId()
-                ]
-            );
+        $ContentUserData = $this->em->getRepository('Studit\H5PBundle\Entity\ContentUserData')->findBy(
+            [
+                'subContentId' => $subContentId,
+                'mainContent' => $contentId,
+                'dataId' => $dataType,
+                'user' => $user->getId()
+            ]
+        );
         if (count($ContentUserData) > 0) {
             foreach ($ContentUserData as $content) {
                 $this->em->remove($content);

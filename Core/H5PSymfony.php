@@ -86,17 +86,16 @@ class H5PSymfony implements \H5PFrameworkInterface
      * @param RouterInterface $router
      */
     public function __construct(
-        H5POptions                    $options,
-        EditorStorage                 $editorStorage,
-        TokenStorageInterface         $tokenStorage,
-        EntityManagerInterface        $manager,
-        ?Session                      $session,
-        ?RequestStack                 $requestStack,
+        H5POptions $options,
+        EditorStorage $editorStorage,
+        TokenStorageInterface $tokenStorage,
+        EntityManagerInterface $manager,
+        ?Session $session,
+        ?RequestStack $requestStack,
         AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface      $eventDispatcher,
-        RouterInterface               $router
-    )
-    {
+        EventDispatcherInterface $eventDispatcher,
+        RouterInterface $router
+    ) {
         $this->options = $options;
         $this->editorStorage = $editorStorage;
         $this->tokenStorage = $tokenStorage;
@@ -158,8 +157,7 @@ class H5PSymfony implements \H5PFrameworkInterface
         $headers = [],
         $files = [],
         $method = 'POST'
-    )
-    {
+    ) {
         $options = [];
         if (!empty($data)) {
             $options['headers'] = ['Content-Type' => 'application/x-www-form-urlencoded'];
@@ -893,7 +891,7 @@ class H5PSymfony implements \H5PFrameworkInterface
         try {
             // return default if db/table still not created
             return $this->options->getOption($name, $default);
-        } catch (ConnectionException|TableNotFoundException $e) {
+        } catch (ConnectionException | TableNotFoundException $e) {
             return $default;
         }
     }

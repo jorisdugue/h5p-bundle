@@ -90,9 +90,9 @@ class Content
         $this->parameters = $parameters;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFilteredParameters(): string
+    public function getFilteredParameters(): ?string
     {
         return $this->filteredParameters;
     }
