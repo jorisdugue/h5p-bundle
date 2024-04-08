@@ -21,7 +21,7 @@ class H5PUtils
      * Fetch the current user if not present return the anonymous user
      * @return string|UserInterface|null
      */
-    public function getCurrentOrAnonymousUser()
+    protected function getCurrentOrAnonymousUser()
     {
         $token = $this->tokenStorage->getToken();
 
@@ -36,7 +36,7 @@ class H5PUtils
      * @param UserInterface|null $user
      * @return string|null|integer
      */
-    public function getUserId(?UserInterface $user)
+    protected function getUserId(?UserInterface $user)
     {
         if ($user !== null) {
             if (method_exists($user, 'getId')) {
