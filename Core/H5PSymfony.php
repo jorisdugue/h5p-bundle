@@ -177,7 +177,8 @@ class H5PSymfony implements \H5PFrameworkInterface
             $client = new Client();
             $response = $client->request($method, $url, $options);
             $response_data = (string)$response->getBody();
-            if (empty($response_data)) {
+            // Prevent any error about road of content-hub-metadata-cache
+            if (empty($response_data) && $response->getStatusCode() !== 304) {
                 return false;
             }
         } catch (\Exception $e) {
