@@ -13,7 +13,7 @@ class Configuration implements ConfigurationInterface
      * version of Symfony H5P bundle
      * @return string
      */
-    const H5P_VERSION = '2.1.0';
+    const H5P_VERSION = '2.2.1';
 
     /**
      * Generates the configuration tree.
