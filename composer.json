@@ -1,6 +1,6 @@
 {
   "name": "jorisdugue/h5p-bundle",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "type": "symfony-bundle",
   "description": "H5P Bundle for Symfony 5, 6 and Symfony 7",
   "keywords": [
@@ -30,8 +30,8 @@
   "require": {
     "php": ">= 7.2.5",
     "doctrine/orm": "^2.14.1",
-    "guzzlehttp/guzzle": "^7.8",
-    "h5p/h5p-core": "1.26",
+    "guzzlehttp/guzzle": "^7.9",
+    "h5p/h5p-core": "1.27",
     "h5p/h5p-editor": "^1.25",
     "symfony/framework-bundle": "~5.0|~6.0|~7.0",
     "symfony/serializer": "~5.0|~6.0|~7.0",
