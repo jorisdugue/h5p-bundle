@@ -9,12 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 class LibraryLibraries
 {
     /**
-     * @var int|null
+     * @var int|Library|null
      */
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Library::class)]
     #[ORM\JoinColumn(name: "library_id", referencedColumnName: "id", onDelete: 'CASCADE')]
-    private ?int $library;
+    private null|Library|int $library;
     /**
      * @var Library|null
      */
@@ -49,14 +49,14 @@ class LibraryLibraries
         return $this->requiredLibrary;
     }
     /**
-     * @param Library $requiredLibrary
+     * @param null|Library|int $requiredLibrary
      */
     public function setRequiredLibrary($requiredLibrary)
     {
         $this->requiredLibrary = $requiredLibrary;
     }
     /**
-     * @return Library
+     * @return null|Library|int
      */
     public function getLibrary()
     {
