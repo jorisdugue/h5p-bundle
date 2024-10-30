@@ -3,6 +3,7 @@
 namespace Studit\H5PBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LibraryRepository::class)]
@@ -115,9 +116,9 @@ class Library
 
     #[ORM\OneToMany(targetEntity: ContentLibraries::class, mappedBy: "library")]
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|Collection
      */
-    private ArrayCollection $contentLibraries;
+    private ArrayCollection|Collection $contentLibraries;
     /**
      * @var string|null
      */
