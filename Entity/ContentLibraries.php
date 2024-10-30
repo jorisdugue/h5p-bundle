@@ -29,9 +29,9 @@ class ContentLibraries
     #[ORM\Column(name: "dependency_type", type: "string", length: 31)]
 
     /**
-     * @var int|null
+     * @var null|string
      */
-    private ?string $dependencyType;
+    private null|string $dependencyType;
 
     #[ORM\Column(name: "drop_css", type: "boolean", length: 1)]
     /**
@@ -82,15 +82,15 @@ class ContentLibraries
     /**
      * @return int
      */
-    public function getDependencyType(): ?int
+    public function getDependencyType(): ?string
     {
         return $this->dependencyType;
     }
     /**
-     * @param int|null $dependencyType
+     * @param null|int|string $dependencyType
      * @return self
      */
-    public function setDependencyType(?int $dependencyType): self
+    public function setDependencyType(?string $dependencyType): self
     {
         $this->dependencyType = $dependencyType;
         return $this;
