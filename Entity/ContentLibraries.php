@@ -80,14 +80,14 @@ class ContentLibraries
     }
 
     /**
-     * @return int
+     * @return string|null
      */
     public function getDependencyType(): ?string
     {
         return $this->dependencyType;
     }
     /**
-     * @param null|int|string $dependencyType
+     * @param null|string $dependencyType
      * @return self
      */
     public function setDependencyType(?string $dependencyType): self
