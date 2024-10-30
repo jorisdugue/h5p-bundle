@@ -1,8 +1,8 @@
 {
   "name": "jorisdugue/h5p-bundle",
-  "version": "2.2.1",
+  "version": "3.0.0",
   "type": "symfony-bundle",
-  "description": "H5P Bundle for Symfony 5, 6 and Symfony 7",
+  "description": "H5P Bundle for Symfony 6 and Symfony 7",
   "keywords": [
     "h5p",
     "symfony",
@@ -28,20 +28,20 @@
     }
   ],
   "require": {
-    "php": ">= 7.2.5",
-    "doctrine/orm": "^2.14.1",
+    "php": ">= 8.1",
+    "doctrine/orm": "~2.0|~3.0",
     "guzzlehttp/guzzle": "^7.9",
     "h5p/h5p-core": "1.27",
     "h5p/h5p-editor": "^1.25",
-    "symfony/framework-bundle": "~5.0|~6.0|~7.0",
-    "symfony/serializer": "~5.0|~6.0|~7.0",
+    "symfony/framework-bundle": "~6.0|~7.0",
+    "symfony/serializer": "~6.0|~7.0",
     "twig/extra-bundle": "^3.0",
-    "doctrine/doctrine-bundle": "^2.0",
-    "symfony/security-bundle": "~5.0|~6.0|~7.0",
-    "symfony/asset": "~5.0|~6.0|~7.0",
-    "symfony/form": "~5.0|~6.0|~7.0",
+    "doctrine/doctrine-bundle": "^2.13",
+    "symfony/security-bundle": "~6.0|~7.0",
+    "symfony/asset": "~6.0|~7.0",
+    "symfony/form": "~6.0|~7.0",
     "ext-json": "*",
-    "symfony/intl": "~5.0|~6.0|~7.0"
+    "symfony/intl": "~6.0|~7.0"
   },
   "autoload": {
     "psr-4": {
@@ -49,6 +49,6 @@
     }
   },
   "require-dev": {
-    "phpstan/phpstan": "^1.10"
+    "phpstan/phpstan": "^1.12"
   }
 }

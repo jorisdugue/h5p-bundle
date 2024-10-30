@@ -82,7 +82,8 @@ class H5PIntegration extends H5PUtils
     {
         static $settings;
         if (!empty($settings)) {
-            return $settings; // Only needs to be generated the first time
+            // Only needs to be generated the first time
+            return $settings;
         }
         // Load current user
         $user = $this->getCurrentOrAnonymousUser();

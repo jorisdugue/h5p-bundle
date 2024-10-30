@@ -4,39 +4,36 @@ namespace Studit\H5PBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(name="h5p_counters")
- */
+#[ORM\Entity()]
+#[ORM\Table(name: "h5p_counters")]
 class Counters
 {
+    #[ORM\Id]
+    #[ORM\Column(name: "type", type: "string", length: 63)]
     /**
-     * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(name="type", type="string", length=63)
+     * @var string|null
      */
-    private $type;
+    private ?string $type;
+
     /**
-     * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(name="library_name", type="string", length=127)
+     * @var string|null
      */
-    private $libraryName;
+    #[ORM\Id]
+    #[ORM\Column(name: "library_name", type: "string", length: 127)]
+    private ?string $libraryName;
+
     /**
-     * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(name="library_version", type="string", length=31)
+     * @var string|null
      */
-    private $libraryVersion;
+    #[ORM\Id]
+    #[ORM\Column(name: "library_version", type: "string", length: 31)]
+    private ?string $libraryVersion;
+
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="num", type="integer")
+     * @var int|null
      */
-    private $num;
+    #[ORM\Column(name: "num", type: "integer")]
+    private ?int $num;
     /**
      * @return string
      */
@@ -86,11 +83,14 @@ class Counters
     {
         return $this->num;
     }
+
     /**
-     * @param int $num
+      * @param int $num
+      * @return self
      */
-    public function setNum($num)
+    public function setNum($num): self
     {
         $this->num = $num;
+        return $this;
     }
 }

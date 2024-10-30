@@ -4,33 +4,28 @@ namespace Studit\H5PBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="LibrariesLanguagesRepository")
- * @ORM\Table(name="h5p_libraries_languages")
- */
+#[ORM\Entity(repositoryClass: LibrariesLanguagesRepository::class)]
+#[ORM\Table(name: "h5p_libraries_languages")]
 class LibrariesLanguages
 {
     /**
-     * @var Library
-     *
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="\Studit\H5PBundle\Entity\Library")
-     * @ORM\JoinColumn(name="library_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var Library|null
      */
-    private $library;
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: Library::class)]
+    #[ORM\JoinColumn(name: "library_id", referencedColumnName: "id", onDelete: "CASCADE")]
+    private ?Library $library;
     /**
-     * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(name="language_code", type="string", length=31)
+     * @var string|null
      */
-    private $languageCode;
+    #[ORM\Id]
+    #[ORM\Column(name: "language_code", type: "string", length: 31)]
+    private ?string $languageCode;
     /**
-     * @var string
-     *
-     * @ORM\Column(name="language_json", type="text")
+     * @var string|null
      */
-    private $languageJson;
+    #[ORM\Column(name: "language_json", type: "text")]
+    private ?string $languageJson;
     /**
      * @return Library
      */

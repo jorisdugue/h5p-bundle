@@ -4,35 +4,29 @@ namespace Studit\H5PBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="LibraryLibrariesRepository")
- * @ORM\Table(name="h5p_library_libraries")
- */
-
+#[ORM\Entity(repositoryClass: LibraryLibrariesRepository::class)]
+#[ORM\Table(name: "h5p_library_libraries")]
 class LibraryLibraries
 {
     /**
-     * @var integer
-     *
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="\Studit\H5PBundle\Entity\Library")
-     * @ORM\JoinColumn(name="library_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var int|null
      */
-    private $library;
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: Library::class)]
+    #[ORM\JoinColumn(name: "library_id", referencedColumnName: "id", onDelete: 'CASCADE')]
+    private ?int $library;
     /**
-     * @var Library
-     *
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="\Studit\H5PBundle\Entity\Library")
-     * @ORM\JoinColumn(name="required_library_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var Library|null
      */
-    private $requiredLibrary;
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: Library::class)]
+    #[ORM\JoinColumn(name: "required_library_id", referencedColumnName: "id", onDelete: 'CASCADE')]
+    private ?Library $requiredLibrary;
     /**
-     * @var string
-     *
-     * @ORM\Column(name="dependency_type", type="string", length=31)
+     * @var string|null
      */
-    private $dependencyType;
+    #[ORM\Column(name: "dependency_type", type: "string", length: 31)]
+    private ?string $dependencyType;
     /**
      * @return string
      */
