@@ -181,7 +181,9 @@ class H5PIntegration extends H5PUtils
             'jsonContent' => $filteredParameters,
             'fullScreen' => $content->getLibrary()->isFullscreen(),
             'exportUrl' => $this->getExportUrl($content),
-            'embedCode' => '<iframe src="' . $embedUrl . '" width=":w" height=":h" frameborder="0" allowfullscreen="allowfullscreen"></iframe>',
+            'embedCode' => '<iframe src="' .
+                $embedUrl .
+                '" width=":w" height=":h" frameborder="0" allowfullscreen="allowfullscreen"></iframe>',
             'resizeCode' => '<script src="' . $resizerUrl . '" charset="UTF-8"></script>',
             'url' => $embedUrl,
             'title' => 'Not Available',
@@ -190,7 +192,7 @@ class H5PIntegration extends H5PUtils
         );
     }
 
-    public function getFilteredParameters(Content $content): ?string
+    public function getFilteredParameters(Content $content): string|object|null
     {
         $params = json_decode($content->getParameters());
         $contentData = [

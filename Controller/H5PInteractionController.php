@@ -218,7 +218,7 @@ class H5PInteractionController extends AbstractController
             'title' => "H5P Content $id",
         ];
         //include the embed file (provide in h5p-core)
-        include $this->kernel->getProjectDir() . '/vendor/h5p/h5p-core/embed.php';
+        include_once $this->kernel->getProjectDir() . '/vendor/h5p/h5p-core/embed.php';
         $response['#markup'] = ob_get_clean();
         //return nes Response HTML
         return new Response($response['#markup']);
