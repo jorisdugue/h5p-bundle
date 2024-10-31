@@ -4,146 +4,136 @@ namespace Studit\H5PBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(name="h5p_libraries_hub_cache")
- */
+#[ORM\Entity()]
+#[ORM\Table('h5p_libraries_hub_cache')]
 class LibrariesHubCache
 {
     /**
-     * @var integer
-     *
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @var int|null
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(name: "id", type: 'integer')]
+    #[ORM\GeneratedValue(strategy:"AUTO")]
+
+    private ?int $id;
     /**
-     * @var string
-     *
-     * @ORM\Column(name="machine_name", type="string", length=127)
+     * @var string|null
      */
-    private $machineName;
+    #[ORM\Column(name: "machine_name", type: "string", length: 127)]
+    private ?string $machineName;
     /**
-     * @var int
-     *
-     * @ORM\Column(name="major_version", type="integer")
+     * @var int|null
      */
-    private $majorVersion;
+    #[ORM\Column(name: "major_version", type: "integer")]
+    private ?int $majorVersion;
+
     /**
-     * @var int
-     *
-     * @ORM\Column(name="minor_version", type="integer")
+     * @var int|null
      */
-    private $minorVersion;
+    #[ORM\Column(name: "minor_version", type: "integer")]
+    private ?int $minorVersion;
     /**
-     * @var int
-     *
-     * @ORM\Column(name="patch_version", type="integer")
+     * @var int|null
      */
-    private $patchVersion;
+    #[ORM\Column(name: "patch_version", type: "integer")]
+    private ?int $patchVersion;
     /**
-     * @var int
-     *
-     * @ORM\Column(name="h5p_major_version", type="integer", nullable=true)
+     * @var int|null
      */
-    private $h5pMajorVersion;
+    #[ORM\Column(name: "h5p_major_version", type: "integer", nullable: true)]
+    private ?int $h5pMajorVersion;
+
     /**
-     * @var int
-     *
-     * @ORM\Column(name="h5p_minor_version", type="integer", nullable=true)
+     * @var int|null
      */
-    private $h5pMinorVersion;
+    #[ORM\Column(name: "h5p_minor_version", type: "integer", nullable: true)]
+    private ?int $h5pMinorVersion;
     /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @var string|null
      */
-    private $title;
+    #[ORM\Column(name: "title", type: "string", length: 255)]
+    private ?string $title;
     /**
-     * @var string
-     *
-     * @ORM\Column(name="summary", type="text")
+     * @var string|null
      */
-    private $summary;
+    #[ORM\Column(name: "summary", type: "text")]
+    private ?string $summary;
+
     /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text")
+     * @var string|null
      */
-    private $description;
+    #[ORM\Column(name: "description", type: "text")]
+    private ?string $description;
     /**
-     * @var string
-     *
-     * @ORM\Column(name="icon", type="text")
+     * @var string|null
      */
-    private $icon;
+    #[ORM\Column(name: "icon", type: "text")]
+    private ?string $icon;
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="created_at", type="integer")
+     * @var int|null
      */
-    private $createdAt;
+    #[ORM\Column(name: "created_at", type: "integer")]
+    private ?int $createdAt;
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="updated_at", type="integer")
+     * @var int|null
      */
-    private $updatedAt;
+    #[ORM\Column(name: "updated_at", type: "integer")]
+    private ?int $updatedAt;
+
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_recommended", type="boolean", options={"default": 1})
+     * @var bool
      */
-    private $isRecommended = true;
+    #[ORM\Column(name: "is_recommended", type: "boolean", options: ["default" => 1])]
+    private bool $isRecommended = true;
+
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="popularity", type="integer")
+     * @var int|null
      */
-    private $popularity = false;
+    #[ORM\Column(name: "popularity", type: "integer")]
+    private ?int $popularity = 0;
+
+    #[ORM\Column(name: "screenshots", type: "text", nullable: true)]
+
     /**
-     * @var string
-     *
-     * @ORM\Column(name="screenshots", type="text", nullable=true)
+     * @var string|null
      */
-    private $screenshots;
+    private ?string $screenshots;
+    #[ORM\Column(name: "license", type: "text", nullable: true)]
     /**
-     * @var string
-     *
-     * @ORM\Column(name="license", type="text", nullable=true)
+     * @var string|null
      */
-    private $license;
+    private ?string $license;
+
+    #[ORM\Column(name: "example", type: "text")]
     /**
-     * @var string
-     *
-     * @ORM\Column(name="example", type="text")
+     * @var string|null
      */
-    private $example;
+    private ?string $example;
+
+    #[ORM\Column(name: "tutorial", type: "text", nullable: true)]
+
     /**
-     * @var string
-     *
-     * @ORM\Column(name="tutorial", type="text", nullable=true)
+     * @var string|null
      */
-    private $tutorial;
+    private ?string $tutorial;
     /**
-     * @var string
-     *
-     * @ORM\Column(name="keywords", type="text", nullable=true)
+     * @var string|null
      */
-    private $keywords;
+    #[ORM\Column(name: "keywords", type: "text", nullable: true)]
+    private ?string $keywords;
+
+    #[ORM\Column(name: "categories", type: "text", nullable: true)]
     /**
-     * @var string
-     *
-     * @ORM\Column(name="categories", type="text", nullable=true)
+     * @var string|null
      */
-    private $categories;
+    private ?string $categories;
+
+    #[ORM\Column(name: "owner", type: "text", nullable: true)]
     /**
-     * @var string
-     *
-     * @ORM\Column(name="owner", type="text", nullable=true)
+     * @var string|null
      */
-    private $owner;
+    private ?string $owner;
+
     public function __get($name)
     {
         $name = \H5PCore::snakeToCamel([$name => 1]);

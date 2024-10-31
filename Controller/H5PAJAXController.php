@@ -7,15 +7,13 @@ use Studit\H5PBundle\Core\H5POptions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route("/h5p/ajax")
- */
+#[Route('/h5p/ajax')]
 class H5PAJAXController extends AbstractController
 {
-    protected $h5peditor;
-    protected $serviceh5poptions;
+    protected \H5peditor $h5peditor;
+    protected H5POptions $serviceh5poptions;
 
     public function __construct(\H5peditor $h5peditor, H5POptions $h5poption)
     {
@@ -23,11 +21,12 @@ class H5PAJAXController extends AbstractController
         $this->serviceh5poptions = $h5poption;
     }
 
+    #[Route('/libraries/')]
+
     /**
      * Callback that lists all h5p libraries.
      *
-     * @Route("/libraries/")
-     * @param Request $request
+     * @param Request $request Current request
      * @return JsonResponse
      */
     public function librariesCallback(Request $request): JsonResponse
@@ -37,6 +36,7 @@ class H5PAJAXController extends AbstractController
         if ($request->get('machineName')) {
             return $this->libraryCallback($request);
         }
+
         //get editor
         $editor = $this->h5peditor;
         $editor->ajax->action(\H5PEditorEndpoints::LIBRARIES);
@@ -47,9 +47,11 @@ class H5PAJAXController extends AbstractController
         return $this->json(json_decode($output, true));
     }
 
+    #[Route('/content-type-cache/')]
+
     /**
-     * Callback that returns the content type cache
-     * @Route("/content-type-cache/")
+     * Callback that returns the content type cache.
+     * @return JsonResponse
      */
     public function contentTypeCacheCallback(): JsonResponse
     {
@@ -63,15 +65,16 @@ class H5PAJAXController extends AbstractController
         return $this->json(json_decode($output, true));
     }
 
+    #[Route('/content-hub-metadata-cache')]
+
     /**
-     * Callback that return the content hub metadata cache
-     * @Route("/content-hub-metadata-cache")
-     * @param Request $request
+     * Callback that return the content hub metadata cache.
+     * @param Request $request Current Request
      * @return JsonResponse
      */
     public function contentHubMetadataCache(Request $request): JsonResponse
     {
-        $locale = $request->getLocale() != null ? $request->getLocale() : 'en';
+        $locale = $request->getLocale() !== null ? $request->getLocale() : 'en';
         ob_start();
 
         $editor = $this->h5peditor;
@@ -83,11 +86,11 @@ class H5PAJAXController extends AbstractController
         return $this->json(json_decode($output, true));
     }
 
+    #[Route('/translations/')]
+
     /**
-     * Callback for translations
-     *
+     * Callback for translations.
      * @param Request $request
-     * @Route("/translations/")
      *
      * @return JsonResponse
      */
@@ -105,13 +108,13 @@ class H5PAJAXController extends AbstractController
         return $this->json(json_decode($output, true));
     }
 
+    #[Route('/library-install/')]
+
     /**
-     * Callback Install library from external file
-     *
-     * @param Request $request
+     * Callback Install library from external file.
+     * @param Request $request Current request
      *
      * @return JsonResponse
-     * @Route("/library-install/")
      */
     public function libraryInstallCallback(Request $request): JsonResponse
     {
@@ -131,9 +134,9 @@ class H5PAJAXController extends AbstractController
     }
 
     /**
-     * Callback that returns data for a given library
+     * Callback that returns data for a given library.
      *
-     * @param Request $request
+     * @param Request $request Current Request
      * @return JsonResponse
      */
     private function libraryCallback(Request $request): JsonResponse
@@ -142,7 +145,7 @@ class H5PAJAXController extends AbstractController
 
         //$machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '', $defaultLanguage
         $editor = $this->h5peditor;
-        $locale = $request->getLocale() != null ? $request->getLocale() : 'en';
+        $locale = $request->getLocale() !== null ? $request->getLocale() : 'en';
         $editor->ajax->action(
             \H5PEditorEndpoints::SINGLE_LIBRARY,
             $request->get('machineName'),
@@ -160,14 +163,15 @@ class H5PAJAXController extends AbstractController
         return $this->json(json_decode($output, true));
     }
 
+    #[Route('/library-upload/')]
+
     /**
-     * Callback for uploading a library
+     * Callback for uploading a library.
      *
-     * @param Request $request
+     * @param Request $request Current Request
      *
      * @return JsonResponse
      * @throws Exception
-     * @Route("/library-upload/")
      */
     public function libraryUploadCallback(Request $request): JsonResponse
     {
@@ -195,19 +199,20 @@ class H5PAJAXController extends AbstractController
         return $this->json(json_decode($output, true));
     }
 
+    #[Route('/files/')]
+
     /**
      * Callback for file uploads.
      *
-     * @param Request $request
+     * @param Request $request Current request
      * @return JsonResponse
-     * @Route("/files/")
      */
     public function filesCallback(Request $request): JsonResponse
     {
         ob_start();
 
         $editor = $this->h5peditor;
-        $id = $request->get('id') != null ? $request->get('id') : $request->get('contentId');
+        $id = $request->get('id') !== null ? $request->get('id') : $request->get('contentId');
         $editor->ajax->action(
             \H5PEditorEndpoints::FILES,
             $request->get('token', 1),
@@ -220,12 +225,13 @@ class H5PAJAXController extends AbstractController
         return $this->json(json_decode($output, true));
     }
 
+    #[Route('/filter/')]
+
     /**
      * Callback for filtering.
      *
-     * @param Request $request
+     * @param Request $request Current request
      * @return JsonResponse
-     * @Route("/filter/")
      */
     public function filterCallback(Request $request): JsonResponse
     {

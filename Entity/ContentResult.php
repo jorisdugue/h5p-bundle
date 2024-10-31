@@ -4,63 +4,54 @@ namespace Studit\H5PBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(name="h5p_content_result")
- */
+#[ORM\Entity()]
+#[ORM\Table(name: "h5p_content_result")]
 class ContentResult
 {
     /**
      * @var integer
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy:"AUTO")]
+    private ?int $id;
     /**
-     * @var Content
-     *
-     * @ORM\ManyToOne(targetEntity="Studit\H5PBundle\Entity\Content")
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @var Content|null
      */
-    private $content;
+    #[ORM\ManyToOne(targetEntity: Content::class)]
+    #[ORM\JoinColumn(onDelete:"CASCADE")]
+    private ?Content $content;
     /**
-     * @var string
-     *
-     * @ORM\Column(type="string", nullable=false)
+     * @var string|int|null
      */
-    private $userId;
+    #[ORM\Column(type: "string", nullable: false)]
+    private string|int|null $userId;
+
     /**
-     * @var integer|null
-     *
-     * @ORM\Column(type="integer", nullable=true)
+     * @var int|null
      */
-    private $score;
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $score;
     /**
-     * @var integer|null
-     *
-     * @ORM\Column(type="integer", nullable=true)
+     * @var int|null
      */
+    #[ORM\Column(type: "integer", nullable: true)]
     private $maxScore;
     /**
-     * @var integer|null
-     *
-     * @ORM\Column(type="integer", nullable=true)
+     * @var int|null
      */
-    private $opened;
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $opened;
     /**
-     * @var integer|null
-     *
-     * @ORM\Column(type="integer", nullable=true)
+     * @var int|null
      */
-    private $finished;
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $finished;
     /**
-     * @var integer|null
-     *
-     * @ORM\Column(type="integer", nullable=true)
+     * @var int|null
      */
-    private $time;
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $time;
     /**
      * ContentResult constructor.
      * @param string $userId

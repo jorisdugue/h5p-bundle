@@ -4,193 +4,222 @@ namespace Studit\H5PBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="EventRepository")
- * @ORM\Table(name="h5p_event")
- */
+#[ORM\Entity(repositoryClass: EventRepository::class)]
+#[ORM\Table('h5p_event')]
 class Event
 {
+    #[ORM\Id]
+    #[ORM\Column(type:"integer")]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+
     /**
      * @var integer
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id;
+
+    #[ORM\Column(name: 'user_id', type: "integer")]
     /**
      * @var integer
-     *
-     * @ORM\Column(name="user_id", type="integer")
      */
-    private $user;
+    private ?int $user;
+
+    #[ORM\Column(name: 'created_at', type: "integer")]
     /**
      * @var integer
-     *
-     * @ORM\Column(name="created_at", type="integer")
      */
-    private $createdAt;
+    private ?int $createdAt;
+
+    #[ORM\Column(name: "type", type: "string", length: 63)]
     /**
      * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=63)
      */
-    private $type;
+    private ?string $type;
+
     /**
      * @var string
-     *
-     * @ORM\Column(name="sub_type", type="string", length=63)
      */
-    private $subType;
+    #[ORM\Column(name: "sub_type", type: "string", length: 63)]
+    private ?string $subType;
+
+    #[ORM\ManyToOne(targetEntity: Content::class)]
+    #[ORM\JoinColumn(name: "content_id", referencedColumnName: "id", onDelete: 'CASCADE')]
     /**
      * @var Content
-     *
-     * @ORM\ManyToOne(targetEntity="\Studit\H5PBundle\Entity\Content")
-     * @ORM\JoinColumn(name="content_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $content;
+    private ?Content $content;
+
+    #[ORM\Column(name: "content_title", type: "string", length: 255)]
+
     /**
      * @var string
-     *
-     * @ORM\Column(name="content_title", type="string", length=255)
      */
-    private $contentTitle;
+    private ?string $contentTitle;
+
+    #[ORM\Column(name: "library_name", type: "string", length: 127)]
+
     /**
      * @var string
-     *
-     * @ORM\Column(name="library_name", type="string", length=127)
      */
-    private $libraryName;
+    private ?string $libraryName;
+
+    #[ORM\Column(name: "library_version", type: "string", length: 31)]
+
     /**
      * @var string
-     *
-     * @ORM\Column(name="library_version", type="string", length=31)
      */
-    private $libraryVersion;
+    private ?string $libraryVersion;
+
     /**
-     * @return integer
+     * @return integer|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
     /**
-     * @param integer $id
+     * @param int|null $id
+     * @return self
      */
-    public function setId($id)
+    public function setId(?int $id): self
     {
         $this->id = $id;
+        return $this;
     }
+
     /**
-     * @return integer
+     * @return int|null
      */
-    public function getUser()
+    public function getUser(): ?int
     {
         return $this->user;
     }
     /**
-     * @param integer $user
+     * @param int|null $user Current user
      */
-    public function setUser($user)
+    public function setUser(?int $user): self
     {
         $this->user = $user;
+        return $this;
     }
     /**
-     * @return integer
+     * @return int|null
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): ?int
     {
         return $this->createdAt;
     }
+
     /**
-     * @param integer $createdAt
+     * @param int|null $createdAt
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(?int $createdAt): self
     {
         $this->createdAt = $createdAt;
+        return $this;
     }
+
     /**
-     * @return string
+     * @return string|null
      */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
     /**
      * @param string $type
+     * @return self
      */
-    public function setType($type)
+    public function setType($type): self
     {
         $this->type = $type;
+        return $this;
     }
+
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSubType()
+    public function getSubType(): ?string
     {
         return $this->subType;
     }
     /**
-     * @param string $subType
+     * @param string|null $subType
+     * @return self
      */
-    public function setSubType($subType)
+    public function setSubType(?string $subType): self
     {
         $this->subType = $subType;
+        return $this;
     }
+
     /**
-     * @return Content
+     * @return Content|null
      */
-    public function getContent()
+    public function getContent(): ?Content
     {
         return $this->content;
     }
+
     /**
      * @param Content $content
+     * @return self
      */
-    public function setContent($content)
+    public function setContent(Content $content): self
     {
         $this->content = $content;
+        return $this;
     }
+
     /**
-     * @return string
+     * @return string|null
      */
-    public function getContentTitle()
+    public function getContentTitle(): ?string
     {
         return $this->contentTitle;
     }
+
     /**
-     * @param string $contentTitle
+     * @param string|null $contentTitle
+     * @return self
      */
-    public function setContentTitle($contentTitle)
+    public function setContentTitle(?string $contentTitle): self
     {
         $this->contentTitle = $contentTitle;
+        return $this;
     }
+
     /**
      * @return string
      */
-    public function getLibraryName()
+    public function getLibraryName(): ?string
     {
         return $this->libraryName;
     }
     /**
      * @param string $libraryName
+     * @return self
      */
-    public function setLibraryName($libraryName)
+    public function setLibraryName(string $libraryName): self
     {
         $this->libraryName = $libraryName;
+        return $this;
     }
+
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLibraryVersion()
+    public function getLibraryVersion(): ?string
     {
         return $this->libraryVersion;
     }
+
     /**
      * @param string $libraryVersion
+     * @return self
      */
-    public function setLibraryVersion($libraryVersion)
+    public function setLibraryVersion(string $libraryVersion): self
     {
         $this->libraryVersion = $libraryVersion;
+        return $this;
     }
 }

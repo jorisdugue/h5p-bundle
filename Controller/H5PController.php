@@ -10,18 +10,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Studit\H5PBundle\Core\H5PIntegration;
 use Studit\H5PBundle\Form\Type\H5PType;
 
-/**
- * @Route("/h5p/")
- */
+#[Route('/h5p/')]
 class H5PController extends AbstractController
 {
-    protected $h5PIntegrations;
-    protected $libraryStorage;
-    protected $entityManager;
+    protected H5PIntegration $h5PIntegrations;
+    protected LibraryStorage $libraryStorage;
+    protected EntityManagerInterface $entityManager;
 
     public function __construct(
         H5PIntegration $h5PIntegration,
@@ -33,9 +31,10 @@ class H5PController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
+    #[Route('list')]
+
     /**
-     * List of all H5P content
-     * @Route("list")
+     * List of all H5P content.
      */
     public function listAction(): Response
     {
@@ -43,9 +42,10 @@ class H5PController extends AbstractController
         return $this->render('@StuditH5P/list.html.twig', ['contents' => $contents]);
     }
 
+    #[Route('show/{content}')]
+
     /**
-     * Show content of H5P created by user
-     * @Route("show/{content}")
+     * Show content of H5P created by user.
      * @param Content $content
      * @param \H5PCore $h5PCore
      * @param H5POptions $h5POptions
@@ -77,13 +77,14 @@ class H5PController extends AbstractController
                 'contentId' => $content->getId(),
                 'isFrame' => $content->getLibrary()->isFrame(),
                 'h5pIntegration' => $h5pIntegration,
-                'files' => $files
+                'files' => $files,
             ]
         );
     }
 
+    #[Route('new')]
+
     /**
-     * @Route("new")
      * @param Request $request
      * @return RedirectResponse|Response
      */
@@ -92,8 +93,9 @@ class H5PController extends AbstractController
         return $this->handleRequest($request);
     }
 
+    #[Route('edit/{content}')]
+
     /**
-     * @Route("edit/{content}")
      * @param Request $request
      * @param Content $content
      * @return RedirectResponse|Response
@@ -135,8 +137,9 @@ class H5PController extends AbstractController
         );
     }
 
+    #[Route("delete/{contentId}")]
+
     /**
-     * @Route("delete/{contentId}")
      * @param integer $contentId
      * @param \H5PStorage $h5PStorage
      * @return RedirectResponse

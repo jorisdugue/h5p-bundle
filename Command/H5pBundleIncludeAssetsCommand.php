@@ -15,7 +15,7 @@ class H5pBundleIncludeAssetsCommand extends Command
 {
     protected static $defaultName = 'h5p-bundle:IncludeAssetsCommand';
     /** KernelInterface $appKernel */
-    private $appKernel;
+    private KernelInterface $appKernel;
 
     /**
      * @param KernelInterface $appKernel

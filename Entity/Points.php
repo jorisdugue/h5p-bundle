@@ -4,49 +4,41 @@ namespace Studit\H5PBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(name="h5p_points")
- */
+#[ORM\Entity()]
+#[ORM\Table(name: "h5p_points")]
 class Points
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="user_id", type="integer")
+     * @var int|null
      */
-    private $user;
+    #[ORM\Column(name: "user_id", type: "integer")]
+    private ?int $user;
     /**
-     * @var Content
-     *
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="\Studit\H5PBundle\Entity\Content")
-     * @ORM\JoinColumn(name="content_main_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var Content|null
      */
-    private $content;
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: Content::class)]
+    #[ORM\JoinColumn(name: "content_main_id", referencedColumnName: "id", onDelete: "CASCADE")]
+    private ?Content $content;
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="started", type="integer")
+     * @var int|null
      */
-    private $started;
+    #[ORM\Column(name: "started", type: "integer")]
+    private ?int $started;
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="finished", type="integer")
+     * @var int
      */
-    private $finished = 0;
+    #[ORM\Column(name: "finished", type: "integer")]
+    private int $finished = 0;
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="points", type="integer", nullable=true)
+     * @var int|null
      */
-    private $points;
+    #[ORM\Column(name: "points", type: "integer", nullable: true)]
+    private ?int $points;
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="max_points", type="integer", nullable=true)
+     * @var int|null
      */
+    #[ORM\Column(name: "max_points", type: "integer", nullable: true)]
     private $maxPoints;
     /**
      * @return integer

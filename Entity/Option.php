@@ -5,39 +5,38 @@ namespace Studit\H5PBundle\Entity;
 use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="OptionRepository")
- * @ORM\Table(name="h5p_option")
- */
+#[ORM\Entity(repositoryClass: OptionRepository::class)]
+#[ORM\Table('h5p_option')]
 class Option
 {
     private const INTEGER = "integer";
     private const BOOLEAN = "boolean";
     private const STRING = "string";
 
-    /**
-     * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(name="name", type="string", length=255)
-     */
-    private $name;
+    #[ORM\Id]
+    #[ORM\Column(name: "name", type: "string", length: 255)]
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="value", type="text")
      */
-    private $value;
+    private ?string $name;
+
+    #[ORM\Column(name: "value", type: "text")]
+
+    /**
+     * @var string|null $value
+     */
+    private ?string $value;
+
+    #[ORM\Column(name: "type", type: "string", length: 255)]
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=255)
      */
-    private $type;
+    private ?string $type;
 
     /**
+     * Constructor of current class.
      * @param string $name
      */
     public function __construct(string $name)
