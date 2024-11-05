@@ -42,5 +42,5 @@ jobs:
           SYMFONY_REQUIRE: ${{ matrix.symfony }}
 
       - name: Run PHPUnit
-        run: bin/phpunit --verbose
+        run: vendor/bin/phpunit
  

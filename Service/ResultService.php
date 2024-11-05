@@ -5,6 +5,7 @@ namespace Studit\H5PBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Studit\H5PBundle\Entity\ContentResult;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ResultService
 {
@@ -53,7 +54,7 @@ class ResultService
      * remove data in content User Data.
      * @param integer $contentId
      * @param string $dataType
-     * @param int|null|string $user Current user
+     * @param UserInterface $user Current user
      * @param integer $subContentId
      */
     public function removeData(int $contentId, string $dataType, $user, int $subContentId): void
@@ -63,7 +64,7 @@ class ResultService
                 'subContentId' => $subContentId,
                 'mainContent' => $contentId,
                 'dataId' => $dataType,
-                'user' => $user->getId()
+                'user' => $user->getUserIdentifier()
             ]
         );
         if (count($ContentUserData) > 0) {
