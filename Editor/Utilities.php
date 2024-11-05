@@ -8,12 +8,12 @@ use Studit\H5PBundle\Core\H5PSymfony;
 class Utilities
 {
     /**
-     * Extract library information from library string
+     * Extract library information from library string.
      *
      * @param string $library Library string with versioning, e.g. H5P.MultiChoice 1.9
      * @return array|bool
      */
-    public static function getLibraryProperties($library)
+    public static function getLibraryProperties($library): array|bool
     {
         $matches = [];
         preg_match_all('/(.+)\s(\d+)\.(\d+)$/', $library, $matches);

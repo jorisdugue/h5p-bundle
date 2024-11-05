@@ -46,7 +46,7 @@ class EditorAjax extends H5PUtils implements \H5PEditorAjaxInterface
 
 
     /**
-     * Get locally stored Content Type Cache. If machine name is provided
+     * Get locally stored Content Type Cache. If machine name is provided.
      * it will only get the given content type from the cache
      *
      * @param $machineName

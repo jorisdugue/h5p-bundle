@@ -15,6 +15,7 @@ class ResultService
 
     /**
      * ResultService constructor.
+     * @param EntityManagerInterface $em
      */
     public function __construct(EntityManagerInterface $em)
     {
@@ -26,7 +27,7 @@ class ResultService
      * @param $userId
      * @return ContentResult
      */
-    public function handleRequestFinished(Request $request, $userId)
+    public function handleRequestFinished(Request $request, $userId): ContentResult
     {
         $contentId = $request->get('contentId', false);
         if (!$contentId) {
@@ -49,13 +50,13 @@ class ResultService
     }
 
     /**
-     * remove data in content User Data
+     * remove data in content User Data.
      * @param integer $contentId
      * @param string $dataType
-     * @param $user
+     * @param int|null|string $user Current user
      * @param integer $subContentId
      */
-    public function removeData($contentId, $dataType, $user, $subContentId)
+    public function removeData(int $contentId, string $dataType, $user, int $subContentId): void
     {
         $ContentUserData = $this->em->getRepository('Studit\H5PBundle\Entity\ContentUserData')->findBy(
             [

@@ -548,16 +548,16 @@ class H5PSymfony implements \H5PFrameworkInterface
     }
 
     /**
-     * Convert list of file paths to csv
+     * Convert list of file paths to csv.
      *
-     * @param array $libraryData
      *  Library data as found in library.json files
-     * @param string $key
      *  Key that should be found in $libraryData
-     * @return string
      *  file paths separated by ', '
+     * @param array $libraryData
+     * @param string $key
+     * @return string
      */
-    private function pathsToCsv($libraryData, $key)
+    private function pathsToCsv(array $libraryData, string $key): string
     {
         if (isset($libraryData[$key])) {
             $paths = array();
