@@ -4,175 +4,189 @@ namespace Studit\H5PBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(name="h5p_content_user_data")
- */
+ #[ORM\Entity()]
+ #[ORM\Table(name: "h5p_content_user_data")]
 class ContentUserData
 {
+    #[ORM\Id]
+    #[ORM\Column(name: "user_id", type: "integer")]
     /**
-     * @var integer
-     *
-     * @ORM\Id
-     * @ORM\Column(name="user_id", type="integer")
+     * @var int|null
      */
-    private $user;
+    private ?int $user;
     /**
-     * @var Content
-     *
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="\Studit\H5PBundle\Entity\Content")
-     * @ORM\JoinColumn(name="content_main_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var Content|null
      */
-    private $mainContent;
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: Content::class)]
+    #[ORM\JoinColumn(name: "content_main_id", referencedColumnName:"id", onDelete: 'CASCADE')]
+    private ?Content $mainContent;
+
+    #[ORM\Id]
+    #[ORM\Column(name: "sub_content_id", type: "integer", length: 10)]
+
     /**
-     * @var integer
-     *
-     * @ORM\Id
-     * @ORM\Column(name="sub_content_id", type="integer", length=10)
+     * @var int|null
      */
-    private $subContentId;
+    private ?int $subContentId;
+
+    #[ORM\Id]
+    #[ORM\Column(name: "data_id", type: "string", length: 127)]
     /**
-     * @var integer
-     *
-     * @ORM\Id
-     * @ORM\Column(name="data_id", type="string", length=127)
+     * @var string|null
      */
-    private $dataId;
+    private ?string $dataId;
+
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="timestamp", type="integer", length=10)
+     * @var int|null
      */
-    private $timestamp;
+    #[ORM\Column(name: "timestamp", type: "integer", length: 10)]
+    private ?int $timestamp;
+
+    #[ORM\Column(name: "data", type: "text")]
     /**
-     * @var string
-     *
-     * @ORM\Column(name="data", type="text")
+     * @var string|null
      */
-    private $data;
+    private ?string $data;
+
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="preloaded", type="boolean", nullable=true)
+     * @var bool|null
      */
-    private $preloaded;
+    #[ORM\Column(name: "preloaded", type: "boolean", nullable: true)]
+    private ?bool $preloaded;
+
+    #[ORM\Column(name: "delete_on_content_change", type: "boolean", nullable: true)]
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="delete_on_content_change", type="boolean", nullable=true)
+     * @var bool|null
      */
-    private $deleteOnContentChange;
+    private ?bool $deleteOnContentChange;
+
     /**
-     * @return integer
+     * @return int|null
      */
-    public function getUser()
+    public function getUser(): ?int
     {
         return $this->user;
     }
+
     /**
-     * @param integer $user
+     * @param null|int $user
+     * @return self
      */
-    public function setUser($user)
+    public function setUser(?int $user): self
     {
         $this->user = $user;
+        return $this;
     }
     /**
-     * @return Content
+     * @return Content|null
      */
-    public function getMainContent()
+    public function getMainContent(): ?Content
     {
         return $this->mainContent;
     }
     /**
      * @param Content $mainContent
+     * @return self
      */
-    public function setMainContent($mainContent)
+    public function setMainContent(?Content $mainContent): self
     {
         $this->mainContent = $mainContent;
+        return $this;
     }
+
     /**
-     * @return int
+     * @return int|null
      */
-    public function getSubContentId()
+    public function getSubContentId(): ?int
     {
         return $this->subContentId;
     }
+
     /**
      * @param int $subContentId
      */
-    public function setSubContentId($subContentId)
+    public function setSubContentId($subContentId): self
     {
         $this->subContentId = $subContentId;
+        return $this;
     }
+
     /**
-     * @return int
+     * @return int|string|null
      */
     public function getDataId()
     {
         return $this->dataId;
     }
+
     /**
      * @param int $dataId
      */
-    public function setDataId($dataId)
+    public function setDataId(null|int|string $dataId): self
     {
         $this->dataId = $dataId;
+        return $this;
     }
+
     /**
      * @return int
      */
-    public function getTimestamp()
+    public function getTimestamp(): ?int
     {
         return $this->timestamp;
     }
     /**
      * @param int $timestamp
      */
-    public function setTimestamp($timestamp)
+    public function setTimestamp($timestamp): self
     {
         $this->timestamp = $timestamp;
+        return $this;
     }
     /**
      * @return string
      */
-    public function getData()
+    public function getData(): ?string
     {
         return $this->data;
     }
     /**
      * @param string $data
      */
-    public function setData($data)
+    public function setData($data): self
     {
         $this->data = $data;
+        return $this;
     }
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function isPreloaded()
+    public function isPreloaded(): ?bool
     {
         return $this->preloaded;
     }
     /**
      * @param bool $preloaded
      */
-    public function setPreloaded($preloaded)
+    public function setPreloaded(bool $preloaded): self
     {
         $this->preloaded = $preloaded;
+        return $this;
     }
     /**
      * @return bool
      */
-    public function isDeleteOnContentChange()
+    public function isDeleteOnContentChange(): ?bool
     {
         return $this->deleteOnContentChange;
     }
     /**
      * @param bool $deleteOnContentChange
      */
-    public function setDeleteOnContentChange($deleteOnContentChange)
+    public function setDeleteOnContentChange($deleteOnContentChange): self
     {
         $this->deleteOnContentChange = $deleteOnContentChange;
+        return $this;
     }
 }

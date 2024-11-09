@@ -5,8 +5,7 @@ namespace Studit\H5PBundle\DependencyInjection;
 use Exception;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
 class StuditH5PExtension extends Extension
@@ -14,8 +13,9 @@ class StuditH5PExtension extends Extension
     /**
      * @inheritDoc
      * @throws Exception
+     * @return void
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

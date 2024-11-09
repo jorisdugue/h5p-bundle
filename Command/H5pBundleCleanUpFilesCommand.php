@@ -13,7 +13,7 @@ class H5pBundleCleanUpFilesCommand extends Command
     /**
      * @var H5POptions $h5POptions
      */
-    private $h5POptions;
+    private H5POptions $h5POptions;
 
     public function __construct(H5POptions $h5POptions)
     {

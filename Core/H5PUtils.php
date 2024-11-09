@@ -36,7 +36,7 @@ class H5PUtils
      * @param UserInterface|null $user
      * @return string|null|integer
      */
-    protected function getUserId(?UserInterface $user)
+    public function getUserId(?UserInterface $user)
     {
         if ($user !== null) {
             if (method_exists($user, 'getId')) {

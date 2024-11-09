@@ -114,11 +114,11 @@ class EditorStorage implements \H5peditorStorage
      * "Callback" for mark the given file as a permanent file.
      * Used when saving content that has new uploaded files.
      *
-     * @param string $path To new file
+     * @param int $fileId To new file
      */
-    public function keepFile($path)
+    public function keepFile($fileId)
     {
-        var_dump($path);
+        var_dump($fileId);
     }
 
     /**

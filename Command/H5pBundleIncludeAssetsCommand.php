@@ -3,19 +3,16 @@
 namespace Studit\H5PBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class H5pBundleIncludeAssetsCommand extends Command
 {
     protected static $defaultName = 'h5p-bundle:IncludeAssetsCommand';
     /** KernelInterface $appKernel */
-    private $appKernel;
+    private KernelInterface $appKernel;
 
     /**
      * @param KernelInterface $appKernel
@@ -26,7 +23,7 @@ class H5pBundleIncludeAssetsCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription(
@@ -39,16 +36,18 @@ class H5pBundleIncludeAssetsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->includeAssets($input->getOption('copy') ?? false);
-        return 0;
+        return Command::SUCCESS;
     }
 
     private function includeAssets(bool $copy): void
     {
-        //get dir of vendor H5P
+        $projectDir = $this->appKernel->getProjectDir();
 
-        $fromDir = $this->appKernel->getProjectDir() . "/vendor/h5p/";
+        //get dir of vendor H5P
+        $fromDir = $projectDir . "/vendor/h5p/";
+
         //call service
-        $toDir = $this->appKernel->getProjectDir() . '/public/bundles/studith5p/h5p/';
+        $toDir = $projectDir . '/public/bundles/studith5p/h5p/';
 
         $coreSubDir = "h5p-core/";
         $coreDirs = ["fonts", "images", "js", "styles"];
@@ -59,7 +58,7 @@ class H5pBundleIncludeAssetsCommand extends Command
         $this->createFiles($fromDir, $toDir, $editorSubDir, $editorDirs, $copy);
     }
 
-    private function createFiles($fromDir, $toDir, $subDir, $subDirs, $copy)
+    private function createFiles(string $fromDir, string $toDir, string $subDir, array $subDirs, bool $copy): void
     {
         foreach ($subDirs as $dir) {
             $src = $fromDir . $subDir . $dir;
@@ -71,7 +70,7 @@ class H5pBundleIncludeAssetsCommand extends Command
         }
     }
 
-    private function recurseCopy($src, $dst)
+    private function recurseCopy(string $src, string $dst): void
     {
         $dir = opendir($src);
         // Restrict the permission to 0750 not upper
