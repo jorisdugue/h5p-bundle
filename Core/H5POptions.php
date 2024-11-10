@@ -120,26 +120,33 @@ class H5POptions
     }
 
     /**
-     * @return mixed|string|null
+     * Helper function to ensure storage_dir always starts with a '/'.
+     *
+     * @return string
      */
-    public function getRelativeH5PPath()
+    private function formatStorageDir(): string
     {
-        $dir = $this->getOption('storage_dir');
+        // Setup the default value to empty string
+        $dir = $this->getOption('storage_dir', [""]);
         return $dir[0] === '/' ? $dir : "/{$dir}";
+    }
+
+    /**
+     * @return string
+     */
+    public function getRelativeH5PPath(): string
+    {
+        return $this->formatStorageDir();
     }
 
     public function getAbsoluteH5PPathWithSlash(): string
     {
-        $dir = $this->getOption('storage_dir');
-        $dir = $dir[0] === '/' ? $dir : "/{$dir}";
-
-        return $this->getAbsoluteWebPath() . $dir . '/';
+        return $this->getAbsoluteWebPath() . $this->formatStorageDir() . '/';
     }
+
     public function getAbsoluteH5PPath(): string
     {
-        $dir = $this->getOption('storage_dir');
-        $dir = $dir[0] === '/' ? $dir : "/{$dir}";
-        return rtrim($this->getAbsoluteWebPath(), '/') . $dir;
+        return rtrim($this->getAbsoluteWebPath(), '/') . $this->formatStorageDir();
     }
 
     public function getAbsoluteWebPath(): string
