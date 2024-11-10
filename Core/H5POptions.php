@@ -12,11 +12,11 @@ class H5POptions
     /**
      * @var array
      */
-    private $config;
+    private array|null $config;
     /**
      * @var array
      */
-    private $storedConfig = null;
+    private array|null $storedConfig = null;
 
     private $h5pPath;
     private $folderPath;
@@ -24,7 +24,7 @@ class H5POptions
     /**
      * @var EntityManagerInterface
      */
-    private $manager;
+    private EntityManagerInterface $manager;
 
     /**
      * H5POptions constructor.
@@ -139,8 +139,7 @@ class H5POptions
     {
         $dir = $this->getOption('storage_dir');
         $dir = $dir[0] === '/' ? $dir : "/{$dir}";
-
-        return $this->getAbsoluteWebPath() . $dir;
+        return rtrim($this->getAbsoluteWebPath(), '/') . $dir;
     }
 
     public function getAbsoluteWebPath(): string
