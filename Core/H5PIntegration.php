@@ -18,31 +18,37 @@ class H5PIntegration extends H5PUtils
     /**
      * @var EntityManager
      */
-    private $entityManager;
+    private EntityManager $entityManager;
+
     /**
      * @var \H5PCore
      */
-    private $core;
+    private \H5PCore $core;
+
     /**
      * @var RouterInterface
      */
-    private $router;
+    private RouterInterface $router;
+
     /**
      * @var H5POptions
      */
-    private $options;
+    private H5POptions $options;
+
     /**
      * @var RequestStack
      */
-    private $requestStack;
+    private RequestStack $requestStack;
+
     /**
      * @var Packages
      */
-    private $assetsPaths;
+    private Packages $assetsPaths;
+
     /**
      * @var \H5PContentValidator
      */
-    private $contentValidator;
+    private \H5PContentValidator $contentValidator;
 
     /**
      * H5PContent constructor.
