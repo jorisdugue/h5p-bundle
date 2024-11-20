@@ -19,11 +19,10 @@ This bundle was tested on :
 Prerequisite
 ------------
 
-You need install doctrine annotations and orm before running this installation
+You need install orm before running this installation
 
 ```bash
 composer require orm
-composer require doctrine/annotations
 ```
 
 Installation

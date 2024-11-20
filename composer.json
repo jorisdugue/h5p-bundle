@@ -1,6 +1,6 @@
 {
   "name": "jorisdugue/h5p-bundle",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "type": "symfony-bundle",
   "description": "H5P Bundle for Symfony 5, 6 and Symfony 7",
   "keywords": [
