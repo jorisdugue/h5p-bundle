@@ -1,6 +1,6 @@
 {
   "name": "jorisdugue/h5p-bundle",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "type": "symfony-bundle",
   "description": "H5P Bundle for Symfony 5, 6 and Symfony 7",
   "keywords": [
@@ -29,6 +29,7 @@
   ],
   "require": {
     "php": ">= 8.1",
+    "composer-runtime-api": "^2",
     "doctrine/orm": "~2.0|~3.0",
     "guzzlehttp/guzzle": "^7.9",
     "h5p/h5p-core": "1.27",

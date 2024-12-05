@@ -7,6 +7,7 @@ use Doctrine\DBAL\Statement;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use Studit\H5PBundle\Service\DoctrineParser;
 
 /**
  * LibraryRepository
@@ -95,11 +96,11 @@ EOT;
         $qb = $this->createQueryBuilder('l')
             ->select('l')
             ->where('l.machineName = :machineName and l.majorVersion = :majorVersion and l.minorVersion = :minorVersion and l.semantics is not null')
-            ->setParameters([
+            ->setParameters(DoctrineParser::buildParams([
                 'machineName' => $machineName,
                 'majorVersion' => $majorVersion,
                 'minorVersion' => $minorVersion
-            ]);
+            ]));
         try {
             $library = $qb->getQuery()->getSingleResult();
         } catch (NoResultException $e) {
@@ -123,7 +124,7 @@ EOT;
     {
         $qb = $this->createQueryBuilder('l')
             ->where('l.machineName = :machineName and l.majorVersion = :majorVersion and l.minorVersion = :minorVersion')
-            ->setParameters($parameters);
+            ->setParameters(DoctrineParser::buildParams($parameters));
         return $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
     }
     public function findIdBy($machineName, $majorVersion, $minorVersion)
@@ -131,11 +132,11 @@ EOT;
         $qb = $this->createQueryBuilder('l')
             ->select('l.id')
             ->where('l.machineName = :machineName and l.majorVersion = :majorVersion and l.minorVersion = :minorVersion and l.semantics is not null')
-            ->setParameters([
+            ->setParameters(DoctrineParser::buildParams([
                 'machineName' => $machineName,
                 'majorVersion' => $majorVersion,
                 'minorVersion' => $minorVersion
-            ]);
+            ]));
         try {
             return $qb->getQuery()->getSingleScalarResult();
         } catch (NoResultException $e) {
@@ -147,12 +148,12 @@ EOT;
         $qb = $this->createQueryBuilder('l')
             ->select('COUNT(l)')
             ->where('l.machineName = :machineName and l.majorVersion = :majorVersion and l.minorVersion = :minorVersion and l.patchVersion < :patchVersion')
-            ->setParameters([
+            ->setParameters(DoctrineParser::buildParams([
                 'machineName' => $library['machineName'],
                 'majorVersion' => $library['majorVersion'],
                 'minorVersion' => $library['minorVersion'],
                 'patchVersion' => $library['patchVersion']
-            ]);
+            ]));
         return $qb->getQuery()->getSingleScalarResult() > 0;
     }
 }
