@@ -116,7 +116,7 @@ class Library
 
     #[ORM\OneToMany(targetEntity: ContentLibraries::class, mappedBy: "library")]
     /**
-     * @var ArrayCollection|Collection
+     * @var ArrayCollection|Collection $contentLibraries
      */
     private ArrayCollection|Collection $contentLibraries;
     /**

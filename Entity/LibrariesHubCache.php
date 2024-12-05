@@ -4,7 +4,7 @@ namespace Studit\H5PBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity()]
+#[ORM\Entity]
 #[ORM\Table('h5p_libraries_hub_cache')]
 class LibrariesHubCache
 {
