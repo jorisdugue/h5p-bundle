@@ -89,6 +89,16 @@ services:
         autowire: true
         tags:
             - { name: 'console.command', command: 'h5p-bundle:cleanup-files'}
+    studit_h5p.versionORM:
+        class: Studit\H5PBundle\Utils\VersionORM
+    Studit\H5PBundle\Utils\VersionORM: '@studit_h5p.versionORM'
+
+    studit_h5p.doctrineParser:
+        class: Studit\H5PBundle\Service\DoctrineParser
+        arguments:
+          [ '@studit_h5p.versionORM' ]
+
+    Studit\H5PBundle\Service\DoctrineParser: '@studit_h5p.doctrineParser'
 
     Studit\H5PBundle\Controller\H5PController:
         autowire: true
@@ -109,7 +119,7 @@ services:
 
     Studit\H5PBundle\Entity\LibraryRepository:
         autowire: true
-        tags: ['doctrine.repository_service']
+        tags: ['doctrine.repository_service', '@studit_h5p.doctrineParser']
 
     Studit\H5PBundle\Entity\LibrariesLanguagesRepository:
         autowire: true
