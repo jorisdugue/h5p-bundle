@@ -105,7 +105,7 @@ parameters:
 ```
 
 For Symfony 5:
-Configure the bundle in `packages > h5pBundle.yml`.
+Configure the bundle in `packages > studit_h5_p.yaml`.
 
 ```yaml
 studit_h5_p:
