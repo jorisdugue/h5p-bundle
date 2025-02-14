@@ -237,7 +237,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     public function setErrorMessage($message, $code = null): void
     {
         if ($this->session) {
-            $this->session->getFlashBag()->add("error", "[$code]: $message");
+            $this->session->getFlashBag()->add("danger", "[$code]: $message");
         }
     }
 
