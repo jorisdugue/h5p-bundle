@@ -50,7 +50,7 @@
     }
   },
   "require-dev": {
-    "phpstan/phpstan": "^1.12",
-    "phpunit/phpunit": "^11.4"
+    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^12.0"
   }
 }

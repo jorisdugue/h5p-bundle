@@ -8,6 +8,7 @@ use Doctrine\ORM\Exception\NotSupported;
 use H5peditorFile;
 use Studit\H5PBundle\Core\H5POptions;
 use Studit\H5PBundle\Core\H5PSymfony;
+use Studit\H5PBundle\Entity\LibrariesLanguages;
 use Studit\H5PBundle\Entity\LibrariesLanguagesRepository;
 use Studit\H5PBundle\Entity\Library;
 use Studit\H5PBundle\Entity\LibraryRepository;
@@ -23,11 +24,11 @@ class EditorStorage implements \H5peditorStorage
     /**
      * @var H5POptions
      */
-    private $options;
+    private H5POptions $options;
     /**
      * @var Filesystem
      */
-    private $filesystem;
+    private Filesystem $filesystem;
     /**
      * For some reason the creators of H5peditorStorage made some functions static
      * which causes problems with the Symfony service structure like circular references.
@@ -35,11 +36,11 @@ class EditorStorage implements \H5peditorStorage
      *
      * @var EditorStorage
      */
-    private static $instance;
+    private static EditorStorage $instance;
     /**
      * @var AuthorizationCheckerInterface
      */
-    private $authorizationChecker;
+    private AuthorizationCheckerInterface $authorizationChecker;
     /**
      * @var EntityManager
      */
@@ -47,7 +48,7 @@ class EditorStorage implements \H5peditorStorage
     /**
      * @var EventDispatcherInterface
      */
-    private $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
     /**
      * EditorStorage constructor.
@@ -58,12 +59,13 @@ class EditorStorage implements \H5peditorStorage
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
-        H5POptions $options,
-        Filesystem $filesystem,
+        H5POptions                    $options,
+        Filesystem                    $filesystem,
         AuthorizationCheckerInterface $authorizationChecker,
-        EntityManagerInterface $entityManager,
-        EventDispatcherInterface $eventDispatcher
-    ) {
+        EntityManagerInterface        $entityManager,
+        EventDispatcherInterface      $eventDispatcher
+    )
+    {
         $this->options = $options;
         $this->filesystem = $filesystem;
         $this->authorizationChecker = $authorizationChecker;
@@ -81,18 +83,15 @@ class EditorStorage implements \H5peditorStorage
      * @param int $majorVersion Major part of version number
      * @param int $minorVersion Minor part of version number
      * @param string $language Language code
-     * @return string Translation in JSON format
+     * @return string|null Translation in JSON format
      */
-    public function getLanguage($machineName, $majorVersion, $minorVersion, $language)
+    public function getLanguage($machineName, $majorVersion, $minorVersion, $language): ?string
     {
         /** @var LibrariesLanguagesRepository $repo */
-        $repo = $this->entityManager->getRepository('Studit\H5PBundle\Entity\LibrariesLanguages');
+        $repo = $this->entityManager->getRepository(LibrariesLanguages::class);
         return $repo->findForLibrary($machineName, $majorVersion, $minorVersion, $language);
     }
 
-    /**
-     * @inheritDoc
-     */
     /**
      * Load language all file(JSON) from database.
      * This is used to translate the editor fields(title, description etc.)
@@ -100,13 +99,13 @@ class EditorStorage implements \H5peditorStorage
      * @param string $machineName The machine readable name of the library(content type)
      * @param int $majorVersion Major part of version number
      * @param int $minorVersion Minor part of version number
-     * @return string[] Translation in JSON format
+     * @return string[]|null Translation in JSON format
      * @throws NotSupported
      */
-    public function getAvailableLanguages($machineName, $majorVersion, $minorVersion): array
+    public function getAvailableLanguages($machineName, $majorVersion, $minorVersion): ?array
     {
         /** @var LibrariesLanguagesRepository $repo */
-        $repo = $this->entityManager->getRepository('Studit\H5PBundle\Entity\LibrariesLanguages');
+        $repo = $this->entityManager->getRepository(LibrariesLanguages::class);
         return $repo->findForLibraryAllLanguages($machineName, $majorVersion, $minorVersion);
     }
 
@@ -116,7 +115,7 @@ class EditorStorage implements \H5peditorStorage
      *
      * @param int $fileId To new file
      */
-    public function keepFile($fileId)
+    public function keepFile($fileId): void
     {
         var_dump($fileId);
     }
@@ -131,10 +130,10 @@ class EditorStorage implements \H5peditorStorage
      * Editor that already knows which content types are supported in its
      * slides.
      *
-     * @param array $libraries List of library names + version to load info for
+     * @param array|null $libraries List of library names + version to load info for
      * @return array List of all libraries loaded
      */
-    public function getLibraries($libraries = null): array
+    public function getLibraries(?array $libraries = null): array
     {
         $canCreateRestricted = $this->authorizationChecker->isGranted('ROLE_H5P_CREATE_RESTRICTED_CONTENT_TYPES');
         if ($libraries !== null) {
@@ -142,7 +141,7 @@ class EditorStorage implements \H5peditorStorage
         }
         $libraries = [];
         /** @var LibraryRepository $libraryRepo */
-        $libraryRepo = $this->entityManager->getRepository('Studit\H5PBundle\Entity\Library');
+        $libraryRepo = $this->entityManager->getRepository(Library::class);
         $librariesResult = $libraryRepo->findAllRunnableWithSemantics();
         foreach ($librariesResult as $library) {
             //Decode metadata setting
@@ -182,7 +181,7 @@ class EditorStorage implements \H5peditorStorage
         $librariesWithDetails = [];
         foreach ($libraries as $library) {
             /** @var LibraryRepository $repo */
-            $repo = $this->entityManager->getRepository('Studit\H5PBundle\Entity\Library');
+            $repo = $this->entityManager->getRepository(Library::class);
             /** @var Library $details */
             $details = $repo->findHasSemantics($library->name, $library->majorVersion, $library->minorVersion);
             if ($details) {
@@ -208,7 +207,7 @@ class EditorStorage implements \H5peditorStorage
      *  List of libraries indexed by machineName with objects as values. The objects
      *  have majorVersion and minorVersion as properties.
      */
-    public function alterLibraryFiles(&$files, $libraries)
+    public function alterLibraryFiles(&$files, $libraries): void
     {
         $mode = 'editor';
         $library_list = [];
@@ -240,7 +239,7 @@ class EditorStorage implements \H5peditorStorage
     }
 
 
-    private function saveFileTemporarilyUnstatic($data, $move_file = false)
+    private function saveFileTemporarilyUnstatic($data, $move_file = false): object|bool
     {
         $h5p_path = $this->options->getAbsoluteH5PPath();
         $temp_id = uniqid('h5p-');
@@ -253,16 +252,16 @@ class EditorStorage implements \H5peditorStorage
         } else {
             try {
                 $this->filesystem->dumpFile($target, $data);
-            } catch (IOException $e) {
+            } catch (IOException) {
                 return false;
             }
         }
         $this->options->getUploadedH5pFolderPath($temporary_file_path);
         $this->options->getUploadedH5pPath("{$temporary_file_path}/{$name}");
-        return (object)array(
+        return (object)[
             'dir' => $temporary_file_path,
             'fileName' => $name
-        );
+        ];
     }
 
     /**
@@ -281,8 +280,9 @@ class EditorStorage implements \H5peditorStorage
      * Clean up temporary files
      *
      * @param string $filePath Path to file or directory
+     * @return void
      */
-    public static function removeTemporarilySavedFiles($filePath)
+    public static function removeTemporarilySavedFiles($filePath): void
     {
         if (is_dir($filePath)) {
             \H5PCore::deleteFileTree($filePath);

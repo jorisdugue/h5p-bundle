@@ -19,8 +19,8 @@ class H5POptions
      */
     private array|null $storedConfig = null;
 
-    private $h5pPath;
-    private $folderPath;
+    private ?string $h5pPath;
+    private ?string $folderPath;
     private $projectRootDir;
 
     /**
@@ -123,10 +123,10 @@ class H5POptions
     }
 
     /**
-     * @param $set
-     * @return mixed
+     * @param string|null $set
+     * @return string
      */
-    public function getUploadedH5pFolderPath($set = null)
+    public function getUploadedH5pFolderPath(?string $set = null): string
     {
         if (!empty($set)) {
             $this->folderPath = $set;
@@ -136,10 +136,10 @@ class H5POptions
     }
 
     /**
-     * @param $set
-     * @return mixed
+     * @param string|null $set
+     * @return string|null
      */
-    public function getUploadedH5pPath($set = null)
+    public function getUploadedH5pPath(?string $set = null): ?string
     {
         if (!empty($set)) {
             $this->h5pPath = $set;

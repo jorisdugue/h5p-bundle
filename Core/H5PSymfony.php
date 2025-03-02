@@ -136,16 +136,18 @@ class H5PSymfony implements \H5PFrameworkInterface
     }
 
     /**
-     * Implements fetchExternalData
-     * @param $url
-     * @param null|mixed $data
-     * @param bool $blocking
-     * @param null $stream
-     * @param bool $fullData
-     * @param array $headers
-     * @param array $files
+     * Fetches a file from a remote server using HTTP GET
+     *
+     * @param string $url Where you want to get or send data.
+     * @param array|null $data Data to post to the URL.
+     * @param bool $blocking Set to 'FALSE' to instantly time out (fire and forget).
+     * @param string|null $stream Path to where the file should be saved.
+     * @param bool $fullData Return additional response data such as headers and potentially other data
+     * @param array $headers Headers to send
+     * @param array $files Files to send
      * @param string $method
-     * @return array|bool|string
+     *
+     * @return array|string The content (response body), or an array with data. NULL if something went wrong
      * @throws GuzzleException
      */
     public function fetchExternalData(
@@ -178,11 +180,11 @@ class H5PSymfony implements \H5PFrameworkInterface
             $response = $client->request($method, $url, $options);
             $response_data = (string)$response->getBody();
             if (empty($response_data)) {
-                return false;
+                return '';
             }
         } catch (\Exception $e) {
             $this->setErrorMessage($e->getMessage(), 'failed-fetching-external-data');
-            return false;
+            return '';
         }
         if ($stream && empty($response->error)) {
             // Create file from data need disable move file or enable ? default set is a fail
@@ -190,7 +192,7 @@ class H5PSymfony implements \H5PFrameworkInterface
             // TODO: Cannot rely on H5PEditor module – Perhaps we could use the
             // save_to/sink option to save directly to file when streaming ?
             // http://guzzle.readthedocs.io/en/latest/request-options.html#sink-option
-            return true;
+            return '';
         }
         if ($fullData) {
             // Compatibility with response of h5p.classe.php
@@ -226,36 +228,32 @@ class H5PSymfony implements \H5PFrameworkInterface
      * Keeps track of messages for the user.
      * @var array
      */
-    private $messages = array('error' => array(), 'info' => array());
+    private array $messages = ['error' => [], 'info' => []];
 
     /**
      * Implements setErrorMessage
-     * @param $message
-     * @param null $code
+     * @param string $message
+     * @param string|null $code
      * @return void
      */
     public function setErrorMessage($message, $code = null): void
     {
-        if ($this->session) {
-            $this->session->getFlashBag()->add("danger", "[$code]: $message");
-        }
+        $this->session?->getFlashBag()->add("danger", "[$code]: $message");
     }
 
     /**
      * Implements setInfoMessage
-     * @param $message
+     * @param string $message
      * @return void
      */
     public function setInfoMessage($message): void
     {
-        if ($this->session) {
-            $this->session->getFlashBag()->add("info", "$message");
-        }
+        $this->session?->getFlashBag()->add("info", "$message");
     }
 
     /**
      * Implements getMessages
-     * @param $type
+     * @param string $type
      * @return array|null
      */
     public function getMessages($type): ?array
@@ -272,7 +270,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      * @param array $replacements
      * @return string|string[]
      */
-    public function t($message, $replacements = array())
+    public function t($message, $replacements = []): array|string
     {
         foreach ($replacements as $search => $replace) {
             $message = str_replace($search, $replace, $message);
@@ -294,9 +292,9 @@ class H5PSymfony implements \H5PFrameworkInterface
     /**
      * Implements getUploadedH5PFolderPath
      * @param null $set
-     * @return null|mixed
+     * @return string
      */
-    public function getUploadedH5pFolderPath($set = null)
+    public function getUploadedH5pFolderPath($set = null): string
     {
         return $this->options->getUploadedH5pFolderPath($set);
     }
@@ -305,9 +303,9 @@ class H5PSymfony implements \H5PFrameworkInterface
     /**
      * Implements getUploadedH5PPath
      * @param null $set
-     * @return null|mixed
+     * @return string|null
      */
-    public function getUploadedH5pPath($set = null)
+    public function getUploadedH5pPath($set = null): ?string
     {
         return $this->options->getUploadedH5pPath($set);
     }
@@ -356,7 +354,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function getLibraryConfig($libraries = null)
+    public function getLibraryConfig(?array $libraries = null)
     {
         // Same as wordpress do but i don't know what is H5P_LIBRARY_CONFIG
         return defined('H5P_LIBRARY_CONFIG') ? H5P_LIBRARY_CONFIG : null;
@@ -915,7 +913,7 @@ class H5PSymfony implements \H5PFrameworkInterface
         if (!isset($fields['filtered'])) {
             return;
         }
-        $content = $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->find($id);
+        $content = $this->manager->getRepository(Content::class)->find($id);
         $content->setFilteredParameters($fields['filtered']);
         $this->manager->persist($content);
         $this->manager->flush();
@@ -926,12 +924,12 @@ class H5PSymfony implements \H5PFrameworkInterface
      * library. This means that the content dependencies will have to be rebuilt,
      * and the parameters refiltered.
      *
-     * @param int $library_id
+     * @param array $library_ids
      */
-    public function clearFilteredParameters($library_id): void
+    public function clearFilteredParameters($library_ids): void
     {
-        $contents = $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->findBy(
-            ['library' => $library_id]
+        $contents = $this->manager->getRepository(Content::class)->findBy(
+            ['library' => $library_ids]
         );
         foreach ($contents as $content) {
             $content->setFilteredParameters('');
@@ -946,22 +944,23 @@ class H5PSymfony implements \H5PFrameworkInterface
     public function getNumNotFiltered()
     {
         /** @var ContentRepository $contentRepo */
-        $contentRepo = $this->manager->getRepository('Studit\H5PBundle\Entity\Content');
+        $contentRepo = $this->manager->getRepository(Content::class);
         return $contentRepo->countNotFiltered();
     }
 
     /**
      * @inheritDoc
      */
-    public function getNumContent($libraryId, $skip = null)
+    public function getNumContent($libraryId, $skip = null): int
     {
         /** @var ContentRepository $contentRepo */
-        $contentRepo = $this->manager->getRepository('Studit\H5PBundle\Entity\Content');
+        $contentRepo = $this->manager->getRepository(Content::class);
         return $contentRepo->countLibraryContent($libraryId);
     }
 
     /**
      * @inheritDoc
+     * @throws \Exception
      */
     public function isContentSlugAvailable($slug): bool
     {
@@ -979,7 +978,7 @@ class H5PSymfony implements \H5PFrameworkInterface
         /**
          * @var Counters $results
          */
-        $results = $this->manager->getRepository('Studit\H5PBundle\Entity\Counters')->findBy(['type' => $type]);
+        $results = $this->manager->getRepository(Counters::class)->findBy(['type' => $type]);
         // Extract results
         foreach ($results as $library) {
             $count[$library->getLibraryName() . " " . $library->getLibraryVersion()] = $library->getNum();
@@ -993,7 +992,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     public function getNumAuthors(): bool
     {
         /** @var ContentRepository $contentRepo */
-        $contentRepo = $this->manager->getRepository('Studit\H5PBundle\Entity\Content');
+        $contentRepo = $this->manager->getRepository(Content::class);
         $contents = $contentRepo->countContent();
         // Return 1 if there is content and 0 if there is none
         return !$contents;
@@ -1028,7 +1027,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     {
         $contentCount = [];
         /** @var ContentRepository $contentRepo */
-        $contentRepo = $this->manager->getRepository('Studit\H5PBundle\Entity\Content');
+        $contentRepo = $this->manager->getRepository(Content::class);
         $results = $contentRepo->libraryContentCount();
         // Format results
         foreach ($results as $library) {
@@ -1053,29 +1052,23 @@ class H5PSymfony implements \H5PFrameworkInterface
      * Implements hasPermission
      *
      * @param int $permission
-     * @param int $content_id
+     * @param null $id
      * @return bool
      */
-    public function hasPermission($permission, $content_id = null)
+    public function hasPermission($permission, $id = null): bool
     {
         if (!$this->options->getOption('use_permission')) {
             return true;
         }
-        switch ($permission) {
-            case \H5PPermission::DOWNLOAD_H5P:
-                return $content_id !== null && $this->authorizationChecker->isGranted('ROLE_H5P_DOWNLOAD_ALL');
-            case \H5PPermission::EMBED_H5P:
-                return $content_id !== null && $this->authorizationChecker->isGranted('ROLE_H5P_EMBED_ALL');
-            case \H5PPermission::CREATE_RESTRICTED:
-                return $this->authorizationChecker->isGranted('ROLE_H5P_CREATE_RESTRICTED_CONTENT_TYPES');
-            case \H5PPermission::UPDATE_LIBRARIES:
-                return $this->authorizationChecker->isGranted('ROLE_H5P_UPDATE_LIBRARIES');
-            case \H5PPermission::INSTALL_RECOMMENDED:
-                return $this->authorizationChecker->isGranted('ROLE_H5P_INSTALL_RECOMMENDED_LIBRARIES');
-            case \H5PPermission::COPY_H5P:
-                return $content_id !== null && $this->authorizationChecker->isGranted('ROLE_H5P_COPY_ALL');
-        }
-        return false;
+        return match ($permission) {
+            \H5PPermission::DOWNLOAD_H5P => $id !== null && $this->authorizationChecker->isGranted('ROLE_H5P_DOWNLOAD_ALL'),
+            \H5PPermission::EMBED_H5P => $id !== null && $this->authorizationChecker->isGranted('ROLE_H5P_EMBED_ALL'),
+            \H5PPermission::CREATE_RESTRICTED => $this->authorizationChecker->isGranted('ROLE_H5P_CREATE_RESTRICTED_CONTENT_TYPES'),
+            \H5PPermission::UPDATE_LIBRARIES => $this->authorizationChecker->isGranted('ROLE_H5P_UPDATE_LIBRARIES'),
+            \H5PPermission::INSTALL_RECOMMENDED => $this->authorizationChecker->isGranted('ROLE_H5P_INSTALL_RECOMMENDED_LIBRARIES'),
+            \H5PPermission::COPY_H5P => $id !== null && $this->authorizationChecker->isGranted('ROLE_H5P_COPY_ALL'),
+            default => false,
+        };
     }
 
     /**
@@ -1083,7 +1076,7 @@ class H5PSymfony implements \H5PFrameworkInterface
      *
      * @param object $contentTypeCache Json with an array called 'libraries'
      *  containing the new content type cache that should replace the old one.
-     * @throws \Exception
+     * @throws Exception
      */
     public function replaceContentTypeCache($contentTypeCache): void
     {
@@ -1107,11 +1100,11 @@ class H5PSymfony implements \H5PFrameworkInterface
             $cache->setIsRecommended($ct->isRecommended);
             $cache->setPopularity($ct->popularity);
             $cache->setScreenshots(json_encode($ct->screenshots));
-            $cache->setLicense(json_encode(isset($ct->license) ? $ct->license : []));
+            $cache->setLicense(json_encode($ct->license ?? []));
             $cache->setExample($ct->example);
-            $cache->setTutorial(isset($ct->tutorial) ? $ct->tutorial : '');
-            $cache->setKeywords(json_encode(isset($ct->keywords) ? $ct->keywords : []));
-            $cache->setCategories(json_encode(isset($ct->categories) ? $ct->categories : []));
+            $cache->setTutorial($ct->tutorial ?? '');
+            $cache->setKeywords(json_encode($ct->keywords ?? []));
+            $cache->setCategories(json_encode($ct->categories ?? []));
             $cache->setOwner($ct->owner);
             $this->manager->persist($cache);
         }

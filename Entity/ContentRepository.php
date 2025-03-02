@@ -39,7 +39,15 @@ class ContentRepository extends ServiceEntityRepository
             ->where('c.library is not null and c.filteredParameters is null');
         return $qb->getQuery()->getSingleScalarResult();
     }
-    public function countLibraryContent($libraryId)
+
+    /**
+     * Counts the number of content items associated with a given library.
+     *
+     * @param int $libraryId The ID of the library.
+     *
+     * @return int The number of content items in the library.
+     */
+    public function countLibraryContent(int $libraryId): int
     {
         $qb = $this->createQueryBuilder('c')
             ->select('count(c)')

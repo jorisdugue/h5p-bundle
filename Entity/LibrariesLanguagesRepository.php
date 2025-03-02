@@ -17,7 +17,17 @@ class LibrariesLanguagesRepository extends ServiceEntityRepository
         parent::__construct($registry, LibrariesLanguages::class);
     }
 
-    public function findForLibrary($machineName, $majorVersion, $minorVersion, $languageCode)
+    /**
+     * Finds the language JSON for a given library and language code.
+     *
+     * @param string $machineName The machine name of the library.
+     * @param int $majorVersion The major version of the library.
+     * @param int $minorVersion The minor version of the library.
+     * @param string $languageCode The language code for the content.
+     *
+     * @return string|null The language JSON or null if not found.
+     */
+    public function findForLibrary(string $machineName, int $majorVersion, int $minorVersion, string $languageCode): ?string
     {
         $qb = $this->createQueryBuilder('ll')
             ->select('ll.languageJson')
@@ -34,9 +44,20 @@ class LibrariesLanguagesRepository extends ServiceEntityRepository
         } catch (NoResultException) {
             return null;
         }
-        return $result['languageJson'] ? $result['languageJson'] : null;
+        return $result['languageJson'] ?? null;
     }
-    public function findForLibraryAllLanguages($machineName, $majorVersion, $minorVersion, $defaultlang = "en")
+
+    /**
+     * Finds all language codes for a given library, including a default language.
+     *
+     * @param int $machineName The machine name of the library.
+     * @param string $majorVersion The major version of the library.
+     * @param string $minorVersion The minor version of the library.
+     * @param string|null $defaultlang The default language code, defaulting to 'en'.
+     *
+     * @return array|null An array of language codes, or null if no languages are found.
+     */
+    public function findForLibraryAllLanguages(int $machineName, string $majorVersion, string $minorVersion, ?string $defaultlang = "en"): ?array
     {
         $qb = $this->createQueryBuilder('ll')
             ->select('ll.languageCode')
@@ -51,11 +72,11 @@ class LibrariesLanguagesRepository extends ServiceEntityRepository
         } catch (NoResultException) {
             return null;
         }
-        $codes = array('en'); // Semantics is 'en' by default.
+        // Semantics is 'en' by default.
+        $languageCodes = ['en'];
         foreach ($results as $result) {
-            $codes[] = $result['languageCode'];
+            $languageCodes[] = $result['languageCode'];
         }
-        return $codes;
-        //return $result['languageJson'] ? $result['languageJson'] : null;
+        return $languageCodes;
     }
 }

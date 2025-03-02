@@ -3,6 +3,7 @@
 namespace Studit\H5PBundle\Entity;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Statement;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NoResultException;
@@ -36,7 +37,7 @@ class LibraryRepository extends ServiceEntityRepository
     /**
      * Find latest library
      * @return array
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
     public function findLatestLibraryVersions(): array
     {
@@ -91,7 +92,7 @@ EOT;
         return $libraryVersions;
     }
 
-    public function findHasSemantics($machineName, $majorVersion, $minorVersion)
+    public function findHasSemantics(string $machineName, int $majorVersion, int $minorVersion): ?Library
     {
         $qb = $this->createQueryBuilder('l')
             ->select('l')
@@ -103,10 +104,10 @@ EOT;
             ]));
         try {
             $library = $qb->getQuery()->getSingleResult();
-        } catch (NoResultException $e) {
+        } catch (NoResultException) {
             return null;
         }
-        return (object)$library;
+        return $library;
     }
 
     public function findAllRunnableWithSemantics()
@@ -122,7 +123,20 @@ EOT;
         return $libraries;
     }
 
-    public function findOneArrayBy($parameters)
+    /**
+     * Finds a record as an array based on the given parameters.
+     *
+     * @param array $parameters Associative array containing the search criteria,
+     *                          expected in the following format:
+     *                          - 'machineName' => string
+     *                          - 'majorVersion' => int
+     *                          - 'minorVersion' => int
+     *
+     * @return array|null Returns an associative array representing the found entity,
+     *                    or null if no result is found.
+     *
+     */
+    public function findOneArrayBy(array $parameters): ?array
     {
         $qb = $this->createQueryBuilder('l')
             ->where('l.machineName = :machineName and l.majorVersion = :majorVersion and l.minorVersion = :minorVersion')
