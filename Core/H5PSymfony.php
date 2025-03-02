@@ -355,7 +355,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function getLibraryConfig(?array $libraries = null)
+    public function getLibraryConfig($libraries = null)
     {
         // Same as wordpress do but i don't know what is H5P_LIBRARY_CONFIG
         return defined('H5P_LIBRARY_CONFIG') ? H5P_LIBRARY_CONFIG : null;

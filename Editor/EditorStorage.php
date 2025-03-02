@@ -133,7 +133,7 @@ class EditorStorage implements \H5peditorStorage
      * @param array|null $libraries List of library names + version to load info for
      * @return array List of all libraries loaded
      */
-    public function getLibraries(?array $libraries = null): array
+    public function getLibraries($libraries = null): array
     {
         $canCreateRestricted = $this->authorizationChecker->isGranted('ROLE_H5P_CREATE_RESTRICTED_CONTENT_TYPES');
         if ($libraries !== null) {
