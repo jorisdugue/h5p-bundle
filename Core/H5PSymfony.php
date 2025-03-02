@@ -14,6 +14,7 @@ use Studit\H5PBundle\Editor\EditorStorage;
 use Studit\H5PBundle\Entity\Content;
 use Studit\H5PBundle\Entity\ContentLibraries;
 use Studit\H5PBundle\Entity\ContentRepository;
+use Studit\H5PBundle\Entity\ContentUserData;
 use Studit\H5PBundle\Entity\Counters;
 use Studit\H5PBundle\Entity\LibrariesHubCache;
 use Studit\H5PBundle\Entity\LibrariesLanguages;
@@ -570,15 +571,15 @@ class H5PSymfony implements \H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function insertContent($contentData, $contentMainId = null)
+    public function insertContent($content, $contentMainId = null)
     {
-        $content = new Content();
-        return $this->storeContent($contentData, $content);
+        $contentC = new Content();
+        return $this->storeContent($content, $contentC);
     }
 
-    private function storeContent($contentData, Content $content)
+    private function storeContent($contentData, Content $content): int
     {
-        $library = $this->manager->getRepository('Studit\H5PBundle\Entity\Library')
+        $library = $this->manager->getRepository(Library::class)
             ->find($contentData['library']['libraryId']);
         $content->setLibrary($library);
         $content->setParameters(str_replace('#tmp', '', $contentData['params']));
@@ -592,19 +593,19 @@ class H5PSymfony implements \H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function updateContent($contentData, $contentMainId = null)
+    public function updateContent($content, $contentMainId = null): int
     {
-        /** @var Content $content */
-        $content = $this->manager->getRepository('Studit\H5PBundle\Entity\Content')->find($contentData['id']);
-        return $this->storeContent($contentData, $content);
+        /** @var Content $contentC */
+        $contentC = $this->manager->getRepository(Content::class)->find($content['id']);
+        return $this->storeContent($content, $contentC);
     }
 
     /**
      * @inheritDoc
      */
-    public function resetContentUserData($contentId)
+    public function resetContentUserData($contentId): void
     {
-        $contentUserDatas = $this->manager->getRepository('Studit\H5PBundle\Entity\ContentUserData')->findBy(
+        $contentUserDatas = $this->manager->getRepository(ContentUserData::class)->findBy(
             ['mainContent' => $contentId, 'deleteOnContentChange' => true]
         );
         foreach ($contentUserDatas as $contentUserData) {
@@ -618,7 +619,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function saveLibraryDependencies($libraryId, $dependencies, $dependency_type)
+    public function saveLibraryDependencies($libraryId, $dependencies, $dependency_type): void
     {
         foreach ($dependencies as $dependency) {
             /** @var Library $library */
@@ -793,9 +794,9 @@ class H5PSymfony implements \H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function alterLibrarySemantics(&$semantics, $name, $majorVersion, $minorVersion)
+    public function alterLibrarySemantics(&$semantics, $machineName, $majorVersion, $minorVersion): void
     {
-        $this->eventDispatcher->dispatch(new LibrarySemanticsEvent($semantics, $name, $majorVersion, $minorVersion), H5PEvents::SEMANTICS);
+        $this->eventDispatcher->dispatch(new LibrarySemanticsEvent($semantics, $machineName, $majorVersion, $minorVersion), H5PEvents::SEMANTICS);
     }
 
     /**
@@ -1158,6 +1159,7 @@ class H5PSymfony implements \H5PFrameworkInterface
     public function replaceContentHubMetadataCache($metadata, $lang)
     {
         // TODO: Implement replaceContentHubMetadataCache() method.
+        return;
     }
 
     /**
